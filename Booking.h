@@ -6,7 +6,7 @@
 #define BOOKING_H
 
 
-#include "Vehicle.h"
+//#include "Vehicle.h"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -14,11 +14,11 @@ using namespace std;
 class Booking {
 private:
     string SailingId;
-    Vehicle vehicle;
+    string licensePlate;
     bool checkedIn = false;//at default not checkedIn
 
 public:
-    Booking(const Vehicle& vehicle, const string& SailingId);//createBooking() basically
+    Booking(const string& licensePlate, const string& SailingId);//createBooking() basically
     void init();
     void checkIn(const Booking& booking);
     bool isCheckedIn(const Booking& booking);
