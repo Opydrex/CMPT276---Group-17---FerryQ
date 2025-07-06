@@ -28,6 +28,14 @@ EXAMPLE FUNCTION DECLARATION:
 Booking(const string& licensePlate, //first parameter comment example
         const string& SailingId     //second parameter comment example
         );
+----------------------------------------------------------------------------
+Function Declaration Commenting procedure:
+    As shown above, each parameter is listed on a separate line, with a comment
+    describing whether it's an input, output, or input and output parameter. 
 
-
+    The description of what the function does comes right after the function
+    declaration. This description should have the following form:
+    //Job: [Actual description of the function]
+    //Usage: [How the function should be used]
+    //Restrictions: [Describe the restrictions of the function]
 */
