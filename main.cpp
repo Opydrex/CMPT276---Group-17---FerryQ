@@ -6,18 +6,24 @@ int main(){
     cout << "Hello World!" << endl;
     cout<<"Hello World!"<<endl;
 }
-
-//==========================================================================
-//==========================================================================
 /*
+Modules will be separated by two double-dashed lines, example:
+//==========================================================================
+//==========================================================================
+
+The header of each module will have this format:
 MODULE NAME:
-REVISION HISTORY. Revisions are going to be descending e.g.
-Rev.2 -
-Rev.1 -
+REVISION HISTORY. (Revisions are going to be in descending order)
+Rev.2 - DD/MM/YYYY - [Description]
+Rev.1 - DD/MM/YYYY - [Description]
+
+At the end of the header, there will be an explanation of what the module does
+and where it is used.
+
+Each section of the header file and each function will be separated
+by a single dashed line. Example:
 ----------------------------------------------------------------------------
-Explanation of what the module does and where it is used.
-----------------------------------------------------------------------------
-C++ #include statements go here.
+C++ #include statements go here (after the header).
 ----------------------------------------------------------------------------
 Global constants/type/variables go here.
 ----------------------------------------------------------------------------
@@ -38,4 +44,7 @@ Function Declaration Commenting procedure:
     //Job: [Actual description of the function]
     //Usage: [How the function should be used]
     //Restrictions: [Describe the restrictions of the function]
+----------------------------------------------------------------------------
+Private Variables in classes will not be separated by a line, but private functions
+will.
 */
