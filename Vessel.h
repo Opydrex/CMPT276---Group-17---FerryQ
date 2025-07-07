@@ -1,0 +1,56 @@
+//==========================================================================
+//==========================================================================
+/*
+MODULE NAME: Vessel.h
+Rev.1 - Vessel class header created.
+----------------------------------------------------------------------------
+This module is used to store data about vessels.
+----------------------------------------------------------------------------
+*/
+
+#ifndef VESSEL_H
+#define VESSEL_H
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Vessel{
+    public:
+        Vessel(const string& name,//input
+               const float& maxCapacitySmall,//input
+               const float& maxCapacityBig//input
+               );
+        //Job: Vessel object constructor.
+        //Usage: Used when a Vessel is being created.
+        //Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
+
+        //----------------------------------------------------------------------------
+
+        bool isVesselExist(const string& name//input
+                           );
+        //Job: Returns a boolean flag indicating if the Vessel exists.
+        //Usage: Call when need to find out if the Vessel is booked.
+        //Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
+
+        //----------------------------------------------------------------------------
+
+
+
+    private:
+        string name;//Vessel's name.
+        float maxCapacitySmall;//Maximum capacity for regular sized vehicles. Measured in meters.
+        float maxCapacityBig;//Maximum capacity for special sized vehicles. Measured in meters.
+
+        void writeVessel(const Vessel& vessel//input
+                         );
+        //Job: Writes the Vessel data into the file.
+        //Usage: Used when all data about Vessel is collected. It is then written into a data file.
+        //Restrictions: Vessel mustn't already exist in the data file.
+
+        //----------------------------------------------------------------------------
+
+}
+
+
+#endif //VESSEL_H
