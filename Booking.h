@@ -2,7 +2,7 @@
 //==========================================================================
 /*
 MODULE NAME: Booking.h
-Rev.1 - Booking class header created
+Rev.1 - 09/07/2025 - Booking class header created
 ----------------------------------------------------------------------------
 This module is used to store data about bookings.
 ----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ void checkIn(const string& sailingId,//input
                     );
 //Job: Checks in a vehicle for a Sailing.
 //Usage: Used when a booked vehicle needs to be checked in upon arrival to the port.
-//Restrictions: Vehicle must be first booked to be checked in. Sailing must exist.
+//Restrictions: Vehicle must be booked for this Sailing to be checked in. Sailing must exist.
 
 //----------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ bool isCheckedIn(const string& sailingId,//input
                  const string& licensePlate//input
                     );
 //Job: Returns a boolean flag indicating if the vehicle is booked in.
-//Usage: Call when need to find out if the vehicle is booked.
+//Usage: Call when need to find out if the vehicle is booked. Simply a getter for a checkedIn variable.
 //Restrictions: Booking must exist. Sailing must exist.
 
 //----------------------------------------------------------------------------
