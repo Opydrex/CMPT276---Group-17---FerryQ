@@ -27,13 +27,14 @@ class Vessel{
 
         //----------------------------------------------------------------------------
 
-        bool isVesselExist(const string& name//input
-                           );
-        //Job: Returns a boolean flag indicating if the Vessel exists.
-        //Usage: Call when need to find out if the Vessel is booked.
-        //Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
+        void writeVesselToFile(const string& filename//input
+                         );
+        //Job: Writes the Vessel data into the file.
+        //Usage: Used when all data about Vessel is collected. It is then written into a data file.
+        //Restrictions: Vessel mustn't already exist in the data file.
 
         //----------------------------------------------------------------------------
+
 
 
 
@@ -42,15 +43,19 @@ class Vessel{
         float maxCapacitySmall;//Maximum capacity for regular sized vehicles. Measured in meters.
         float maxCapacityBig;//Maximum capacity for special sized vehicles. Measured in meters.
 
-        void writeVessel(const Vessel& vessel//input
-                         );
-        //Job: Writes the Vessel data into the file.
-        //Usage: Used when all data about Vessel is collected. It is then written into a data file.
-        //Restrictions: Vessel mustn't already exist in the data file.
 
-        //----------------------------------------------------------------------------
 
-}
+};
 
+
+
+bool isVesselExist(const string& name//input
+                           );
+
+    //Job: Returns a boolean flag indicating if the Vessel exists.
+    //Usage: Call when need to find out if the Vessel exists when creating a Sailing.
+    //Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
+
+    //----------------------------------------------------------------------------
 
 #endif //VESSEL_H
