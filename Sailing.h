@@ -67,7 +67,7 @@ bool deleteSailing(const string& sailingId,//input
 
 //----------------------------------------------------------------------------
 
-void printSailingsReport();
+void printReport();
 //Job: Prints a Sailings report.
 //Usage: Call when User wants to print Sailings report.
 //Restrictions: At least 1 Sailing must exist.
