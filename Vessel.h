@@ -28,7 +28,8 @@ class Vessel{
         //Usage: Used when a Vessel is being created.
         //Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
 
-        //----------------------------------------------------------------------------
+
+		//----------------------------------------------------------------------------
 
         void writeVessel(const string& filename//input
                          );
@@ -37,6 +38,7 @@ class Vessel{
         //Restrictions: Vessel mustn't already exist in the data file.
 
         //----------------------------------------------------------------------------
+
 
 
 
@@ -50,15 +52,18 @@ class Vessel{
 
 };
 
-
+Vessel createVessel();
+// Job: Prompts the user for appropriate data and returns a Vessel object
+// Usage: Called by the UI to collect vessel information from the user. The collected data can then be passed to writeVessel to save it to file.
+// Restrictions: User input must conform to each variable's domain
 
 bool isVesselExist(const string& name//input
                            );
 
-    //Job: Returns a boolean flag indicating if the Vessel exists.
-    //Usage: Call when need to find out if the Vessel exists when creating a Sailing.
-    //Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
+//Job: Returns a boolean flag indicating if the Vessel exists.
+//Usage: Call when need to find out if the Vessel exists when creating a Sailing.
+//Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
 
-    //----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 #endif //VESSEL_H

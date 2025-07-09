@@ -31,7 +31,8 @@ class Booking {
     public:
         Booking(const string& licensePlate,//input
                 const string& sailingId,//input
-
+				const string& phoneNumber,
+				const boolean& checkedIn
                 );
         //Job: Booking object constructor.
         //Usage: Used when a vehicle is getting booked for a Sailing.
@@ -55,6 +56,7 @@ class Booking {
     private:
         string sailingId;//sailingId is used to identify on which Sailing the vehicle is booked.
         string licensePlate;//vehicle's license plate. acts as a primary key.
+		string phoneNumber; //phone number associated with a booking
         bool checkedIn = false;//Flag to identify if vehicle has been registered.
 
 
@@ -62,6 +64,11 @@ class Booking {
 
 
 };
+
+Booking createBooking();
+// Job: Prompts the user for a sailingID, license plate and a phone number and returns a booking object that contains them
+// Usage: Called by the UI to collect booking information from the user. The collected data can then be passed to writeBooking to save it to file.
+// Restrictions: User input must conform to each variable's domain
 
 
 void checkIn(const string& sailingId,//input

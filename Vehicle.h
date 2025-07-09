@@ -22,7 +22,6 @@ const string fileNameVehicle = "vehicle.txt"; //constant that stores file name w
 class Vehicle{
     public:
         Vehicle(const string& licensePlate,//input
-                const string& phoneNumber,//input
                 const float& height,//input
                 const float& length //input
                 );
@@ -43,7 +42,6 @@ class Vehicle{
 
     private:
             string licensePlate; //License plate of the vehicle.
-            string phoneNumber; //Phone number associated with a vehicle.
             float height; //Vehicle's height. 0 if it is not a special-sized vehicle.
             float length; //Vehicle's length. 0 if it is not a special-sized vehicle.
 
