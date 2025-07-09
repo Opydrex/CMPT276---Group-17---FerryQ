@@ -4,7 +4,7 @@
 MODULE NAME: Vehicle.h
 Rev.1 - 09/07/2025 - Vehicle class header created
 ----------------------------------------------------------------------------
-This module is used to store data about vehicle.
+This module contains functions and implementations related to Vehicles.
 ----------------------------------------------------------------------------
 */
 
@@ -15,8 +15,9 @@ This module is used to store data about vehicle.
 #include <iostream>
 #include <string>
 using namespace std;
-
-const string fileNameVehicle = "vehicle.txt"; //constant that stores file name with all vehicles
+const float maxLength = 99.9; //constant that stores maximum allowed vehicle length.
+const float maxHeight = 9.9; //constant that stores maximum allowed vehicle height.
+const string fileNameVehicle = "vehicle.txt"; //constant that stores file name with all vehicles.
 
 class Vehicle{
     public:

@@ -4,7 +4,7 @@
 MODULE NAME: Sailing.h
 Rev.1 - 09/07/2025 - Sailing class header created
 ----------------------------------------------------------------------------
-This module is used to store data about sailing.
+This module contains functions and implementations related to Sailings.
 ----------------------------------------------------------------------------
 */
 

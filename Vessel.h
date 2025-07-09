@@ -4,7 +4,7 @@
 MODULE NAME: Vessel.h
 Rev.1 - 09/07/2025 - Vessel class header created.
 ----------------------------------------------------------------------------
-This module is used to store data about vessels.
+This module contains functions and implementations related to Vessels.
 ----------------------------------------------------------------------------
 */
 

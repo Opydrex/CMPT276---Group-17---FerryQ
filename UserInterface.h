@@ -4,7 +4,7 @@
 MODULE NAME: UserInterface.h
 Rev.1 - 09/07/2025 - UserInterface class header created.
 ----------------------------------------------------------------------------
-This module is used to declare UI functions.
+This module contains functions and implementations related to User Interface.
 ----------------------------------------------------------------------------
 */
 

@@ -4,7 +4,7 @@
 MODULE NAME: Booking.h
 Rev.1 - 09/07/2025 - Booking class header created
 ----------------------------------------------------------------------------
-This module is used to store data about bookings.
+This module contains functions and implementations related to Bookings.
 ----------------------------------------------------------------------------
 */
 

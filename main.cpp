@@ -1,4 +1,13 @@
-// hello there
+//==========================================================================
+//==========================================================================
+/*
+MODULE NAME: main.cpp
+Rev.1 - 09/07/2025 - Main module created
+----------------------------------------------------------------------------
+This module contains the main function, as well as functions and implementations related to startup and shutdown.
+----------------------------------------------------------------------------
+*/
+
 #include <iostream>
 
 using namespace std;
