@@ -16,7 +16,7 @@ This module is used to store data about vessels.
 using namespace std;
 
 const float maxLaneLength = 3600.0; // max length in meters for both the regular-sized and special-sized vehicle lanes
-const string fileNameVessel = "vessel.txt";
+const string fileNameVessel = "vessel.txt";//constant that stores file name with all vessels
 
 class Vessel{
     public:

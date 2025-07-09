@@ -3,8 +3,25 @@
 
 using namespace std;
 int main(){
-
+	cout<<"Welcome to the FerryQ!!!"<<endl;
 }
+
+void init();
+
+//Job: Initialises and opens every data file upon program launch.
+//Usage: Used in main.cpp
+//Restrictions: Data files must exist. They come prefilled with the executable of FerryQ.
+
+//----------------------------------------------------------------------------
+
+void shutdown();
+
+//Job: Shutdowns every data file and frees all the used memory when User exits the program.
+//Usage: Used in main.cpp
+//Restrictions: Data files must exist. They come prefilled with the executable of FerryQ.
+
+//----------------------------------------------------------------------------
+
 /*
 Modules will be separated by two double-dashed lines, example:
 //==========================================================================

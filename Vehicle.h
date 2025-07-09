@@ -16,7 +16,7 @@ This module is used to store data about vehicle.
 #include <string>
 using namespace std;
 
-const string fileNameVehicle = "vehicle.txt";
+const string fileNameVehicle = "vehicle.txt"; //constant that stores file name with all vehicles
 
 class Vehicle{
     public:

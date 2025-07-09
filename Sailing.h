@@ -18,7 +18,7 @@ using namespace std;
 
 const int maxSailingDay = 31; //last day of the month - can't create a sailing on day 32.
 const int maxSailingHour = 23; //last hour of the day in 24-hour format - can't create a sailing on hour 25.
-const string fileNameSailing = "sailing.txt";
+const string fileNameSailing = "sailing.txt"; //constant that stores file name with all sailings
 
 class Sailing{
 
@@ -30,7 +30,7 @@ class Sailing{
                 );
         //Job: Sailing object constructor.
         //Usage: Used when a Sailing is being created.
-        //Restrictions: vesselName and sailingId must be unique. sailingId and vesselNamemust comply to domain.
+        //Restrictions: vesselName and sailingId must be unique. sailingId and vesselName must comply to domain.
 
         //----------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ class Sailing{
         //----------------------------------------------------------------------------
 
     private:
-        string sailingId;//SailingID
+        string sailingId;//SailingId.
         string vesselName;//Vessel that is going to complete a Sailing.
         float currentCapacitySmall;//Remaning length for regular-sized vehicles.
         float currentCapacityBig;//Remaining length for special-sized vehicles.
@@ -67,5 +67,11 @@ bool deleteSailing(const string& sailingId,//input
 
 //----------------------------------------------------------------------------
 
+void printSailingsReport();
+//Job: Prints a Sailings report.
+//Usage: Call when User wants to print Sailings report.
+//Restrictions: At least 1 Sailing must exist.
+
+//----------------------------------------------------------------------------
 
 #endif //SAILING_H

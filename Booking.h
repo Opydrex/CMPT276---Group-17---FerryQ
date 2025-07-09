@@ -25,7 +25,7 @@ const float extraPerMeterInHeight = 2.0; //constant stating how much to charge p
 const float extraPerMeterInLength = 3.0; //constant stating how much to charge per every extra meter in length
 const float maxHeightForRegularSizedVehicle = 2.0; //constant stating max height for a regular sized vehicle
 const float maxLengthForRegularSizedVehicle = 7.0; //constat stating max length for a regular sized vehicle
-const string fileNameVehicle = "booking.txt";
+const string fileNameVehicle = "booking.txt";//constant that stores file name with all bookings
 
 class Booking {
     public:
@@ -35,7 +35,7 @@ class Booking {
                 );
         //Job: Booking object constructor.
         //Usage: Used when a vehicle is getting booked for a Sailing.
-        //Restrictions: licensePlate and sailingId must comply to domain. sailingIDd must exist.
+        //Restrictions: licensePlate and sailingId must comply to domain. sailingId must exist.
 
         //----------------------------------------------------------------------------
 
@@ -53,9 +53,9 @@ class Booking {
 
 
     private:
-        string sailingId;//SailingID is used to identify on which Sailing the vehicle is booked
-        string licensePlate;//vehicle's license plate. acts as a primary key
-        bool checkedIn = false;//Flag to identify if vehicle has been registered
+        string sailingId;//sailingId is used to identify on which Sailing the vehicle is booked.
+        string licensePlate;//vehicle's license plate. acts as a primary key.
+        bool checkedIn = false;//Flag to identify if vehicle has been registered.
 
 
 
