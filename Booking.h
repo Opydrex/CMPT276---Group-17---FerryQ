@@ -19,16 +19,19 @@ This module is used to store data about bookings.
 using namespace std;
 
 //----------------------------------------------------------------------------
+
 const float regularSizedVehicleFare = 14.0; //constant stating regular sized vehicle fare
 const float extraPerMeterInHeight = 2.0; //constant stating how much to charge per every extra meter in height
 const float extraPerMeterInLength = 3.0; //constant stating how much to charge per every extra meter in length
 const float maxHeightForRegularSizedVehicle = 2.0; //constant stating max height for a regular sized vehicle
 const float maxLengthForRegularSizedVehicle = 7.0; //constat stating max length for a regular sized vehicle
+const string fileNameVehicle = "booking.txt";
 
 class Booking {
     public:
         Booking(const string& licensePlate,//input
-                const string& sailingId//input
+                const string& sailingId,//input
+
                 );
         //Job: Booking object constructor.
         //Usage: Used when a vehicle is getting booked for a Sailing.

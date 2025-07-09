@@ -3,8 +3,7 @@
 
 using namespace std;
 int main(){
-    cout << "Hello World!" << endl;
-    cout<<"Hello World!"<<endl;
+
 }
 /*
 Modules will be separated by two double-dashed lines, example:

@@ -15,6 +15,9 @@ This module is used to store data about vessels.
 #include <string>
 using namespace std;
 
+const float maxLaneLength = 3600.0; // max length in meters for both the regular-sized and special-sized vehicle lanes
+const string fileNameVessel = "vessel.txt";
+
 class Vessel{
     public:
         Vessel(const string& name,//input
@@ -27,7 +30,7 @@ class Vessel{
 
         //----------------------------------------------------------------------------
 
-        void writeVesselToFile(const string& filename//input
+        void writeVessel(const string& filename//input
                          );
         //Job: Writes the Vessel data into the file.
         //Usage: Used when all data about Vessel is collected. It is then written into a data file.

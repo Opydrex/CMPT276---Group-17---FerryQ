@@ -16,6 +16,8 @@ This module is used to store data about vehicle.
 #include <string>
 using namespace std;
 
+const string fileNameVehicle = "vehicle.txt";
+
 class Vehicle{
     public:
         Vehicle(const string& licensePlate,//input
@@ -29,7 +31,7 @@ class Vehicle{
 
         //----------------------------------------------------------------------------
 
-        void writeVehicleToFile(const string& filename//input
+        void writeVehicle(const string& filename//input
                                 );
         //Job: Writes an instance of the Vehicle object to the file.
         //Usage: Used automatically when a Vehicle is registered for the Booking for the first time ever.
@@ -39,10 +41,10 @@ class Vehicle{
 
 
     private:
-            string& licensePlate; //License plate of the vehicle.
-            string& phoneNumber; //Phone number associated with a vehicle.
-            float& height; //Vehicle's height. 0 if it is not a special-sized vehicle.
-            float& length; //Vehicle's length. 0 if it is not a special-sized vehicle.
+            string licensePlate; //License plate of the vehicle.
+            string phoneNumber; //Phone number associated with a vehicle.
+            float height; //Vehicle's height. 0 if it is not a special-sized vehicle.
+            float length; //Vehicle's length. 0 if it is not a special-sized vehicle.
 
 
 
@@ -56,6 +58,7 @@ bool isVehicleExist(const string& licensePlate//input
 //Restrictions: licensePlate must comply to domain.
 
 //----------------------------------------------------------------------------
+
 
 
 #endif //VEHICLE_H
