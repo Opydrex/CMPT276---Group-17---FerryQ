@@ -19,6 +19,11 @@ This module is used to store data about bookings.
 using namespace std;
 
 //----------------------------------------------------------------------------
+const float regularSizedVehicleFare = 14.0; //constant stating regular sized vehicle fare
+const float extraPerMeterInHeight = 2.0; //constant stating how much to charge per every extra meter in height
+const float extraPerMeterInLength = 3.0; //constant stating how much to charge per every extra meter in length
+const float maxHeightForRegularSizedVehicle = 2.0; //constant stating max height for a regular sized vehicle
+const float maxLengthForRegularSizedVehicle = 7.0; //constat stating max length for a regular sized vehicle
 
 class Booking {
     public:
@@ -58,7 +63,7 @@ class Booking {
 
 void checkIn(const string& sailingId,//input
              const string& licensePlate//input
-                    );
+             );
 //Job: Checks in a vehicle for a Sailing.
 //Usage: Used when a booked vehicle needs to be checked in upon arrival to the port.
 //Restrictions: Vehicle must be first booked to be checked in. Sailing must exist.
@@ -83,5 +88,14 @@ bool deleteBooking(const string& sailingId,//input
 
 //----------------------------------------------------------------------------
 
+float calculateFare(const float& length,//input
+					const float& height//input
+					);
+
+//Job: Calculates fare for a booked vehicle.
+//Usage: Called when checking the vehicle in. Only call if special-sized vehicle. For normal sized - fixed fare.
+//Restrictions: height and length have to be non-zero.
+
+//----------------------------------------------------------------------------
 
 #endif // BOOKING_H
