@@ -15,7 +15,7 @@ This module contains functions and implementations related to User Interface.
 #include <string>
 using namespace std;
 
-
+//----------------------------------------------------------------------------
 
 void userInterfaceLoop();
 //Job: Handles the execution loop of the program, this function has the switch cases for the UI to function

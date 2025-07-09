@@ -49,11 +49,14 @@ class Sailing{
         float currentCapacityBig;//Remaining length for special-sized vehicles.
 };
 
+//----------------------------------------------------------------------------
 
 Sailing createSailing();
 // Job: Prompts the user for appropriate data and returns a Sailing object
 // Usage: Called by the UI to collect Sailing information from the user. The collected data can then be passed to writeSailing to save it to file.
 // Restrictions: User input must conform to each variable's domain
+
+//----------------------------------------------------------------------------
 
 bool isSailingExist(const string& sailingId//input
                     );

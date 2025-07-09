@@ -65,11 +65,14 @@ class Booking {
 
 };
 
+//----------------------------------------------------------------------------
+
 Booking createBooking();
 // Job: Prompts the user for a sailingID, license plate and a phone number and returns a booking object that contains them
 // Usage: Called by the UI to collect booking information from the user. The collected data can then be passed to writeBooking to save it to file.
 // Restrictions: User input must conform to each variable's domain
 
+//----------------------------------------------------------------------------
 
 void checkIn(const string& sailingId,//input
              const string& licensePlate//input

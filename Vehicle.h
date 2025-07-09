@@ -49,6 +49,8 @@ class Vehicle{
 
 };
 
+//----------------------------------------------------------------------------
+
 bool isVehicleExist(const string& licensePlate//input
                            );
 

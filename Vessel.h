@@ -52,10 +52,15 @@ class Vessel{
 
 };
 
+//----------------------------------------------------------------------------
+
+
 Vessel createVessel();
 // Job: Prompts the user for appropriate data and returns a Vessel object
 // Usage: Called by the UI to collect vessel information from the user. The collected data can then be passed to writeVessel to save it to file.
 // Restrictions: User input must conform to each variable's domain
+
+//----------------------------------------------------------------------------
 
 bool isVesselExist(const string& name//input
                            );
