@@ -1,0 +1,152 @@
+//==========================================================================
+//==========================================================================
+/*
+MODULE NAME: Vessel.h
+Rev.1 - 22/07/2025 - Vessel class implementation.
+----------------------------------------------------------------------------
+This module contains Vessel class implementation.
+----------------------------------------------------------------------------
+*/
+#include "Vessel.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+Vessel::Vessel(const string& name,//input
+               const float& maxCapacitySmall,//input
+               const float& maxCapacityBig//input
+               )
+{
+    this->name = name;
+    this->maxCapacitySmall = maxCapacitySmall;
+    this->maxCapacityBig = maxCapacityBig;
+}
+
+
+
+void Vessel::writeVessel(ofstream& outFile)
+{
+
+    //isVehicleExist is handled by the createVessel caller
+    if(vesselFile.is_open()) {
+        //cout << "A vessel called " << this->name << " with "<< this->maxCapacitySmall << " low vehicle capacity and "<< maxCapacityBig << " special v"<< endl;//edit this according to user manual
+        //all messages to user will be handled from the createVessel
+        vesselFile << this->name << "," << this->maxCapacitySmall << "," << this->maxCapacityBig << endl;
+        outFile.flush();
+    } else {
+        cerr << "Error: Unable to open file '" << filename << "' for writing. Check file path and permissions." << endl;
+    }
+
+}
+
+bool isVesselExist(const string& name, ifstream& inFile){
+    inFile.clear(); // clear any error flags
+    inFile.seekg(0, ios::beg); // move read pointer to the beginning of the file
+
+    string line;
+    bool exists = false;
+
+    while(getLine(inFile, line)){
+        stringstream ss(line);
+        string vesselNameFromFile;
+
+        if(getline(ss,vesselNameFromFile, ',')){
+            if(vesselNameFromFile == name){
+                exists = true;
+                break;
+            }
+        }
+    }
+
+    return exists;
+
+}
+
+Vessel createVessel(ifstream& inFile, ofstream& outFile){
+    string name;
+    float maxCapacitySmall;
+    float maxCapacityBig;
+    string anotherVessel;
+    string inputForCapacities;
+    while (true) {
+    while (true) {
+        cout << "Enter Vessel name (1 - 25 characters): ";
+        getline(cin >> ws, name);
+
+        if (name.empty()) {
+           //if just hit enter
+            return {}; // return empty vessel object
+        }
+
+        if (name.length() > 25) {
+            cout << "Bad entry! Please try again. " << endl;
+            continue;
+        }
+
+        if (isVesselExist(name, inFile)) {
+            cout << "Error: Vessel with this name already exists. Please enter a unique name." << endl;
+            continue;
+        }
+
+        // name is valid and unique
+        break;
+    }
+
+
+    while (true) {
+        cout << "Enter vessel capacity for low vehicles (0 - 3,600 meters): ";
+        getline(cin >> ws, inputForCapacities);
+
+        if (inputForCapacities.empty()) {
+            //if just hit enter
+            return {};
+        }
+
+        stringstream ss(input);
+        if (ss >> maxCapacitySmall && maxCapacitySmall > 0 && maxCapacitySmall <= 3600.0) {
+            break;
+        } else {
+            cout << "Bad entry! Please try again." << endl;
+        }
+    }
+
+    while (true) {
+        cout << "EEnter vessel capacity for special vehicles (0 - 3,600 meters): ";
+        getline(cin >> ws, input);
+
+        if (input.empty()) {
+            //if just hit enter
+            return {};
+        }
+
+        stringstream ss(input);
+        if (ss >> maxCapacityBig && maxCapacityBig > 0 && maxCapacityBig <= 3600.0) {
+            break;
+        } else {
+            cout << "Bad Entry! Please try again. " << endl;
+        }
+    }
+
+    Vessel newVessel(name, maxCapacitySmall, maxCapacityBig);
+
+    newVessel.writeVessel(outFile);
+
+    cout << "A vessel called " << vessel.getName()
+         << " with " << vessel.getMaxCapacitySmall()
+         << " low vehicle capacity and "
+         << vessel.getMaxCapacityBig()
+         << " special vehicle capacity has been created."
+         << " Would you like to create another vessel? (Y/N): ";
+
+
+    if(anotherVessel == "Y"){
+        createVessel(inFile,outFile);
+    }
+    return newVessel;
+
+
+
+}
