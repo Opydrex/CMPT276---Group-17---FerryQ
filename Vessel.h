@@ -65,7 +65,7 @@ void createVessel(ifstream& inFile,// reference to the open input file stream
 
 //----------------------------------------------------------------------------
 
-bool isVesselExist(const string& name//input
+bool isVesselExist(const string& name,  //input
                    ifstream& inFile     //file to read data from
                    );
 
