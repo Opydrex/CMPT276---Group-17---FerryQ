@@ -17,27 +17,26 @@ using namespace std;
 
 int main(){
     // Declare the stream objects
-    std::ifstream myInputFile;
-    std::ofstream myOutputFile;
-
-    // Open the physical files on disk
-    myInputFile.open("vessel.txt");
-    myOutputFile.open("vessel.txt");
-
-    // Check if the files were opened successfully
-    if (!myInputFile.is_open()) {
-        std::cerr << "Error: Could not open input file." << std::endl;
-        return 1; // Exit with an error code
-    }
-    if (!myOutputFile.is_open()) {
-        std::cerr << "Error: Could not open output file." << std::endl;
-        return 1; // Exit with an error code
+    // Step 1: open for reading to check duplicates
+    ifstream myInputFile("vessel.txt");
+    if (!myInputFile) {
+        cerr << "Could not open vessel.txt for reading" << endl;
+        return 1;
     }
 
-    // Testing function
-	createVessel(myInputFile, myOutputFile);
 
-    // Close the files
+
+    ofstream myOutputFile("vessel.txt", ios::app);
+    if (!myOutputFile) {
+        cerr << "Could not open vessel.txt for appending" << endl;
+        return 1;
+    }
+
+// Now call your logic
+    createVessel(myInputFile, myOutputFile);
+
+// Clean up
     myInputFile.close();
     myOutputFile.close();
+
 }
