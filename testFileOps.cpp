@@ -13,7 +13,6 @@ This module contains the operations and functions that will test the program
 #include <string>
 #include <sstream>
 #include "Vessel.h"
-#include "vessel.txt"
 using namespace std;
 
 int main(){

@@ -67,6 +67,7 @@ bool isVesselExist(const string& name, ifstream& inFile){
 
 void createVessel(ifstream& inFile, ofstream& outFile){
     string name;
+    inFile.seekg(0, ios::end);
     float maxCapacitySmall;
     float maxCapacityBig;
     string anotherVessel;
@@ -145,13 +146,18 @@ void createVessel(ifstream& inFile, ofstream& outFile){
          << maxCapacityBig
          << " special vehicle capacity has been created."
          << " Would you like to create another vessel? (Y/N): ";
+        cin>> anotherVessel;
+        if(anotherVessel == "Y"){
+            createVessel(inFile,outFile);
+        } else{
+            return;
+        }
 
 
-    if(anotherVessel == "Y"){
-        createVessel(inFile,outFile);
-    }
 
 
 
 
-}}
+}
+
+}
