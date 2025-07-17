@@ -31,13 +31,13 @@ void Vessel::writeVessel(ofstream& outFile)
 {
 
     //isVehicleExist is handled by the createVessel caller
-    if(vesselFile.is_open()) {
+    if(outFile.is_open()) {
         //cout << "A vessel called " << this->name << " with "<< this->maxCapacitySmall << " low vehicle capacity and "<< maxCapacityBig << " special v"<< endl;//edit this according to user manual
         //all messages to user will be handled from the createVessel
-        vesselFile << this->name << "," << this->maxCapacitySmall << "," << this->maxCapacityBig << endl;
+        outFile << this->name << "," << this->maxCapacitySmall << "," << this->maxCapacityBig << endl;
         outFile.flush();
     } else {
-        cerr << "Error: Unable to open file '" << filename << "' for writing. Check file path and permissions." << endl;
+        cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
     }
 
 }
@@ -96,25 +96,29 @@ Vessel createVessel(ifstream& inFile, ofstream& outFile){
     }
 
 
+            while (true) {
+                cout << "Enter vessel capacity for low vehicles (0 - 3,600 meters): ";
+                getline(cin >> ws, inputForCapacities);
+
+                if (inputForCapacities.empty()) {
+                    //if just hit enter
+                    return {};
+                }
+
+                stringstream ss(input);
+                if (ss >> maxCapacitySmall && maxCapacitySmall > 0 && maxCapacitySmall <= 3600.0) {
+                    break;
+                } else {
+                    cout << "Bad entry! Please try again." << endl;
+                }
+
+
+            }
+
+
+
     while (true) {
-        cout << "Enter vessel capacity for low vehicles (0 - 3,600 meters): ";
-        getline(cin >> ws, inputForCapacities);
-
-        if (inputForCapacities.empty()) {
-            //if just hit enter
-            return {};
-        }
-
-        stringstream ss(input);
-        if (ss >> maxCapacitySmall && maxCapacitySmall > 0 && maxCapacitySmall <= 3600.0) {
-            break;
-        } else {
-            cout << "Bad entry! Please try again." << endl;
-        }
-    }
-
-    while (true) {
-        cout << "EEnter vessel capacity for special vehicles (0 - 3,600 meters): ";
+        cout << "Enter vessel capacity for special vehicles (0 - 3,600 meters): ";
         getline(cin >> ws, input);
 
         if (input.empty()) {
@@ -149,4 +153,4 @@ Vessel createVessel(ifstream& inFile, ofstream& outFile){
 
 
 
-}
+}}
