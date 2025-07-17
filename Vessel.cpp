@@ -65,7 +65,7 @@ bool isVesselExist(const string& name, ifstream& inFile){
 
 }
 
-Vessel createVessel(ifstream& inFile, ofstream& outFile){
+void createVessel(ifstream& inFile, ofstream& outFile){
     string name;
     float maxCapacitySmall;
     float maxCapacityBig;
@@ -78,7 +78,7 @@ Vessel createVessel(ifstream& inFile, ofstream& outFile){
 
         if (name.empty()) {
            //if just hit enter
-            return {}; // return empty vessel object
+            return; // return empty vessel object
         }
 
         if (name.length() > 25) {
@@ -102,7 +102,7 @@ Vessel createVessel(ifstream& inFile, ofstream& outFile){
 
                 if (inputForCapacities.empty()) {
                     //if just hit enter
-                    return {};
+                    return;
                 }
 
                 stringstream ss(input);
@@ -123,7 +123,7 @@ Vessel createVessel(ifstream& inFile, ofstream& outFile){
 
         if (input.empty()) {
             //if just hit enter
-            return {};
+            return;
         }
 
         stringstream ss(input);
@@ -149,7 +149,7 @@ Vessel createVessel(ifstream& inFile, ofstream& outFile){
     if(anotherVessel == "Y"){
         createVessel(inFile,outFile);
     }
-    return newVessel;
+
 
 
 
