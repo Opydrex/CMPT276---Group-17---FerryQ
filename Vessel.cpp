@@ -105,7 +105,7 @@ void createVessel(ifstream& inFile, ofstream& outFile){
                     return;
                 }
 
-                stringstream ss(input);
+                stringstream ss(inputForCapacities);
                 if (ss >> maxCapacitySmall && maxCapacitySmall > 0 && maxCapacitySmall <= 3600.0) {
                     break;
                 } else {

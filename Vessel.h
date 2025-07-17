@@ -56,7 +56,7 @@ class Vessel{
 //----------------------------------------------------------------------------
 
 
-Vessel createVessel(ifstream& inFile,// reference to the open input file stream
+void createVessel(ifstream& inFile,// reference to the open input file stream
                     ofstream& outFile// reference to the open output file stream
                     );
 // Job: Prompts the user for appropriate data and returns a Vessel object
