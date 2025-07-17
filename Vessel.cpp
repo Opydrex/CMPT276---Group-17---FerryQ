@@ -49,7 +49,7 @@ bool isVesselExist(const string& name, ifstream& inFile){
     string line;
     bool exists = false;
 
-    while(getLine(inFile, line)){
+    while(getline(inFile, line)){
         stringstream ss(line);
         string vesselNameFromFile;
 
@@ -71,6 +71,7 @@ void createVessel(ifstream& inFile, ofstream& outFile){
     float maxCapacityBig;
     string anotherVessel;
     string inputForCapacities;
+    string inputForBigCapacities;
     while (true) {
     while (true) {
         cout << "Enter Vessel name (1 - 25 characters): ";
@@ -119,14 +120,14 @@ void createVessel(ifstream& inFile, ofstream& outFile){
 
     while (true) {
         cout << "Enter vessel capacity for special vehicles (0 - 3,600 meters): ";
-        getline(cin >> ws, input);
+        getline(cin >> ws, inputForBigCapacities);
 
-        if (input.empty()) {
+        if (inputForBigCapacities.empty()) {
             //if just hit enter
             return;
         }
 
-        stringstream ss(input);
+        stringstream ss(inputForBigCapacities);
         if (ss >> maxCapacityBig && maxCapacityBig > 0 && maxCapacityBig <= 3600.0) {
             break;
         } else {
@@ -138,10 +139,10 @@ void createVessel(ifstream& inFile, ofstream& outFile){
 
     newVessel.writeVessel(outFile);
 
-    cout << "A vessel called " << vessel.getName()
-         << " with " << vessel.getMaxCapacitySmall()
+    cout << "A vessel called " << name
+         << " with " << maxCapacitySmall
          << " low vehicle capacity and "
-         << vessel.getMaxCapacityBig()
+         << maxCapacityBig
          << " special vehicle capacity has been created."
          << " Would you like to create another vessel? (Y/N): ";
 
