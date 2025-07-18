@@ -13,30 +13,53 @@ This module contains the operations and functions that will test the program
 #include <string>
 #include <sstream>
 #include "Vessel.h"
+#include "Vehicle.h"
 using namespace std;
 
 int main(){
     // Declare the stream objects
     // Step 1: open for reading to check duplicates
-    ifstream myInputFile("vessel.txt");
-    if (!myInputFile) {
+    ifstream myInputVesselFile("vessel.txt");
+    if (!myInputVesselFile) {
         cerr << "Could not open vessel.txt for reading" << endl;
         return 1;
     }
 
 
 
-    ofstream myOutputFile("vessel.txt", ios::app);
-    if (!myOutputFile) {
+    ofstream myOutputVesselFile("vessel.txt", ios::app);
+    if (!myOutputVesselFile) {
         cerr << "Could not open vessel.txt for appending" << endl;
         return 1;
     }
 
 // Now call your logic
-    createVessel(myInputFile, myOutputFile);
+    createVessel(myInputVesselFile, myOutputVesselFile);
+
+
+
+    //testing vehicle
+    ifstream myInputVehicleFile("vehicle.txt");
+    if (!myInputVehicleFile) {
+        cerr << "Could not open vehicle.txt for reading" << endl;
+        return 1;
+    }
+
+
+
+    ofstream myOutputVehicleFile("vehicle.txt", ios::app);
+    if (!myOutputVesselFile) {
+        cerr << "Could not open vessel.txt for appending" << endl;
+        return 1;
+    }
+    Vehicle newVehicle("cmpt276", 2, 6);
+
+    newVehicle.writeVehicle(myOutputVehicleFile);
+    cout<<isVesselExist("cmpt276",myInputVehicleFile);
+
 
 // Clean up
-    myInputFile.close();
-    myOutputFile.close();
+    myInputVesselFile.close();
+    myOutputVesselFile.close();
 
 }
