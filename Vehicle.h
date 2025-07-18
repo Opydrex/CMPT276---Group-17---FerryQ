@@ -15,6 +15,7 @@ This module contains functions and implementations related to Vehicles.
 
 #include <iostream>
 #include <string>
+
 using namespace std;
 const float maxLength = 99.9; //constant that stores maximum allowed vehicle length.
 const float maxHeight = 9.9; //constant that stores maximum allowed vehicle height.
@@ -32,7 +33,7 @@ class Vehicle{
 
         //----------------------------------------------------------------------------
 
-        void writeVehicle(const string& filename//input
+        void writeVehicle(ofstream& outFile//input
                                 );
         //Job: Writes an instance of the Vehicle object to the file.
         //Usage: Used automatically when a Vehicle is registered for the Booking for the first time ever.
