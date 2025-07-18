@@ -3,6 +3,7 @@
 /*
 MODULE NAME: Vehicle.h
 Rev.1 - 09/07/2025 - Vehicle class header created
+Rev.2 - 24/07/2025 - Minor changes
 ----------------------------------------------------------------------------
 This module contains functions and implementations related to Vehicles.
 ----------------------------------------------------------------------------

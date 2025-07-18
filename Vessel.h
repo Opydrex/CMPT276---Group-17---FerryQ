@@ -3,7 +3,7 @@
 /*
 MODULE NAME: Vessel.h
 Rev.1 - 09/07/2025 - Vessel class header created.
-Rev.2 - 22/07/2025 - Vesseh class header edited
+Rev.2 - 24/07/2025 - Minor changes
 ----------------------------------------------------------------------------
 This module contains functions and implementations related to Vessels.
 ----------------------------------------------------------------------------
