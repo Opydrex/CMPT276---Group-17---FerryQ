@@ -62,6 +62,6 @@ bool isVehicleExist(const string& licensePlate//input
 
 //----------------------------------------------------------------------------
 
-
+void getVehicleDimensions(string licensePlate, float& length, float& height, ifstream& inFile);
 
 #endif //VEHICLE_H
