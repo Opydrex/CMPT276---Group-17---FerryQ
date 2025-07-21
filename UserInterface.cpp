@@ -28,7 +28,6 @@ using namespace std;
 //----------------------------------------------------------------------------
 void SailingsMenu(ifstream& vesselInFile, ofstream& vesselOutFile);
 void BookingsMenu(ifstream& vehicleInFile, ofstream& vehicleOutFile, ifstream& bookingInFile, ofstream& bookingOutFile);
-void DeleteBooking(ofstream& bookingOutFile);
 
 
 //----------------------------------------------------------------------------
@@ -78,11 +77,11 @@ void userInterfaceLoop() {
                 break;
             case 2:
                 // Go to the Bookings Menu
-                handleBookingsMenu(vehicleInFile, vehicleOutFile, bookingInFile, bookingOutFile);
+                BookingsMenu(vehicleInFile, vehicleOutFile, bookingInFile, bookingOutFile);
                 break;
             case 3:
                 // Go to the Sailings Menu
-                handleSailingsMenu(vesselInFile, vesselOutFile);
+                SailingsMenu(vesselInFile, vesselOutFile);
                 break;
             case 0:
                 running = false;
