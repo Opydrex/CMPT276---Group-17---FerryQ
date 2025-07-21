@@ -3,6 +3,7 @@
 /*
 MODULE NAME: Vessel.h
 Rev.1 - 09/07/2025 - Vessel class header created.
+Rev.2 - 24/07/2025 - Minor changes
 ----------------------------------------------------------------------------
 This module contains functions and implementations related to Vessels.
 ----------------------------------------------------------------------------
@@ -31,7 +32,7 @@ class Vessel{
 
 		//----------------------------------------------------------------------------
 
-        void writeVessel(const string& filename//input
+        void writeVessel(ofstream& outFile//input
                          );
         //Job: Writes the Vessel data into the file.
         //Usage: Used when all data about Vessel is collected. It is then written into a data file.
@@ -55,15 +56,18 @@ class Vessel{
 //----------------------------------------------------------------------------
 
 
-Vessel createVessel();
+void createVessel(ifstream& inFile,// reference to the open input file stream
+                    ofstream& outFile// reference to the open output file stream
+                    );
 // Job: Prompts the user for appropriate data and returns a Vessel object
 // Usage: Called by the UI to collect vessel information from the user. The collected data can then be passed to writeVessel to save it to file.
 // Restrictions: User input must conform to each variable's domain
 
 //----------------------------------------------------------------------------
 
-bool isVesselExist(const string& name//input
-                           );
+bool isVesselExist(const string& name,  //input
+                   ifstream& inFile     //file to read data from
+                   );
 
 //Job: Returns a boolean flag indicating if the Vessel exists.
 //Usage: Call when need to find out if the Vessel exists when creating a Sailing.
@@ -71,4 +75,21 @@ bool isVesselExist(const string& name//input
 
 //----------------------------------------------------------------------------
 
+
+
+float getMaxRegularLength(const string& vesselName, ifstream& inFile);
+
+//Job: Getter for initial regular-sized vehicles on the vessel.
+//Usage: Called when creating a Sailing.
+//Restrictions: Vessel name must be under 25 characters. Vessel name must exist.
+
+//----------------------------------------------------------------------------
+
+float getMaxSpecialLength(const string& vesselName, ifstream& inFile);
+
+//Job: Getter for initial special-sized vehicles on the vessel.
+//Usage: Called when creating a Sailing.
+//Restrictions: Vessel name must be under 25 characters. Vessel name must exist.
+
+//----------------------------------------------------------------------------
 #endif //VESSEL_H

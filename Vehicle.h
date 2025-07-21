@@ -3,6 +3,7 @@
 /*
 MODULE NAME: Vehicle.h
 Rev.1 - 09/07/2025 - Vehicle class header created
+Rev.2 - 24/07/2025 - Minor changes
 ----------------------------------------------------------------------------
 This module contains functions and implementations related to Vehicles.
 ----------------------------------------------------------------------------
@@ -14,6 +15,7 @@ This module contains functions and implementations related to Vehicles.
 
 #include <iostream>
 #include <string>
+
 using namespace std;
 const float maxLength = 99.9; //constant that stores maximum allowed vehicle length.
 const float maxHeight = 9.9; //constant that stores maximum allowed vehicle height.
@@ -31,7 +33,7 @@ class Vehicle{
 
         //----------------------------------------------------------------------------
 
-        void writeVehicle(const string& filename//input
+        void writeVehicle(ofstream& outFile//input
                                 );
         //Job: Writes an instance of the Vehicle object to the file.
         //Usage: Used automatically when a Vehicle is registered for the Booking for the first time ever.
@@ -51,8 +53,8 @@ class Vehicle{
 
 //----------------------------------------------------------------------------
 
-bool isVehicleExist(const string& licensePlate//input
-                           );
+bool isVehicleExist(const string& licensePlate, //input
+                     ifstream& inFile      );
 
 //Job: Returns a boolean flag indicating if the Vehicle exists.
 //Usage: Call when need to find out if the Vehicle exists
@@ -60,6 +62,10 @@ bool isVehicleExist(const string& licensePlate//input
 
 //----------------------------------------------------------------------------
 
+void getVehicleDimensions(string licensePlate, float& length, float& height, ifstream& inFile);
 
+//Job: Assigns vehicle length and height to two pointers.
+//Usage: Used to calculate fare.
+//Restrictions: licensePlate must comply to domain. Vehicle must exist
 
 #endif //VEHICLE_H

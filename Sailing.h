@@ -16,6 +16,11 @@ This module contains functions and implementations related to Sailings.
 #include <string>
 using namespace std;
 
+const std::string fileNameSailing = "sailing.txt";
+const std::string fileNameBooking = "booking.txt";
+const std::string fileNameVehicle = "vehicle.txt";
+const std::string fileNameVessel = "vessel.txt";
+
 const int maxSailingDay = 31; //last day of the month - can't create a sailing on day 32.
 const int maxSailingHour = 23; //last hour of the day in 24-hour format - can't create a sailing on hour 25.
 const string fileNameSailing = "sailing.txt"; //constant that stores file name with all sailings
@@ -51,7 +56,7 @@ class Sailing{
 
 //----------------------------------------------------------------------------
 
-Sailing createSailing();
+void createSailing();
 // Job: Prompts the user for appropriate data and returns a Sailing object
 // Usage: Called by the UI to collect Sailing information from the user. The collected data can then be passed to writeSailing to save it to file.
 // Restrictions: User input must conform to each variable's domain
@@ -67,8 +72,7 @@ bool isSailingExist(const string& sailingId//input
 
 //----------------------------------------------------------------------------
 
-bool deleteSailing(const string& sailingId,//input
-                   );
+void deleteSailing();
 //Job: Deletes a Sailing and all related bookings.
 //Usage: Call when need to delete a sailing and all related bookings.
 //Restrictions: Sailing must exist.
