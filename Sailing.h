@@ -51,7 +51,7 @@ class Sailing{
 
 //----------------------------------------------------------------------------
 
-Sailing createSailing();
+void createSailing();
 // Job: Prompts the user for appropriate data and returns a Sailing object
 // Usage: Called by the UI to collect Sailing information from the user. The collected data can then be passed to writeSailing to save it to file.
 // Restrictions: User input must conform to each variable's domain
@@ -67,8 +67,7 @@ bool isSailingExist(const string& sailingId//input
 
 //----------------------------------------------------------------------------
 
-bool deleteSailing(const string& sailingId,//input
-                   );
+void deleteSailing();
 //Job: Deletes a Sailing and all related bookings.
 //Usage: Call when need to delete a sailing and all related bookings.
 //Restrictions: Sailing must exist.
