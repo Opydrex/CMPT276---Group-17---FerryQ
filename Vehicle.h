@@ -53,8 +53,8 @@ class Vehicle{
 
 //----------------------------------------------------------------------------
 
-bool isVehicleExist(const string& licensePlate//input
-                     ifstream& inFile      );
+bool isVehicleExist(const string& licensePlate, //input
+                          ifstream& inFile    );
 
 //Job: Returns a boolean flag indicating if the Vehicle exists.
 //Usage: Call when need to find out if the Vehicle exists
