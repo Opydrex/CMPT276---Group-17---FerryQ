@@ -64,4 +64,8 @@ bool isVehicleExist(const string& licensePlate//input
 
 void getVehicleDimensions(string licensePlate, float& length, float& height, ifstream& inFile);
 
+//Job: Assigns vehicle length and height to two pointers.
+//Usage: Used to calculate fare.
+//Restrictions: licensePlate must comply to domain. Vehicle must exist
+
 #endif //VEHICLE_H

@@ -83,6 +83,9 @@ void getVehicleDimensions(string licensePlate, float& length, float& height, ifs
                     break;
                 }
             }
+            else{
+                cout<<"Vehicle not found."<<endl;
+            }
         }
     }
 }
