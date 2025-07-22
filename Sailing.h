@@ -16,11 +16,6 @@ This module contains functions and implementations related to Sailings.
 #include <string>
 using namespace std;
 
-const std::string fileNameSailing = "sailing.txt";
-const std::string fileNameBooking = "booking.txt";
-const std::string fileNameVehicle = "vehicle.txt";
-const std::string fileNameVessel = "vessel.txt";
-
 const int maxSailingDay = 31; //last day of the month - can't create a sailing on day 32.
 const int maxSailingHour = 23; //last hour of the day in 24-hour format - can't create a sailing on hour 25.
 
