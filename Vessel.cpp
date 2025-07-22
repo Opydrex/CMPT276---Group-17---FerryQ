@@ -42,6 +42,14 @@ void Vessel::writeVessel(ofstream& outFile)
 
 }
 
+
+
+
+// CREATE QUEURY A SINGLE SAILING AND ALSO ADD IT TO THE MENU (EDIT THE USER MANUAL)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\
+
+
+
+
 bool isVesselExist(const string& name, ifstream& inFile){
     inFile.clear(); // clear any error flags
     inFile.seekg(0, ios::beg); // move read pointer to the beginning of the file

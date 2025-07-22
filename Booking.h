@@ -32,7 +32,7 @@ class Booking {
         Booking(const string& licensePlate,//input
                 const string& sailingId,//input
 				const string& phoneNumber,
-				const boolean& checkedIn
+				const bool& checkedIn
                 );
         //Job: Booking object constructor.
         //Usage: Used when a vehicle is getting booked for a Sailing.
