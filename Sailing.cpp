@@ -57,7 +57,7 @@ void Sailing::writeSailing(ofstream& outFile) {
 //----------------------------------------------------------------------------
 // Prompts the user for appropriate data and returns a Sailing object
 //----------------------------------------------------------------------------
-void createSailing(ofstream& sailingOutFile, ifstream& sailingInFile) {
+void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sailingInFile) {
     while (true) {
         string term, vessel, dayStr, hourStr;
         int day = 0, hour = 0;

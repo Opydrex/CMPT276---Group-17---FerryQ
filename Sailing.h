@@ -56,7 +56,8 @@ class Sailing{
 //----------------------------------------------------------------------------
 
 void createSailing(ifstream& vesselFile,//input
-                   ofstream& sailingOutFile//input
+                   ofstream& sailingOutFile,//input
+                   ifstream& sailingInFile//input
                    );
 
 // Job: Prompts the user for appropriate data and returns a Sailing object
