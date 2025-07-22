@@ -77,6 +77,7 @@ bool isVesselExist(const string& name,  //input
 
 
 
+
 float getMaxRegularLength(const string& vesselName, ifstream& inFile);
 
 //Job: Getter for initial regular-sized vehicles on the vessel.
@@ -92,4 +93,5 @@ float getMaxSpecialLength(const string& vesselName, ifstream& inFile);
 //Restrictions: Vessel name must be under 25 characters. Vessel name must exist.
 
 //----------------------------------------------------------------------------
+
 #endif //VESSEL_H

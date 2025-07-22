@@ -211,4 +211,3 @@ float getMaxSpecialLength(const string& vesselName, ifstream& inFile) {
     return -1;
 }
 
-

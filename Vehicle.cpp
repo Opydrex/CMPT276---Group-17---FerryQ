@@ -60,7 +60,9 @@ bool isVehicleExist(const string& licensePlate, ifstream& inFile){
 
 }
 
-void getVehicleDimensions(string licensePlate, float& length, float& height, ifstream& inFile){
+
+void getVehicleDimensions(string licensePlate, string* length, string* height, ifstream& inFile){
+
     if(isVehicleExist(licensePlate, inFile)){
         inFile.clear();
         inFile.seekg(0, ios::beg);
@@ -78,14 +80,16 @@ void getVehicleDimensions(string licensePlate, float& length, float& height, ifs
 
                 if (licensePlateFromFile == licensePlate) {
                     // Found the matching license plate; return the two values
-                    height = stof(vehicleHeight);
-                    length = stof(vehicleLength);
+
+                    *height = vehicleHeight;
+                    *length = vehicleLength;
                     break;
                 }
             }
             else{
                 cout<<"Vehicle not found."<<endl;
             }
+
         }
     }
 }
