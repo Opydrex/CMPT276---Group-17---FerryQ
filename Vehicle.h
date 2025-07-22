@@ -34,7 +34,9 @@ class Vehicle{
         //----------------------------------------------------------------------------
 
         void writeVehicle(ofstream& outFile//input
-                                );
+
+                         );
+
         //Job: Writes an instance of the Vehicle object to the file.
         //Usage: Used automatically when a Vehicle is registered for the Booking for the first time ever.
         //Restrictions: Isn't called when Vehicle already exists in the file.
@@ -53,14 +55,29 @@ class Vehicle{
 
 //----------------------------------------------------------------------------
 
-bool isVehicleExist(const string& licensePlate//input
-                           );
+bool isVehicleExist(const string& licensePlate,//input
+                     ifstream& inFile//Input
+                    );
+
 
 //Job: Returns a boolean flag indicating if the Vehicle exists.
 //Usage: Call when need to find out if the Vehicle exists
 //Restrictions: licensePlate must comply to domain.
 
 //----------------------------------------------------------------------------
+
+
+void getVehicleDimensions(string licensePlate, //Input
+                          string* length, //Output
+                          string* height, //Output
+                          ifstream& inFile //Input
+                         );
+
+//Job: Assigns vehicle length and height to two pointers.
+//Usage: acts as a getter for a vehicle's height and length.
+//Restrictions: licensePlate must comply to domain. Vehicle must exist
+
+
 
 
 

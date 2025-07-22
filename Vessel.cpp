@@ -82,28 +82,28 @@ void createVessel(ifstream& inFile, ofstream& outFile){
     string inputForCapacities;
     string inputForBigCapacities;
     while (true) {
-    while (true) {
-        cout << "Enter Vessel name (1 - 25 characters): ";
-        getline(cin >> ws, name);
+        while (true) {
+            cout << "Enter Vessel name (1 - 25 characters): ";
+            getline(cin >> ws, name);
 
-        if (name.empty()) {
-           //if just hit enter
-            return; // return empty vessel object
+            if (name.empty()) {
+               //if just hit enter
+                return; // return empty vessel object
+            }
+
+            if (name.length() > 25) {
+                cout << "Bad entry! Please try again. " << endl;
+                continue;
+            }
+
+            if (isVesselExist(name, inFile)) {
+                cout << "Error: Vessel with this name already exists. Please enter a unique name." << endl;
+                continue;
+            }
+
+            // name is valid and unique
+            break;
         }
-
-        if (name.length() > 25) {
-            cout << "Bad entry! Please try again. " << endl;
-            continue;
-        }
-
-        if (isVesselExist(name, inFile)) {
-            cout << "Error: Vessel with this name already exists. Please enter a unique name." << endl;
-            continue;
-        }
-
-        // name is valid and unique
-        break;
-    }
 
 
             while (true) {
@@ -169,3 +169,53 @@ void createVessel(ifstream& inFile, ofstream& outFile){
 }
 
 }
+
+float getMaxRegularLength(const string& vesselName, ifstream& inFile) {
+    inFile.clear();
+    inFile.seekg(0, ios::beg);
+
+    string line;
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        string vesselNameFromFile;
+        string regularLengthStr;
+
+        if (getline(ss, vesselNameFromFile, ',') &&
+            getline(ss, regularLengthStr, ',')) {
+
+            if (vesselNameFromFile == vesselName) {
+                return stof(regularLengthStr);
+            }
+        }
+    }
+
+    cerr << "Error: Vessel '" << vesselName << "' not found in file.\n";
+    return -1;
+}
+
+
+float getMaxSpecialLength(const string& vesselName, ifstream& inFile) {
+    inFile.clear();
+    inFile.seekg(0, ios::beg);
+
+    string line;
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        string vesselNameFromFile;
+        string skipRegularLengthStr;
+        string specialLengthStr;
+
+        if (getline(ss, vesselNameFromFile, ',') &&
+            getline(ss, skipRegularLengthStr, ',') &&
+            getline(ss, specialLengthStr, ',')) {
+
+            if (vesselNameFromFile == vesselName) {
+                return stof(specialLengthStr);
+            }
+        }
+    }
+
+    cerr << "Error: Vessel '" << vesselName << "' not found in file.\n";
+    return -1;
+}
+
