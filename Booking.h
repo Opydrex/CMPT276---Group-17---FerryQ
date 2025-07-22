@@ -95,10 +95,20 @@ bool isBookingExist(const string& sailingId,//input
 
 bool deleteBooking(const string& sailingId,//input
                    const string& licensePlate,//input
-                   ofstream& outFile//Input
+                   ofstream& outFile, //input
+                   ifstream& inFile // input
+
                     );
 //Job: Deletes a booking from the file.
 //Usage: Call when need to delete a booking.
+//Restrictions: Booking must exist. Sailing must exist.
+
+//----------------------------------------------------------------------------
+
+
+void promptToDeleteBooking(ifstream& inFile, ofstream& outFile);
+//Job: Prompts user to understand which booking to delete. it later calls deleteBooking
+//Usage: Call when user chooses an option to Delete Booking
 //Restrictions: Booking must exist. Sailing must exist.
 
 //----------------------------------------------------------------------------
