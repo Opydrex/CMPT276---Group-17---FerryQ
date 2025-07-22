@@ -31,8 +31,12 @@ class Booking {
     public:
         Booking(const string& licensePlate,//input
                 const string& sailingId,//input
-				const string& phoneNumber,//Input
-                const bool& checkIn//Input
+
+				const string& phoneNumber,
+				const bool& checkedIn
+
+			
+
                 );
         //Job: Booking object constructor.
         //Usage: Used when a vehicle is getting booked for a Sailing.

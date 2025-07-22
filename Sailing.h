@@ -23,7 +23,6 @@ const std::string fileNameVessel = "vessel.txt";
 
 const int maxSailingDay = 31; //last day of the month - can't create a sailing on day 32.
 const int maxSailingHour = 23; //last hour of the day in 24-hour format - can't create a sailing on hour 25.
-const string fileNameSailing = "sailing.txt"; //constant that stores file name with all sailings
 
 class Sailing{
 
@@ -39,7 +38,7 @@ class Sailing{
 
         //----------------------------------------------------------------------------
 
-        void writeSailing(const string& filename//input
+        void writeSailing(ofstream& outFile//input
                           );
         //Job: Writes an instance of the Sailing object to the file.
         //Usage: Used when a Sailing is written to the file.
@@ -56,14 +55,18 @@ class Sailing{
 
 //----------------------------------------------------------------------------
 
-void createSailing();
+void createSailing(ifstream& vesselFile,//input
+                   ofstream& sailingOutFile//input
+                   );
+
 // Job: Prompts the user for appropriate data and returns a Sailing object
 // Usage: Called by the UI to collect Sailing information from the user. The collected data can then be passed to writeSailing to save it to file.
 // Restrictions: User input must conform to each variable's domain
 
 //----------------------------------------------------------------------------
 
-bool isSailingExist(const string& sailingId//input
+bool isSailingExist(const string& sailingId,//input
+                    ifstream& sailingInFile//input
                     );
 
 //Job: Returns a boolean flag indicating if the Sailing exists.
@@ -72,14 +75,28 @@ bool isSailingExist(const string& sailingId//input
 
 //----------------------------------------------------------------------------
 
-void deleteSailing();
+bool deleteSailing(const string& sailingId,//input
+                   ofstream& outFile,//input
+                   ifstream& inFile//input
+                   );
+
 //Job: Deletes a Sailing and all related bookings.
 //Usage: Call when need to delete a sailing and all related bookings.
 //Restrictions: Sailing must exist.
 
 //----------------------------------------------------------------------------
 
-void printReport();
+void promptToDeleteSailing(ifstream& inFile,//input
+                           ofstream& outFile//input
+                           );
+//Job: Prompts for SailingID and invokes deleteSailing.
+//Usage: Call to interactively delete a sailing.
+//Restrictions: inFile and outFile must be open and writable/readable.
+
+//----------------------------------------------------------------------------
+
+void printReport(ifstream& sailingInFile
+                 );
 //Job: Prints a Sailings report.
 //Usage: Call when User wants to print Sailings report.
 //Restrictions: At least 1 Sailing must exist.
