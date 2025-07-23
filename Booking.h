@@ -71,16 +71,22 @@ class Booking {
 
 //----------------------------------------------------------------------------
 
-Booking createBooking();
+Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for getVehicleDimensions
+                      ofstream& outFile, //Input; The Vehicle's file. Needed for writeVehicle
+                      ofstream& outFileBooking, //Input; The Booking's file. Needed to write the booking to file
+                      ifstream& sailingInFile
+);
 // Job: Prompts the user for a sailingID, license plate and a phone number and returns a booking object that contains them
 // Usage: Called by the UI to collect booking information from the user. The collected data can then be passed to writeBooking to save it to file.
 // Restrictions: User input must conform to each variable's domain
 
 //----------------------------------------------------------------------------
 
-void checkIn(ifstream& inFile,//Input
-             ofstream& outFile//Input
-             );
+void checkIn(ifstream& inFile,//Input; The booking's file
+             ifstream& inFileVehicle,//Input; the Vehicle's file
+             ofstream& outFile,//Input; The booking's file
+             ifstream& sailingInFile
+);
 //Job: Checks in one or multiple vehicle for a Sailing.
 //Usage: Used when a booked vehicle needs to be checked in upon arrival to the port.
 //Restrictions: Vehicle must be booked for this Sailing to be checked in. Sailing must exist. inFile and outFile must be open before calling this function

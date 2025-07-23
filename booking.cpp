@@ -44,7 +44,8 @@ void Booking::writeBooking(ofstream& outFile//Input; The Booking's file
 
 Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for getVehicleDimensions
                      ofstream& outFile, //Input; The Vehicle's file. Needed for writeVehicle
-                     ofstream& outFileBooking //Input; The Booking's file. Needed to write the booking to file
+                     ofstream& outFileBooking, //Input; The Booking's file. Needed to write the booking to file
+                     ifstream& sailingInFile
 )
 {
 
@@ -72,7 +73,7 @@ Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for 
            }
 
            //If the sailing ID doesn't exist, let them try again
-           else if(!isSailingExist(sailingID)){
+           else if(!isSailingExist(sailingID,sailingInFile)){
                cout << "SailingID does not exist! Please try again, or press Enter to exit\n";
                continue;
            }
@@ -231,7 +232,8 @@ float calculateFare(const float& length,//input
 
 void checkIn(ifstream& inFile,//Input; The booking's file
             ifstream& inFileVehicle,//Input; the Vehicle's file
-            ofstream& outFile//Input; The booking's file
+            ofstream& outFile,//Input; The booking's file
+            ifstream& sailingInFile
 )
 {
    inFile.clear(); // clear any error flags
@@ -259,7 +261,7 @@ void checkIn(ifstream& inFile,//Input; The booking's file
            }
 
            //If the sailing ID doesn't exist, let them try again
-           else if(!isSailingExist(sailingID)){ !
+           else if(!isSailingExist(sailingID,sailingInFile)){
 
                cout << "SailingID does not exist! Please try again, or press Enter to exit\n";
                continue;

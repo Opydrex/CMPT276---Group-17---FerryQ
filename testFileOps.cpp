@@ -119,6 +119,7 @@ int main() {
                 return 1;
             }
         }
+<<<<<<< HEAD
         break; 
         
             case 3:  
@@ -150,6 +151,55 @@ int main() {
   
     return 0;  
 }   
+=======
+        Vessel v1("SpiritBC", 20.0f, 10.0f);
+        v1.writeVessel(outV);
+    }
+
+    int choice = -1;
+    do {
+        cout << "\n=== Sailing Module Test Harness ===" << endl;
+        cout << "1) Create a Sailing" << endl;
+        cout << "2) Delete a Sailing" << endl;
+        cout << "3) View Sailings Report" << endl;
+        cout << "0) Exit" << endl;
+        cout << "Enter choice (0-3): ";
+        cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        switch (choice) {
+            case 1:
+                cout << "\n--- Create Sailing ---" << endl;
+                createSailing();
+                break;
+
+            case 2:
+                cout << "\n--- Delete Sailing ---" << endl;
+                deleteSailing();
+                break;
+
+            case 3:
+                cout << "\n--- Sailings Report ---" << endl;
+                printReport();
+                break;
+
+            case 0:
+                cout << "Exiting test harness." << endl;
+                break;
+
+            default:
+                cout << "Invalid option. Please enter 0-3." << endl;
+        }
+
+        if (choice != 0) {
+            cout << "\nPress Enter to return to menu...";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    } while (choice != 0);
+
+    return 0;
+}
+>>>>>>> ee6f551980d3795703ebdd7d5e8894267e89dc5d
 
 // int main(){
 //     // Declare the stream objects
