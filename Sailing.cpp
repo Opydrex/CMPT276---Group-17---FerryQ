@@ -333,7 +333,7 @@ void printReport(ifstream& sailingInFile) {
             string inp;
             while(true) {
                 cout << "Enter M for more, 0 or Enter to exit: ";
-                getline(cin, inp);
+                getline(cin>>ws, inp);
                 if(inp.empty() || inp == "0") {
                     exit = true;
                     break;
@@ -358,7 +358,8 @@ void querySailing(ifstream& sailingInFile) {
     while (true) {
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sailingId;
-        getline(cin, sailingId);
+        //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        getline(cin>>ws, sailingId);
         if (sailingId.empty())
             return;
 

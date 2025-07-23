@@ -51,6 +51,8 @@ void createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for get
 
    string vehicleLength;
    string vehicleHeight;
+   float floatVehicleLength;
+   float floatVehicleHeight;
    bool exitFlag = false;
    while(true){// This loop controls the whole checkIn process
        string sailingID;
@@ -128,15 +130,16 @@ void createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for get
        }
        else { //Vehicle does not already exist on file, gather data and create it
        string vehicleLength;
+
        while(true){//This loop gets the vehicle length from the user
            cout << "Enter the vehicle's length (up to 99.9 meters): ";
            getline(cin >> ws, vehicleLength);
-
-           if(vehicleLength.length() < 0){
+           floatVehicleLength = stof(vehicleLength);
+           if(floatVehicleLength < 0){
                cout << "The length of the car cannot be smaller than 0. Please try again\n";
                continue;
            }
-           else if(vehicleLength.length() > 99.9){
+           else if(floatVehicleLength > 99.9){
                cout << "The length of the car cannot be larger than 99.9 Please try again\n";
                continue;
            }
@@ -146,14 +149,14 @@ void createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for get
 
        string vehicleHeight;
        while(true){//This loop gets the vehicle height from the user
-           cout << "Enter the vehicle's length (up to 99.9 meters): ";
+           cout << "Enter the vehicle's height (up to 9.9 meters): ";
            getline(cin >> ws, vehicleHeight);
-
-           if(vehicleHeight.length() < 0){
+           floatVehicleHeight = stof(vehicleHeight);
+           if(floatVehicleHeight < 0){
                cout << "The height of the car cannot be smaller than 0. Please try again\n";
                continue;
            }
-           else if(vehicleHeight.length() > 9.9){
+           else if(floatVehicleHeight > 9.9){
                cout << "The height of the car cannot exceed 9.9 Please try again\n";
                continue;
            }
@@ -166,15 +169,14 @@ void createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for get
        newVehicle.writeVehicle(outFile);
    }
 
-   float vHeight = stof(vehicleHeight);
-   float vLength = stof(vehicleLength);
+
 
    //Write the new booking to file
    Booking newBooking(sailingID, licensePlate, phoneNumber, false);
    newBooking.writeBooking(outFileBooking);
 
    string yesNo;
-   if(vHeight > maxHeightForRegularSizedVehicle || vLength > maxLengthForRegularSizedVehicle){
+   if(floatVehicleHeight > maxHeightForRegularSizedVehicle ||  floatVehicleLength > maxLengthForRegularSizedVehicle){
        cout << "Special-sized vehicle with a " << licensePlate << " license plate has been booked for Sailing"
        << sailingID << ". Would you like to create another booking? (Y/N) "; //Print the prompt
    }
