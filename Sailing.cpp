@@ -85,7 +85,7 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
 
             capSmall = getMaxRegularLength(vessel, vesselFile);
             capBig = getMaxSpecialLength(vessel, vesselFile);
-
+ 
             if (capSmall == -1 || capBig == -1) {
                 cout << "Error: Vessel not found. Please enter a valid vessel name." << endl;
                 continue;
@@ -298,6 +298,7 @@ void querySailing(ifstream& sailingInFile) {
     while (true) {
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sailingId;
+
         getline(cin >> ws, sailingId);
         if (sailingId.empty())
             return;

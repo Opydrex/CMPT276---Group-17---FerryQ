@@ -42,7 +42,7 @@ void Booking::writeBooking(ofstream& outFile//Input; The Booking's file
    }
 }
 
-Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for getVehicleDimensions
+void createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for getVehicleDimensions
                      ofstream& outFile, //Input; The Vehicle's file. Needed for writeVehicle
                      ofstream& outFileBooking, //Input; The Booking's file. Needed to write the booking to file
                      ifstream& sailingInFile
@@ -51,6 +51,8 @@ Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for 
 
    string vehicleLength;
    string vehicleHeight;
+   float floatVehicleLength;
+   float floatVehicleHeight;
    bool exitFlag = false;
    while(true){// This loop controls the whole checkIn process
        string sailingID;
@@ -128,15 +130,16 @@ Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for 
        }
        else { //Vehicle does not already exist on file, gather data and create it
        string vehicleLength;
+
        while(true){//This loop gets the vehicle length from the user
            cout << "Enter the vehicle's length (up to 99.9 meters): ";
            getline(cin >> ws, vehicleLength);
-
-           if(vehicleLength.length() < 0){
+           floatVehicleLength = stof(vehicleLength);
+           if(floatVehicleLength < 0){
                cout << "The length of the car cannot be smaller than 0. Please try again\n";
                continue;
            }
-           else if(vehicleLength.length() > 99.9){
+           else if(floatVehicleLength > 99.9){
                cout << "The length of the car cannot be larger than 99.9 Please try again\n";
                continue;
            }
@@ -146,14 +149,14 @@ Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for 
 
        string vehicleHeight;
        while(true){//This loop gets the vehicle height from the user
-           cout << "Enter the vehicle's length (up to 99.9 meters): ";
+           cout << "Enter the vehicle's height (up to 9.9 meters): ";
            getline(cin >> ws, vehicleHeight);
-
-           if(vehicleHeight.length() < 0){
+           floatVehicleHeight = stof(vehicleHeight);
+           if(floatVehicleHeight < 0){
                cout << "The height of the car cannot be smaller than 0. Please try again\n";
                continue;
            }
-           else if(vehicleHeight.length() > 9.9){
+           else if(floatVehicleHeight > 9.9){
                cout << "The height of the car cannot exceed 9.9 Please try again\n";
                continue;
            }
@@ -166,15 +169,14 @@ Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for 
        newVehicle.writeVehicle(outFile);
    }
 
-   float vHeight = stof(vehicleHeight);
-   float vLength = stof(vehicleLength);
+
 
    //Write the new booking to file
    Booking newBooking(sailingID, licensePlate, phoneNumber, false);
    newBooking.writeBooking(outFileBooking);
 
    string yesNo;
-   if(vHeight > maxHeightForRegularSizedVehicle || vLength > maxLengthForRegularSizedVehicle){
+   if(floatVehicleHeight > maxHeightForRegularSizedVehicle ||  floatVehicleLength > maxLengthForRegularSizedVehicle){
        cout << "Special-sized vehicle with a " << licensePlate << " license plate has been booked for Sailing"
        << sailingID << ". Would you like to create another booking? (Y/N) "; //Print the prompt
    }
@@ -197,17 +199,17 @@ bool isBookingExist(const string& sailingId,//input
 ){
    string line;
    while (getline(inFile, line)) {//This loop searches for a booking
-   stringstream ss(line);
-   string sailingIDFromFile, licensePlateFromFile;
+       stringstream ss(line);
+       string sailingIDFromFile, licensePlateFromFile;
 
-   if (getline(ss, sailingIDFromFile, ',') && getline(ss, licensePlateFromFile, ',')) {
-       if (sailingIDFromFile == sailingId && licensePlateFromFile == licensePlate) {
-           return true;
+       if (getline(ss, sailingIDFromFile, ',') && getline(ss, licensePlateFromFile, ',')) {
+           if (sailingIDFromFile == sailingId && licensePlateFromFile == licensePlate) {
+               return true;
+           }
        }
+       return false;
    }
-
    return false;
-   }
 }
 
 float calculateFare(const float& length,//input
@@ -327,7 +329,7 @@ void checkIn(ifstream& inFile,//Input; The booking's file
 
        //Update the booking by deleting the old one and creating a new one.
        Booking newBooking(licensePlateFromFile,sailingIDFromFile, phoneNumberFromFile, true);
-       deleteBooking(sailingIDFromFile, licensePlateFromFile,  outFile, inFile);
+       deleteBooking(sailingIDFromFile, licensePlateFromFile,inFile, outFile);
        newBooking.writeBooking(outFile);
 
    } //The check-in function will automatically loop until the user presses enter for the sailingID or the license Plate
@@ -337,8 +339,11 @@ void checkIn(ifstream& inFile,//Input; The booking's file
 
 bool deleteBooking(const string& licensePlate,
                    const string& sailingId,
+
                    ifstream& inFile,
-                   ofstream& outFile)
+                   ofstream& outFile
+
+                   )
 {
     string line;
     bool found = false;
