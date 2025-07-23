@@ -8,12 +8,13 @@ This module contains the main function, as well as functions and implementations
 ----------------------------------------------------------------------------
 */
 
-#include <iostream>
 #include "UserInterface.h"
-using namespace std;
-int main(){
-	cout<<"Welcome to the FerryQ!!!"<<endl;
+#include <iostream>
+
+int main() {
+    std::cout << "Welcome to the FerryQ!!!" << std::endl << std::endl;
     userInterfaceLoop();
+    return 0;
 }
 
 void init();
