@@ -71,23 +71,13 @@ bool isSailingExist(const string& sailingId,//input
 
 //----------------------------------------------------------------------------
 
-bool deleteSailing(const string& sailingId,//input
-                   ofstream& outFile,//input
+bool deleteSailing(ofstream& outFile,//input
                    ifstream& inFile//input
                    );
 
 //Job: Deletes a Sailing and all related bookings.
 //Usage: Call when need to delete a sailing and all related bookings.
 //Restrictions: Sailing must exist.
-
-//----------------------------------------------------------------------------
-
-void promptToDeleteSailing(ifstream& inFile,//input
-                           ofstream& outFile//input
-                           );
-//Job: Prompts for SailingID and invokes deleteSailing.
-//Usage: Call to interactively delete a sailing.
-//Restrictions: inFile and outFile must be open and writable/readable.
 
 //----------------------------------------------------------------------------
 

@@ -29,177 +29,119 @@ This module contains the operations and functions that will test the program
 #include "Sailing.h"
 using namespace std;
 
-int main() {  
-    // ensure vessel data exists  
-    {  
-        ofstream tmpV("vessel.txt", ios::app);  
-    }  
-    // ensure sailing file exists so ifstream won’t fail  
-    {  
-        ofstream tmpS("sailing.txt", ios::app);  
-    }  
+bool validSailingId(const string& s) {  
+    if (s.size() != 9) return false;  
+    if (s[3] != '-' || s[6] != '-') return false;  
+    for (int i = 0; i < 3; ++i) if (!isalpha(s[i])) return false;  
+    for (int i : {4,5,7,8})      if (!isdigit(s[i])) return false;  
+    return true;  
+}  
   
-    // open vessel lookup file (read‑only)  
+int main() {  
+    // make sure data files exist  
+    { ofstream tmp("vessel.txt", ios::app); }  
+    { ofstream tmp("sailing.txt", ios::app); }  
+  
+    // open vessel file for lookup  
     ifstream vesselIn("vessel.txt");  
     if (!vesselIn) {  
-        cerr << "Could not open vessel.txt for reading" << endl;  
+        cerr << "Could not open vessel.txt for reading\n";  
         return 1;  
     }  
   
-    // open sailing file for appending new sailings  
+    // persistent streams for creates & reports  
     ofstream sailingOut("sailing.txt", ios::app);  
     if (!sailingOut) {  
-        cerr << "Could not open sailing.txt for appending" << endl;  
+        cerr << "Could not open sailing.txt for appending\n";  
         return 1;  
     }  
-  
-    // open sailing file for reading/existence checks  
     ifstream sailingIn("sailing.txt");  
     if (!sailingIn) {  
-        cerr << "Could not open sailing.txt for reading" << endl;  
+        cerr << "Could not open sailing.txt for reading\n";  
         return 1;  
     }  
   
     int choice = -1;  
     do {  
-        cout << "\n=== Sailing Module Test Harness ===" << endl;  
-        cout << "1) Create a Sailing" << endl;  
-        cout << "2) Delete a Sailing" << endl;  
-        cout << "3) View Sailings Report" << endl;  
-        cout << "4) Query a Sailing" << endl;  
-        cout << "0) Exit" << endl;  
+        cout << "\n=== Sailing Module Test Harness ===\n";  
+        cout << "1) Create a Sailing\n";  
+        cout << "2) Delete a Sailing\n";  
+        cout << "3) View Sailings Report\n";  
+        cout << "4) Query a Sailing\n";  
+        cout << "0) Exit\n";  
         cout << "Enter choice (0-4): ";  
         cin >> choice;  
         cin.ignore(numeric_limits<streamsize>::max(), '\n');  
   
         switch (choice) {  
             case 1:  
-                cout << "\n--- Create Sailing ---" << endl;  
+                cout << "\n--- Create Sailing ---\n";  
                 createSailing(vesselIn, sailingOut, sailingIn);  
                 break;  
   
-        case 2: {
-            cout << "\n--- Delete Sailing ---" << endl;
+            case 2: {
+                cout << "\n--- Delete Sailing ---\n";
+                // 0) Close the persistent handles so we can delete/rename the file
+                sailingIn.close();
+                sailingOut.close();
 
-            // 1) open original for reading
-            sailingIn.clear();
-            sailingIn.seekg(0, ios::beg);
+                while (true) {
+                    // 1) Open fresh streams on the file
+                    ifstream inFile("sailing.txt");
+                    ofstream outFile("sailing_tmp.txt", ios::trunc);
+                    if (!inFile || !outFile) {
+                        cerr << "Error opening files\n";
+                        break;
+                    }
 
-            // 2) open temp for writing (trunc)
-            ofstream tempOut("sailing_tmp.txt");
-            if (!tempOut) {
-                cerr << "Error: could not open sailing_tmp.txt for writing" << endl;
+                    // 2) Prompt for ID, filter one record
+                    bool ok = deleteSailing(outFile, inFile);
+                    inFile.close();
+                    outFile.close();
+
+                    // 3) Now that no handles are open, this will succeed
+                    remove("sailing.txt");
+                    rename("sailing_tmp.txt", "sailing.txt");
+
+                    cout << "Would you like to delete another sailing? (Y/N) ";
+                    string resp;
+                    getline(cin, resp);
+                    if (resp.empty() || (resp[0] != 'Y' && resp[0] != 'y'))
+                        break;
+                }
+
+                // 4) Reopen persistent streams for the rest of the harness
+                sailingOut.open("sailing.txt", ios::app);
+                sailingIn.open("sailing.txt");
                 break;
-            }
-
-            // 3) prompt and delete using streams
-            promptToDeleteSailing(sailingIn, tempOut);
-
-            // 4) close both
-            sailingIn.close();
-            tempOut.close();
-
-            // 5) replace original
-            remove("sailing.txt");
-            if (rename("sailing_tmp.txt", "sailing.txt") != 0) {
-                perror("Error renaming temp file");
-                break;
-            }
-
-            // 6) reopen streams for next operations
-            sailingIn.open("sailing.txt");
-            if (!sailingIn) {
-                cerr << "Error: could not reopen sailing.txt for reading" << endl;
-                return 1;
-            }
-            sailingOut.close();
-            sailingOut.open("sailing.txt", ios::app);
-            if (!sailingOut) {
-                cerr << "Error: could not reopen sailing.txt for appending" << endl;
-                return 1;
-            }
-        }
-<<<<<<< HEAD
-        break; 
-        
+            }  
             case 3:  
-                cout << "\n--- Sailings Report ---" << endl;  
                 printReport(sailingIn);  
                 break;  
   
             case 4:  
-                cout << "\n--- Query a Single Sailing ---" << endl;  
+                cout << "\n--- Query a Single Sailing ---\n";  
                 querySailing(sailingIn);  
                 break;  
   
             case 0:  
-                cout << "Exiting test harness." << endl;  
+                cout << "Exiting test harness.\n";  
                 break;  
   
             default:  
-                cout << "Invalid option. Please enter 0-4." << endl;  
+                cout << "Invalid option. Please enter 0-4.\n";  
         }  
   
         if (choice != 0) {  
             cout << "\nPress Enter to return to menu...";  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  
-            // rewind sailingIn so next operation starts at the top  
             sailingIn.clear();  
             sailingIn.seekg(0, ios::beg);  
         }  
     } while (choice != 0);  
   
     return 0;  
-}   
-=======
-        Vessel v1("SpiritBC", 20.0f, 10.0f);
-        v1.writeVessel(outV);
-    }
-
-    int choice = -1;
-    do {
-        cout << "\n=== Sailing Module Test Harness ===" << endl;
-        cout << "1) Create a Sailing" << endl;
-        cout << "2) Delete a Sailing" << endl;
-        cout << "3) View Sailings Report" << endl;
-        cout << "0) Exit" << endl;
-        cout << "Enter choice (0-3): ";
-        cin >> choice;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-        switch (choice) {
-            case 1:
-                cout << "\n--- Create Sailing ---" << endl;
-                createSailing();
-                break;
-
-            case 2:
-                cout << "\n--- Delete Sailing ---" << endl;
-                deleteSailing();
-                break;
-
-            case 3:
-                cout << "\n--- Sailings Report ---" << endl;
-                printReport();
-                break;
-
-            case 0:
-                cout << "Exiting test harness." << endl;
-                break;
-
-            default:
-                cout << "Invalid option. Please enter 0-3." << endl;
-        }
-
-        if (choice != 0) {
-            cout << "\nPress Enter to return to menu...";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-    } while (choice != 0);
-
-    return 0;
 }
->>>>>>> ee6f551980d3795703ebdd7d5e8894267e89dc5d
 
 // int main(){
 //     // Declare the stream objects
