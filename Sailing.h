@@ -51,6 +51,11 @@ class Sailing{
 
 //----------------------------------------------------------------------------
 
+bool isValidSailingID(const string& id//input
+                      );
+
+//----------------------------------------------------------------------------
+
 void createSailing(ifstream& vesselFile,//input
                    ofstream& sailingOutFile,//input
                    ifstream& sailingInFile//input
@@ -82,7 +87,14 @@ bool deleteSailing(ofstream& outFile,//input
 
 //----------------------------------------------------------------------------
 
-void printReport(ifstream& sailingInFile
+void printSailingReportHeader();
+// Job: Prints the standardized header and underline rows for a sailing report.
+// Usage: Call before displaying sailing rows in either printReport or querySailing.
+// Restrictions: None. Just prints to standard output.
+
+//----------------------------------------------------------------------------
+
+void printReport(ifstream& sailingInFile//input
                  );
 //Job: Prints a Sailings report.
 //Usage: Call when User wants to print Sailings report.
@@ -90,7 +102,7 @@ void printReport(ifstream& sailingInFile
 
 //----------------------------------------------------------------------------
 
-void querySailing(ifstream& sailingInFile
+void querySailing(ifstream& sailingInFile//input
                   );
 // Job: Prompts user for a valid SailingID and prints its details.
 // Usage: Call when user wants to view information for a specific sailing.

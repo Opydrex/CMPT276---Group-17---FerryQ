@@ -56,6 +56,17 @@ void Sailing::writeSailing(ofstream& outFile) {
 }
 
 //----------------------------------------------------------------------------
+// Check if a string is a valid SailingID in ccc-dd-dd format
+//----------------------------------------------------------------------------
+bool isValidSailingID(const string& id) {
+    return id.size() == 9 &&
+           id[3] == '-' && id[6] == '-' &&
+           isalpha(id[0]) && isalpha(id[1]) && isalpha(id[2]) &&
+           isdigit(id[4]) && isdigit(id[5]) &&
+           isdigit(id[7]) && isdigit(id[8]);
+}
+
+//----------------------------------------------------------------------------
 // Prompts the user for appropriate data and returns a Sailing object
 //----------------------------------------------------------------------------
 void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sailingInFile) {
@@ -150,9 +161,7 @@ bool deleteSailing(ofstream& outFile, ifstream& inFile) {
     string sailingID;
     cout << "Enter SailingID (ccc-dd-dd): ";
     getline(cin >> ws, sailingID);
-    if (sailingID.size() != 9 || sailingID[3] != '-' || sailingID[6] != '-'
-        || !isalpha(sailingID[0])||!isalpha(sailingID[1])||!isalpha(sailingID[2])
-        || !isdigit(sailingID[4])||!isdigit(sailingID[5])||!isdigit(sailingID[7])||!isdigit(sailingID[8])) {
+    if (!isValidSailingID(sailingID)) {
         cout << "Bad entry! Must be ccc‑dd‑dd.\n";
         return false;
     }
@@ -195,7 +204,29 @@ bool isSailingExist(const string& sailingId, ifstream& sailingInFile) {
     }
     return false;
 }
+//----------------------------------------------------------------------------
+// Print header of paged report
+//----------------------------------------------------------------------------
 
+void printSailingReportHeader() {
+    //Header
+    cout << "     "
+         << left << setw(12) << "SailingID" << " "
+         << setw(24) << "Vessel Name" << " "
+         << setw(6)  << "LHR" << " "
+         << setw(6)  << "HHR" << " "
+         << setw(14) << "Total Vehicles" << " "
+         << setw(13) << "Deck Usage(%)" << "\n";
+
+    // Dash line spacing
+    cout << "     "
+         << string(12, '-') << " "
+         << string(24, '-') << " "
+         << string(6, '-')  << " "
+         << string(6, '-')  << " "
+         << string(14, '-') << " "
+         << string(13, '-') << "\n";
+}
 
 //----------------------------------------------------------------------------
 // Print paged report with exit-on-enter and error messages
@@ -208,22 +239,7 @@ void printReport(ifstream& sailingInFile) {
     cout << "  " << "== Sailings Report ==" << endl;
 
     //Head
-    cout << "     "
-         << left << setw(12) << "SailingID" << " "
-         << setw(24) << "Vessel Name" << " "
-         << setw(6)  << "LHR" << " "
-         << setw(6)  << "HHR" << " "
-         << setw(14) << "Total Vehicles" << " "
-         << setw(13) << "Deck Usage(%)" << "\n";
-
-    //Dash line spacing
-    cout << "     "
-         << string(12, '-') << " "
-         << string(24, '-') << " "
-         << string(6, '-')  << " "
-         << string(6, '-')  << " "
-         << string(14, '-') << " "
-         << string(13, '-') << "\n";
+    printSailingReportHeader();
 
     string line;
     int total = 0, page = 0;
@@ -304,10 +320,7 @@ void querySailing(ifstream& sailingInFile) {
             return;
 
         // format check
-        if (sailingId.size() != 9 || sailingId[3] != '-' || sailingId[6] != '-' ||
-            !isalpha(sailingId[0]) || !isalpha(sailingId[1]) || !isalpha(sailingId[2]) ||
-            !isdigit(sailingId[4]) || !isdigit(sailingId[5]) ||
-            !isdigit(sailingId[7]) || !isdigit(sailingId[8])) {
+        if (!isValidSailingID(sailingId)) {
             cout << "Bad entry! SailingID must follow the format ccc-dd-dd." << endl;
             continue;
         }
@@ -319,22 +332,7 @@ void querySailing(ifstream& sailingInFile) {
         bool found = false;
 
         // print header
-        cout << left
-             << setw(10) << "SailingID" << "  "
-             << setw(24) << "Vessel Name" << "  "
-             << right
-             << setw(5) << "LHR"
-             << setw(7) << "HHR" << "  "
-             << setw(14) << "Total Vehicles" << "  "
-             << setw(14) << "Deck Usage(%)" << "\n";
-
-        cout << string(10, '-') << "  "
-             << string(24, '-') << "  "
-             << right
-             << string(5, '-')
-             << string(7, '-') << "  "
-             << string(14, '-') << "  "
-             << string(14, '-') << "\n";
+        printSailingReportHeader();
 
         while (getline(sailingInFile, line)) {
             if (line.empty()) continue;
