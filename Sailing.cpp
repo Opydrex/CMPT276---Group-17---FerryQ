@@ -11,45 +11,49 @@ Unsorted fixed-length text records are used. Linear searches and simple append/d
 */
 
 #include "Sailing.h"
-#include "Booking.h" 
-#include "Vessel.h"           
+#include "Booking.h"
+#include "Vessel.h"
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <iomanip>
-#include <cstdio>               
+#include <cstdio>
 #include <limits>
 using namespace std;
 
 //----------------------------------------------------------------------------
 // Sailing constructor
 //----------------------------------------------------------------------------
-//makes a sailing obj using the given infomation (id, name, small & big caps)
-Sailing::Sailing(const string& sailingId,   //input
-                 const string& vesselName,  //input
-                 const float& currentCapacitySmall,  //input
-                 const float& currentCapacityBig     //input
-                )
+// makes a sailing obj using the given infomation (id, name, small & big caps)
+Sailing::Sailing(const string &sailingId,           // input
+                 const string &vesselName,          // input
+                 const float &currentCapacitySmall, // input
+                 const float &currentCapacityBig    // input
+)
 {
-    this->sailingId = sailingId; //save the sailing id
-    this->vesselName = vesselName; //save vessel name
-    this->currentCapacitySmall = currentCapacitySmall; //small cars
-    this->currentCapacityBig = currentCapacityBig; //big vehicals
+    this->sailingId = sailingId;                       // save the sailing id
+    this->vesselName = vesselName;                     // save vessel name
+    this->currentCapacitySmall = currentCapacitySmall; // small cars
+    this->currentCapacityBig = currentCapacityBig;     // big vehicals
 }
 
 //----------------------------------------------------------------------------
 // Writes an instance of the Sailing object to the file.
 //----------------------------------------------------------------------------
-//open file and stick data of sailing to it in csv like format
-void Sailing::writeSailing(ofstream& outFile) {
-    if(outFile.is_open()){
+// open file and stick data of sailing to it in csv like format
+void Sailing::writeSailing(ofstream &outFile)
+{
+    if (outFile.is_open())
+    {
         outFile << sailingId << ","
                 << vesselName << ","
                 << currentCapacitySmall << ","
                 << currentCapacityBig << endl;
         outFile.flush();
-    } else {
+    }
+    else
+    {
         cerr << "Error: Unable to write to the output stream." << endl;
     }
 }
@@ -57,8 +61,10 @@ void Sailing::writeSailing(ofstream& outFile) {
 //----------------------------------------------------------------------------
 // Prompts the user for appropriate data and returns a Sailing object
 //----------------------------------------------------------------------------
-void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sailingInFile) {
-    while (true) {
+void createSailing(ifstream &vesselFile, ofstream &sailingOutFile, ifstream &sailingInFile)
+{
+    while (true)
+    {
         string term, vessel, dayStr, hourStr;
         int day = 0, hour = 0;
         float capSmall = 0.f, capBig = 0.f;
@@ -66,26 +72,32 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
         // Step 2: Enter terminal ID
         cout << "Enter departure terminal ID (ccc): ";
         getline(cin, term);
-        if (term.empty()) return;
-        if (term.size() != 3 || !isalpha(term[0]) || !isalpha(term[1]) || !isalpha(term[2])) {
+        if (term.empty())
+            return;
+        if (term.size() != 3 || !isalpha(term[0]) || !isalpha(term[1]) || !isalpha(term[2]))
+        {
             cout << "Bad entry! Must be exactly three letters." << endl;
             continue;
         }
 
         // Step 3: Enter vessel name
-        while (true) {
+        while (true)
+        {
             cout << "Enter vessel name (1-25 characters): ";
             getline(cin >> ws, vessel);
-            if (vessel.empty()) return;
-            if (vessel.length() > 25) {
+            if (vessel.empty())
+                return;
+            if (vessel.length() > 25)
+            {
                 cout << "Bad entry! Name too long." << endl;
                 continue;
             }
 
             capSmall = getMaxRegularLength(vessel, vesselFile);
             capBig = getMaxSpecialLength(vessel, vesselFile);
- 
-            if (capSmall == -1 || capBig == -1) {
+
+            if (capSmall == -1 || capBig == -1)
+            {
                 cout << "Error: Vessel not found. Please enter a valid vessel name." << endl;
                 continue;
             }
@@ -96,13 +108,16 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
         // Step 5: Departure Day
         cout << "Enter departure day (dd): ";
         getline(cin >> ws, dayStr);
-        if (dayStr.empty()) return;
-        if (dayStr.size() != 2 || !isdigit(dayStr[0]) || !isdigit(dayStr[1])) {
+        if (dayStr.empty())
+            return;
+        if (dayStr.size() != 2 || !isdigit(dayStr[0]) || !isdigit(dayStr[1]))
+        {
             cout << "Bad entry! Must be two digits (01-31)." << endl;
             continue;
         }
         day = stoi(dayStr);
-        if (day < 1 || day > maxSailingDay) {
+        if (day < 1 || day > maxSailingDay)
+        {
             cout << "Day out of range." << endl;
             continue;
         }
@@ -110,13 +125,16 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
         // Step 6: Departure Hour
         cout << "Enter departure hour (hh): ";
         getline(cin >> ws, hourStr);
-        if (hourStr.empty()) return;
-        if (hourStr.size() != 2 || !isdigit(hourStr[0]) || !isdigit(hourStr[1])) {
+        if (hourStr.empty())
+            return;
+        if (hourStr.size() != 2 || !isdigit(hourStr[0]) || !isdigit(hourStr[1]))
+        {
             cout << "Bad entry! Must be two digits (00-23)." << endl;
             continue;
         }
         hour = stoi(hourStr);
-        if (hour < 0 || hour > maxSailingHour) {
+        if (hour < 0 || hour > maxSailingHour)
+        {
             cout << "Hour out of range." << endl;
             continue;
         }
@@ -126,9 +144,12 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
         // Check if SailingID exists already
         sailingInFile.clear();
         sailingInFile.seekg(0, ios::beg);
-        if (isSailingExist(id, sailingInFile)) {
+        if (isSailingExist(id, sailingInFile))
+        {
             cout << "A sailing with SailingID " << id << " already exists. Would you like to create another sailing? (Y/N)" << endl;
-        } else {
+        }
+        else
+        {
             Sailing newSailing(id, vessel, capSmall, capBig);
             newSailing.writeSailing(sailingOutFile);
             cout << "Sailing successfully created. The SailingID is " << id << ". Would you like to create another sailing? (Y/N)" << endl;
@@ -136,7 +157,8 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
 
         string response;
         getline(cin >> ws, response);
-        if (response != "Y" && response != "y") {
+        if (response != "Y" && response != "y")
+        {
             return;
         }
     }
@@ -145,7 +167,8 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
 //----------------------------------------------------------------------------
 // Delete a sailing record
 //----------------------------------------------------------------------------
-bool deleteSailing(const string& sailingId, ofstream& outFile, ifstream& inFile) {
+bool deleteSailing(const string &sailingId, ofstream &outFile, ifstream &inFile)
+{
     inFile.clear();
     inFile.seekg(0, ios::beg);
     outFile.clear();
@@ -155,14 +178,17 @@ bool deleteSailing(const string& sailingId, ofstream& outFile, ifstream& inFile)
     bool deleted = false;
     bool hasContent = false;
 
-    while (getline(inFile, line)) {
-        if (line.empty()) continue;
+    while (getline(inFile, line))
+    {
+        if (line.empty())
+            continue;
 
         stringstream ss(line);
         string currentId;
         getline(ss, currentId, ',');
 
-        if (currentId == sailingId) {
+        if (currentId == sailingId)
+        {
             deleted = true;
             continue; // Skip writing this line (effectively deleting it)
         }
@@ -172,9 +198,10 @@ bool deleteSailing(const string& sailingId, ofstream& outFile, ifstream& inFile)
     }
 
     // Ensure the file ends with exactly one newline if it has content
-    if (hasContent) {
-    // Instead of trying to read the last character, we'll ensure
-    // the file ends with exactly one newline by writing one if needed
+    if (hasContent)
+    {
+        // Instead of trying to read the last character, we'll ensure
+        // the file ends with exactly one newline by writing one if needed
         outFile.seekp(-1, ios::end);
         char lastChar;
         // We need to temporarily open the file for reading to check the last character
@@ -183,7 +210,8 @@ bool deleteSailing(const string& sailingId, ofstream& outFile, ifstream& inFile)
             tempIn.seekg(-1, ios::end);
             lastChar = tempIn.get();
         }
-        if (lastChar != '\n') {
+        if (lastChar != '\n')
+        {
             outFile << '\n';
         }
     }
@@ -195,20 +223,24 @@ bool deleteSailing(const string& sailingId, ofstream& outFile, ifstream& inFile)
 //----------------------------------------------------------------------------
 // promptToDeleteSailing: prompt user and call deleteSailing
 //----------------------------------------------------------------------------
-void promptToDeleteSailing(ifstream& inFile, ofstream& outFile) {
+void promptToDeleteSailing(ifstream &inFile, ofstream &outFile)
+{
     // Create a temporary file for the output
     string tempFilename = "sailings_temp.txt";
     ofstream tempOut(tempFilename);
-    if (!tempOut) {
+    if (!tempOut)
+    {
         cerr << "Error creating temporary file." << endl;
         return;
     }
 
-    while (true) {
+    while (true)
+    {
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sailingId;
         getline(cin, sailingId);
-        if (sailingId.empty()) {
+        if (sailingId.empty())
+        {
             tempOut.close();
             remove(tempFilename.c_str());
             break;
@@ -218,7 +250,8 @@ void promptToDeleteSailing(ifstream& inFile, ofstream& outFile) {
         if (sailingId.size() != 9 || sailingId[3] != '-' || sailingId[6] != '-' ||
             !isalpha(sailingId[0]) || !isalpha(sailingId[1]) || !isalpha(sailingId[2]) ||
             !isdigit(sailingId[4]) || !isdigit(sailingId[5]) ||
-            !isdigit(sailingId[7]) || !isdigit(sailingId[8])) {
+            !isdigit(sailingId[7]) || !isdigit(sailingId[8]))
+        {
             cout << "Bad entry! SailingID must follow the format ccc-dd-dd." << endl;
             continue;
         }
@@ -230,26 +263,30 @@ void promptToDeleteSailing(ifstream& inFile, ofstream& outFile) {
         tempOut.seekp(0, ios::beg);
 
         bool ok = deleteSailing(sailingId, tempOut, inFile);
-        if (ok) {
+        if (ok)
+        {
             cout << "Sailing with SailingID " << sailingId << " deleted successfully." << endl;
-            
+
             // Close files
             tempOut.close();
             inFile.close();
-            
+
             // Replace original with temp
             remove("sailing.txt");
             rename(tempFilename.c_str(), "sailing.txt");
-            
+
             // Reopen files for next operation
             inFile.open("sailings.txt");
             tempOut.open(tempFilename);
-            
-            if (!inFile || !tempOut) {
+
+            if (!inFile || !tempOut)
+            {
                 cerr << "Error updating files." << endl;
                 break;
             }
-        } else {
+        }
+        else
+        {
             cout << "No sailing with SailingID " << sailingId << " was found." << endl;
         }
 
@@ -257,7 +294,8 @@ void promptToDeleteSailing(ifstream& inFile, ofstream& outFile) {
         cout << "Would you like to try deleting another sailing? (Y/N): ";
         string resp;
         getline(cin, resp);
-        if (resp.empty() || (resp[0] != 'Y' && resp[0] != 'y')) {
+        if (resp.empty() || (resp[0] != 'Y' && resp[0] != 'y'))
+        {
             tempOut.close();
             remove(tempFilename.c_str());
             break;
@@ -268,15 +306,18 @@ void promptToDeleteSailing(ifstream& inFile, ofstream& outFile) {
 //----------------------------------------------------------------------------
 // Check if sailing already in file
 //----------------------------------------------------------------------------
-bool isSailingExist(const string& sailingId, ifstream& sailingInFile) {
+bool isSailingExist(const string &sailingId, ifstream &sailingInFile)
+{
     sailingInFile.clear();
     sailingInFile.seekg(0, ios::beg);
-    
+
     string line;
-    while(getline(sailingInFile, line)) {
+    while (getline(sailingInFile, line))
+    {
         stringstream ss(line);
         string currentId;
-        if(getline(ss, currentId, ',')) {
+        if (getline(ss, currentId, ','))
+        {
             if (currentId == sailingId)
                 return true;
         }
@@ -286,32 +327,34 @@ bool isSailingExist(const string& sailingId, ifstream& sailingInFile) {
 //----------------------------------------------------------------------------
 // Print paged report with exit-on-enter and error messages
 //----------------------------------------------------------------------------
-//shows all the sailingss in a nice list, 5 per page
-void printReport(ifstream& sailingInFile) {
+// shows all the sailingss in a nice list, 5 per page
+void printReport(ifstream &sailingInFile)
+{
     sailingInFile.clear();
     sailingInFile.seekg(0, ios::beg);
 
     cout << "== Sailings Report ==" << endl;
-    cout << left << setw(4) << "No." << "  " << setw(10) << "SailingID" << "  " 
-         << setw(24) << "Vessel Name" << "  " << right << setw(5) << "LHR" 
-         << setw(7) << "HHR" << "  " << setw(14) << "Total Vehicles" 
+    cout << left << setw(4) << "No." << "  " << setw(10) << "SailingID" << "  "
+         << setw(24) << "Vessel Name" << "  " << right << setw(5) << "LHR"
+         << setw(7) << "HHR" << "  " << setw(14) << "Total Vehicles"
          << "  " << setw(14) << "Deck Usage(%)" << "\n";
-         
-    cout << left << string(4, '-') << "  " << string(10, '-') << "  " 
-         << string(24, '-') << "  " << right << string(5, '-') 
-         << string(7, '-') << "  " << string(14, '-') << "  " 
+
+    cout << left << string(4, '-') << "  " << string(10, '-') << "  "
+         << string(24, '-') << "  " << right << string(5, '-')
+         << string(7, '-') << "  " << string(14, '-') << "  "
          << string(14, '-') << "\n";
 
     string line;
     int total = 0, page = 0;
     bool exit = false;
 
-    while(getline(sailingInFile, line)) {
+    while (getline(sailingInFile, line))
+    {
         stringstream ss(line);
         string id, vesName, freeSpaceStr, bookedSpaceStr;
-        getline(ss, id, ','); 
-        getline(ss, vesName, ','); 
-        getline(ss, freeSpaceStr, ','); 
+        getline(ss, id, ',');
+        getline(ss, vesName, ',');
+        getline(ss, freeSpaceStr, ',');
         getline(ss, bookedSpaceStr, ',');
 
         float vehicleSpace = stof(freeSpaceStr);
@@ -320,33 +363,37 @@ void printReport(ifstream& sailingInFile) {
         int usage = totalCapacity ? int((bookedSpace / totalCapacity) * 100) : 0;
         string idx = to_string(total + 1) + ")";
 
-        cout << right << setw(4) << idx << "  " << left << setw(10) << id 
-             << "  " << setw(24) << vesName << "  " << right << setw(5) 
-             << fixed << setprecision(1) << vehicleSpace << setw(7) 
-             << bookedSpace << "  " << setw(14) << totalCapacity << "  " 
+        cout << right << setw(4) << idx << "  " << left << setw(10) << id
+             << "  " << setw(24) << vesName << "  " << right << setw(5)
+             << fixed << setprecision(1) << vehicleSpace << setw(7)
+             << bookedSpace << "  " << setw(14) << totalCapacity << "  "
              << setw(14) << (to_string(usage) + "%") << "\n";
 
         total++;
         page++;
 
-        if(page == 5) {
+        if (page == 5)
+        {
             string inp;
-            while(true) {
+            while (true)
+            {
                 cout << "Enter M for more, 0 or Enter to exit: ";
-                getline(cin>>ws, inp);
-                if(inp.empty() || inp == "0") {
+                getline(cin >> ws, inp);
+                if (inp.empty() || inp == "0")
+                {
                     exit = true;
                     break;
                 }
-                if(inp == "M" || inp == "m")
+                if (inp == "M" || inp == "m")
                     break;
                 cout << "Bad entry! Please enter M or 0 (or press Enter).\n";
             }
-            if(exit) break;
+            if (exit)
+                break;
             page = 0;
         }
     }
-    if(!exit && total > 0)
+    if (!exit && total > 0)
         cout << "No more sailings.\n";
 }
 
@@ -354,11 +401,13 @@ void printReport(ifstream& sailingInFile) {
 // Prompt and print a single sailing record
 //----------------------------------------------------------------------------
 // prompts user for a valid SailingID, reads file, and prints corresponding information
-void querySailing(ifstream& sailingInFile) {
-    while (true) {
+void querySailing(ifstream &sailingInFile)
+{
+    while (true)
+    {
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sailingId;
-        //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        // cin.ignore(numeric_limits<streamsize>::max(), '\n');
         getline(cin >> ws, sailingId);
         if (sailingId.empty())
             return;
@@ -367,7 +416,8 @@ void querySailing(ifstream& sailingInFile) {
         if (sailingId.size() != 9 || sailingId[3] != '-' || sailingId[6] != '-' ||
             !isalpha(sailingId[0]) || !isalpha(sailingId[1]) || !isalpha(sailingId[2]) ||
             !isdigit(sailingId[4]) || !isdigit(sailingId[5]) ||
-            !isdigit(sailingId[7]) || !isdigit(sailingId[8])) {
+            !isdigit(sailingId[7]) || !isdigit(sailingId[8]))
+        {
             cout << "Bad entry! SailingID must follow the format ccc-dd-dd." << endl;
             continue;
         }
@@ -396,21 +446,24 @@ void querySailing(ifstream& sailingInFile) {
              << string(14, '-') << "  "
              << string(14, '-') << "\n";
 
-        while (getline(sailingInFile, line)) {
-            if (line.empty()) continue;
+        while (getline(sailingInFile, line))
+        {
+            if (line.empty())
+                continue;
 
             stringstream ss(line);
             string currentId, vesselName, freeSpaceStr, bookedSpaceStr;
             getline(ss, currentId, ',');
-            if (currentId == sailingId) {
+            if (currentId == sailingId)
+            {
                 getline(ss, vesselName, ',');
                 getline(ss, freeSpaceStr, ',');
                 getline(ss, bookedSpaceStr, ',');
 
-                float freeSpace   = stof(freeSpaceStr);
+                float freeSpace = stof(freeSpaceStr);
                 float bookedSpace = stof(bookedSpaceStr);
-                int   totalCap    = int(freeSpace + bookedSpace);
-                int   usage       = totalCap ? int((bookedSpace / totalCap) * 100) : 0;
+                int totalCap = int(freeSpace + bookedSpace);
+                int usage = totalCap ? int((bookedSpace / totalCap) * 100) : 0;
 
                 cout << left
                      << setw(10) << currentId << "  "
@@ -426,7 +479,8 @@ void querySailing(ifstream& sailingInFile) {
             }
         }
 
-        if (!found) {
+        if (!found)
+        {
             cout << "No sailing with SailingID " << sailingId << " was found." << endl;
         }
 

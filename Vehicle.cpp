@@ -15,9 +15,9 @@ This module contains Vehicle class implementation.
 
 using namespace std;
 
-Vehicle::Vehicle(const string& licensePlate,//input
-               const float& height,//input
-               const float& length//input
+Vehicle::Vehicle(const string &licensePlate, // input
+                 const float &height,        // input
+                 const float &length         // input
 )
 {
     this->licensePlate = licensePlate;
@@ -25,31 +25,38 @@ Vehicle::Vehicle(const string& licensePlate,//input
     this->length = length;
 }
 
-void Vehicle::writeVehicle(ofstream& outFile) {
-    if(outFile.is_open()) {
-        //cout << "A vessel called " << this->name << " with "<< this->maxCapacitySmall << " low vehicle capacity and "<< maxCapacityBig << " special v"<< endl;//edit this according to user manual
-        //all messages to user will be handled from the createVessel
+void Vehicle::writeVehicle(ofstream &outFile)
+{
+    if (outFile.is_open())
+    {
+        // cout << "A vessel called " << this->name << " with "<< this->maxCapacitySmall << " low vehicle capacity and "<< maxCapacityBig << " special v"<< endl;//edit this according to user manual
+        // all messages to user will be handled from the createVessel
         outFile << this->licensePlate << "," << this->height << "," << this->length << endl;
         outFile.flush();
-    } else {
+    }
+    else
+    {
         cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
     }
-
 }
 
-bool isVehicleExist(const string& licensePlate, ifstream& inFile){
-    inFile.clear(); // clear any error flags
+bool isVehicleExist(const string &licensePlate, ifstream &inFile)
+{
+    inFile.clear();            // clear any error flags
     inFile.seekg(0, ios::beg); // move read pointer to the beginning of the file
 
     string line;
     bool exists = false;
 
-    while(getline(inFile, line)){
+    while (getline(inFile, line))
+    {
         stringstream ss(line);
         string licensePlateFromFile;
 
-        if(getline(ss,licensePlateFromFile, ',')){
-            if(licensePlateFromFile == licensePlate){
+        if (getline(ss, licensePlateFromFile, ','))
+        {
+            if (licensePlateFromFile == licensePlate)
+            {
                 exists = true;
                 break;
             }
@@ -57,18 +64,19 @@ bool isVehicleExist(const string& licensePlate, ifstream& inFile){
     }
 
     return exists;
-
 }
 
+void getVehicleDimensions(string licensePlate, string *length, string *height, ifstream &inFile)
+{
 
-void getVehicleDimensions(string licensePlate, string* length, string* height, ifstream& inFile){
-
-    if(isVehicleExist(licensePlate, inFile)){
+    if (isVehicleExist(licensePlate, inFile))
+    {
         inFile.clear();
         inFile.seekg(0, ios::beg);
 
         string line;
-        while (getline(inFile, line)) {
+        while (getline(inFile, line))
+        {
             stringstream ss(line);
             string licensePlateFromFile;
             string vehicleHeight;
@@ -76,9 +84,11 @@ void getVehicleDimensions(string licensePlate, string* length, string* height, i
 
             if (getline(ss, licensePlateFromFile, ',') &&
                 getline(ss, vehicleHeight, ',') &&
-                getline(ss, vehicleLength, ',')) {
+                getline(ss, vehicleLength, ','))
+            {
 
-                if (licensePlateFromFile == licensePlate) {
+                if (licensePlateFromFile == licensePlate)
+                {
                     // Found the matching license plate; return the two values
 
                     *height = vehicleHeight;
@@ -86,10 +96,10 @@ void getVehicleDimensions(string licensePlate, string* length, string* height, i
                     break;
                 }
             }
-            else{
-                cout<<"Vehicle not found."<<endl;
+            else
+            {
+                cout << "Vehicle not found." << endl;
             }
-
         }
     }
 }

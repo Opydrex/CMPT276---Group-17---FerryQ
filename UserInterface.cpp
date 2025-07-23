@@ -52,7 +52,6 @@ void userInterfaceLoop() {
         return;
     }
 
-    int choice;
     bool running = true;
 
     while (running) {
@@ -63,14 +62,18 @@ void userInterfaceLoop() {
         cout << "[0] Quit" << endl;
         cout << "Enter a number (0-3): ";
 
-        cin >> choice;
-        cin.ignore();
+        string inputLine;
+        int choice = -1;
+        getline(cin, inputLine);
 
-        // Input validation
-        if (cin.fail()) {
-            cout << "Bad Entry! Please enter a valid number." << endl;
-            cin.clear(); 
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        if (!inputLine.empty()) {
+            try {
+                choice = stoi(inputLine);
+            } catch (const exception&) {
+                choice = -1; // Invalid input
+            }
+        } else {
+            cout << "Bad Entry! Please try again." << endl;
             continue;
         }
 
@@ -113,7 +116,8 @@ void userInterfaceLoop() {
 // Sailings Menu
 //----------------------------------------------------------------------------
 void SailingsMenu(ifstream& vesselInFile, ofstream& vesselOutFile, ifstream& sailingInFile, ofstream& sailingOutFile) {
-    int choice;
+    string inputLine;
+    int choice = -1;
     bool inMenu = true;
 
     while (inMenu) {
@@ -126,13 +130,17 @@ void SailingsMenu(ifstream& vesselInFile, ofstream& vesselOutFile, ifstream& sai
         cout << "[0] Exit" << endl;
         cout << "Enter a number (0-5): ";
 
-        cin >> choice;
+        getline(cin, inputLine);
+        if (inputLine.empty()) return;
         cin.ignore();
 
-        if (cin.fail()) {
+        try {
+            choice = stoi(inputLine); // Convert string to integer
+        } catch (const std::invalid_argument& e) {
             cout << "Bad Entry! Please enter a valid number." << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            choice = -1;
             continue;
         }
 
@@ -167,7 +175,8 @@ void SailingsMenu(ifstream& vesselInFile, ofstream& vesselOutFile, ifstream& sai
 // Bookings Menu
 //----------------------------------------------------------------------------
 void BookingsMenu(ifstream& vehicleInFile, ofstream& vehicleOutFile, ifstream& bookingInFile, ofstream& bookingOutFile, ifstream& sailingInFile) {
-    int choice;
+    string inputLine;
+    int choice = -1;
     bool inMenu = true;
 
     while (inMenu) {
@@ -177,12 +186,17 @@ void BookingsMenu(ifstream& vehicleInFile, ofstream& vehicleOutFile, ifstream& b
         cout << "[0] Exit" << endl;
         cout << "Enter a number (0-2): ";
 
-        cin >> choice;
+        getline(cin, inputLine);
+        if (inputLine.empty()) return;
+        cin.ignore();
 
-        if (cin.fail()) {
+        try {
+            choice = stoi(inputLine); // Convert string to integer
+        } catch (const std::invalid_argument& e) {
             cout << "Bad Entry! Please enter a valid number." << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            choice = -1;
             continue;
         }
 
