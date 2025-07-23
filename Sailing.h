@@ -18,6 +18,7 @@ using namespace std;
 
 const int maxSailingDay = 31; //last day of the month - can't create a sailing on day 32.
 const int maxSailingHour = 23; //last hour of the day in 24-hour format - can't create a sailing on hour 25.
+const std::string fileNameSailing = "sailing.txt";
 
 class Sailing{
 
