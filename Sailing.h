@@ -99,4 +99,10 @@ void printReport(ifstream& sailingInFile
 
 //----------------------------------------------------------------------------
 
+void querySailing(ifstream& sailingInFile
+                  );
+// Job: Prompts user for a valid SailingID and prints its details.
+// Usage: Call when user wants to view information for a specific sailing.
+// Restrictions: sailingInFile must be open and readable.
+
 #endif //SAILING_H
