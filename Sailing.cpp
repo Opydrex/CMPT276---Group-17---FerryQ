@@ -65,7 +65,7 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
 
         // Step 2: Enter terminal ID
         cout << "Enter departure terminal ID (ccc): ";
-        getline(cin >> ws, term);
+        getline(cin, term);
         if (term.empty()) return;
         if (term.size() != 3 || !isalpha(term[0]) || !isalpha(term[1]) || !isalpha(term[2])) {
             cout << "Bad entry! Must be exactly three letters." << endl;
@@ -84,7 +84,7 @@ void createSailing(ifstream& vesselFile, ofstream& sailingOutFile, ifstream& sai
 
             capSmall = getMaxRegularLength(vessel, vesselFile);
             capBig = getMaxSpecialLength(vessel, vesselFile);
-
+ 
             if (capSmall == -1 || capBig == -1) {
                 cout << "Error: Vessel not found. Please enter a valid vessel name." << endl;
                 continue;
@@ -359,7 +359,7 @@ void querySailing(ifstream& sailingInFile) {
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sailingId;
         //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        getline(cin>>ws, sailingId);
+        getline(cin >> ws, sailingId);
         if (sailingId.empty())
             return;
 

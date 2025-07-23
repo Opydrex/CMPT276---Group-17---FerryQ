@@ -188,8 +188,6 @@ float getMaxRegularLength(const string& vesselName, ifstream& inFile) {
             }
         }
     }
-
-    cerr << "Error: Vessel '" << vesselName << "' not found in file.\n";
     return -1;
 }
 
@@ -214,8 +212,6 @@ float getMaxSpecialLength(const string& vesselName, ifstream& inFile) {
             }
         }
     }
-
-    cerr << "Error: Vessel '" << vesselName << "' not found in file.\n";
     return -1;
 }
 

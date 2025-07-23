@@ -64,6 +64,7 @@ void userInterfaceLoop() {
         cout << "Enter a number (0-3): ";
 
         cin >> choice;
+        cin.ignore();
 
         // Input validation
         if (cin.fail()) {
@@ -126,6 +127,7 @@ void SailingsMenu(ifstream& vesselInFile, ofstream& vesselOutFile, ifstream& sai
         cout << "Enter a number (0-5): ";
 
         cin >> choice;
+        cin.ignore();
 
         if (cin.fail()) {
             cout << "Bad Entry! Please enter a valid number." << endl;
