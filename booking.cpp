@@ -42,7 +42,7 @@ void Booking::writeBooking(ofstream& outFile//Input; The Booking's file
    }
 }
 
-Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for getVehicleDimensions
+void createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for getVehicleDimensions
                      ofstream& outFile, //Input; The Vehicle's file. Needed for writeVehicle
                      ofstream& outFileBooking, //Input; The Booking's file. Needed to write the booking to file
                      ifstream& sailingInFile
@@ -197,17 +197,17 @@ bool isBookingExist(const string& sailingId,//input
 ){
    string line;
    while (getline(inFile, line)) {//This loop searches for a booking
-   stringstream ss(line);
-   string sailingIDFromFile, licensePlateFromFile;
+       stringstream ss(line);
+       string sailingIDFromFile, licensePlateFromFile;
 
-   if (getline(ss, sailingIDFromFile, ',') && getline(ss, licensePlateFromFile, ',')) {
-       if (sailingIDFromFile == sailingId && licensePlateFromFile == licensePlate) {
-           return true;
+       if (getline(ss, sailingIDFromFile, ',') && getline(ss, licensePlateFromFile, ',')) {
+           if (sailingIDFromFile == sailingId && licensePlateFromFile == licensePlate) {
+               return true;
+           }
        }
+       return false;
    }
-
    return false;
-   }
 }
 
 float calculateFare(const float& length,//input
@@ -327,7 +327,7 @@ void checkIn(ifstream& inFile,//Input; The booking's file
 
        //Update the booking by deleting the old one and creating a new one.
        Booking newBooking(licensePlateFromFile,sailingIDFromFile, phoneNumberFromFile, true);
-       deleteBooking(sailingIDFromFile, licensePlateFromFile,  outFile, inFile);
+       deleteBooking(sailingIDFromFile, licensePlateFromFile,inFile, outFile);
        newBooking.writeBooking(outFile);
 
    } //The check-in function will automatically loop until the user presses enter for the sailingID or the license Plate
@@ -337,8 +337,11 @@ void checkIn(ifstream& inFile,//Input; The booking's file
 
 bool deleteBooking(const string& licensePlate,
                    const string& sailingId,
+
                    ifstream& inFile,
-                   ofstream& outFile)
+                   ofstream& outFile
+
+                   )
 {
     string line;
     bool found = false;

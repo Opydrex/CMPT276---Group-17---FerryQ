@@ -71,7 +71,7 @@ class Booking {
 
 //----------------------------------------------------------------------------
 
-Booking createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for getVehicleDimensions
+void createBooking(ifstream& inFile, //Input; The Vehicle's file. Needed for getVehicleDimensions
                       ofstream& outFile, //Input; The Vehicle's file. Needed for writeVehicle
                       ofstream& outFileBooking, //Input; The Booking's file. Needed to write the booking to file
                       ifstream& sailingInFile
@@ -103,12 +103,11 @@ bool isBookingExist(const string& sailingId,//input
 
 //----------------------------------------------------------------------------
 
-bool deleteBooking(const string& sailingId,//input
-                   const string& licensePlate,//input
-                   ofstream& outFile, //input
-                   ifstream& inFile // input
-
-                    );
+bool deleteBooking(const string& licensePlate,
+                   const string& sailingId,//input
+                   ifstream& inFile, // input
+                   ofstream& outFile //input
+                   );
 //Job: Deletes a booking from the file.
 //Usage: Call when need to delete a booking.
 //Restrictions: Booking must exist. Sailing must exist.
