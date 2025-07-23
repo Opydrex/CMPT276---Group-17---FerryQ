@@ -14,39 +14,40 @@ This module contains functions and implementations related to Sailings.
 
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 const int maxSailingDay = 31; //last day of the month - can't create a sailing on day 32.
 const int maxSailingHour = 23; //last hour of the day in 24-hour format - can't create a sailing on hour 25.
-const std::string fileNameSailing = "sailing.txt";
+const string fileNameSailing = "sailing.txt";
 
-class Sailing{
-
+class Sailing {
     public:
-        Sailing(const string& sailingId,//input
-                const string& vesselName,//input
-                const float& currentCapacitySmall,//input
-                const float& currentCapacityBig //input
-                );
-        //Job: Sailing object constructor.
-        //Usage: Used when a Sailing is being created.
-        //Restrictions: vesselName and sailingId must be unique. sailingId and vesselName must comply to domain.
+        // Default constructor
+        Sailing() = default;
 
-        //----------------------------------------------------------------------------
+        // File I/O
+        void writeSailing(ofstream& outFile);
 
-        void writeSailing(ofstream& outFile//input
-                          );
-        //Job: Writes an instance of the Sailing object to the file.
-        //Usage: Used when a Sailing is written to the file.
-        //Restrictions: File exists and found.
+        // Add readSailing() later if needed
+        // void readSailing(ifstream& inFile);
+        // Setters
+        void setSailingID(const string& id);
+        void setVesselName(const string& name);
+        void setCurrentCapacitySmall(float cap);
+        void setCurrentCapacityBig(float cap);
 
-        //----------------------------------------------------------------------------
-
+        // Getters
+        string getSailingID() const;
+        string getVesselName() const;
+        float getCurrentCapacitySmall() const;
+        float getCurrentCapacityBig() const;
+        
     private:
-        string sailingId;//SailingId.
-        string vesselName;//Vessel that is going to complete a Sailing.
-        float currentCapacitySmall;//Remaning length for regular-sized vehicles.
-        float currentCapacityBig;//Remaining length for special-sized vehicles.
+        char sailingID[16];       // Fixed-length ID: "ccc-dd-hh" (max 11 + null terminator)
+        char vesselName[26];      // Vessel name (max 25 + null)
+        float currentCapacitySmall;
+        float currentCapacityBig;
 };
 
 //----------------------------------------------------------------------------

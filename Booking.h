@@ -29,45 +29,38 @@ const string fileNameBooking = "booking.txt";//constant that stores file name wi
 
 class Booking {
     public:
-        Booking(const string& licensePlate,//input
-                const string& sailingId,//input
+        // Default constructor
+        Booking() = default;
 
-				const string& phoneNumber,
-				const bool& checkedIn
+        // Parameterized constructor
+        Booking(const string& licensePlate,  // input
+                const string& sailingId,     // input
+                const string& phoneNumber,   // input
+                const bool& checkedIn        // input
+        );
 
-			
+        // Write booking to binary file
+        void writeBooking(ofstream& outFile);
 
-                );
-        //Job: Booking object constructor.
-        //Usage: Used when a vehicle is getting booked for a Sailing.
-        //Restrictions: licensePlate and sailingId must comply to domain. sailingId must exist.
+        // Setters
+        void setSailingID(const string& id);
+        void setLicensePlate(const string& plate);
+        void setPhoneNumber(const string& phone);
+        void setCheckedIn(bool status);
 
-        //----------------------------------------------------------------------------
-
-
-
-        void writeBooking(ofstream& outFile//input
-                          );
-        //Job: Writes the Booking data into the file.
-        //Usage: Used when all data about Booking is collected. It is then written into a data file.
-        //Restrictions: Booking mustn't already exist in the data file.
-
-        //----------------------------------------------------------------------------
-
-
-
+        // Getters
+        string getSailingID() const;
+        string getLicensePlate() const;
+        string getPhoneNumber() const;
+        bool getCheckedIn() const;
 
     private:
-        string sailingId;//sailingId is used to identify on which Sailing the vehicle is booked.
-        string licensePlate;//vehicle's license plate. acts as a primary key.
-		string phoneNumber; //phone number associated with a booking
-        bool checkedIn;//Flag to identify if vehicle has been registered.
-
-
-
-
-
+        char sailingId[16];      // "ccc-dd-hh" + null terminator
+        char licensePlate[16];   // up to 15 characters + null terminator
+        char phoneNumber[16];    // up to 15 characters + null terminator
+        bool checkedIn;          // flag for check-in
 };
+
 
 //----------------------------------------------------------------------------
 

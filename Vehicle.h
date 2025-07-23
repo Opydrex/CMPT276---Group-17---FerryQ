@@ -19,66 +19,60 @@ This module contains functions and implementations related to Vehicles.
 using namespace std;
 const float maxLength = 99.9; //constant that stores maximum allowed vehicle length.
 const float maxHeight = 9.9; //constant that stores maximum allowed vehicle height.
-const string fileNameVehicle = "vehicle.txt"; //constant that stores file name with all vehicles.
-
-class Vehicle{
+const string fileNameVehicle = "vehicle.txt";
+class Vehicle {
     public:
-        Vehicle(const string& licensePlate,//input
-                const float& height,//input
-                const float& length //input
-                );
-        //Job: Vehicle object constructor.
-        //Usage: Used when a Vehicle is being created. Created automatically if the vehicle is not found in the file.
-        //Restrictions: Must comply to the domain restrictions and height/length restrictions.
+        Vehicle() = default;
 
-        //----------------------------------------------------------------------------
+        Vehicle(const string& licensePlate, // input
+                const float& height,       // input
+                const float& length        // input
+        );
+        // Job: Vehicle object constructor.
+        // Usage: Used when a Vehicle is being created. Created automatically if the vehicle is not found in the file.
+        // Restrictions: Must comply to the domain restrictions and height/length restrictions.
 
-        void writeVehicle(ofstream& outFile//input
+        void writeVehicle(ofstream& outFile); // input
+        // Job: Writes an instance of the Vehicle object to the file.
+        // Usage: Used automatically when a Vehicle is registered for the Booking for the first time ever.
+        // Restrictions: Isn't called when Vehicle already exists in the file.
 
-                         );
+        // Setters
+        void setLicensePlate(const string& licensePlate);
+        void setHeight(float height);
+        void setLength(float length);
 
-        //Job: Writes an instance of the Vehicle object to the file.
-        //Usage: Used automatically when a Vehicle is registered for the Booking for the first time ever.
-        //Restrictions: Isn't called when Vehicle already exists in the file.
-
-        //----------------------------------------------------------------------------
-
+        // Getters
+        string getLicensePlate() const;
+        float getHeight() const;
+        float getLength() const;
 
     private:
-            string licensePlate; //License plate of the vehicle.
-            float height; //Vehicle's height. 0 if it is not a special-sized vehicle.
-            float length; //Vehicle's length. 0 if it is not a special-sized vehicle.
-
-
-
+        char licensePlate[11]; // License plate (max 10 chars + null terminator)
+        float height; // Vehicle's height
+        float length; // Vehicle's length
 };
 
 //----------------------------------------------------------------------------
 
-bool isVehicleExist(const string& licensePlate,//input
-                     ifstream& inFile//Input
-                    );
+//----------------------------------------------------------------------------
 
-
-//Job: Returns a boolean flag indicating if the Vehicle exists.
-//Usage: Call when need to find out if the Vehicle exists
-//Restrictions: licensePlate must comply to domain.
+bool isVehicleExist(const string& licensePlate, // input
+                    ifstream& inFile            // input
+);
+// Job: Returns a boolean flag indicating if the Vehicle exists.
+// Usage: Call when need to find out if the Vehicle exists
+// Restrictions: licensePlate must comply to domain.
 
 //----------------------------------------------------------------------------
 
+void getVehicleDimensions(string licensePlate, // input
+                          string* length,      // output
+                          string* height,      // output
+                          ifstream& inFile     // input
+);
+// Job: Assigns vehicle length and height to two pointers.
+// Usage: acts as a getter for a vehicle's height and length.
+// Restrictions: licensePlate must comply to domain. Vehicle must exist.
 
-void getVehicleDimensions(string licensePlate, //Input
-                          string* length, //Output
-                          string* height, //Output
-                          ifstream& inFile //Input
-                         );
-
-//Job: Assigns vehicle length and height to two pointers.
-//Usage: acts as a getter for a vehicle's height and length.
-//Restrictions: licensePlate must comply to domain. Vehicle must exist
-
-
-
-
-
-#endif //VEHICLE_H
+#endif // VEHICLE_H

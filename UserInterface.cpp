@@ -141,7 +141,7 @@ void SailingsMenu(ifstream& vesselInFile, ofstream& vesselOutFile, ifstream& sai
                 createSailing(vesselInFile, sailingOutFile, sailingInFile);
                 break;
             case 2:
-                promptToDeleteSailing(sailingInFile, sailingOutFile);
+                deleteSailing(sailingOutFile, sailingInFile);
                 break;
             case 3:
                 createVessel(vesselInFile, vesselOutFile);
