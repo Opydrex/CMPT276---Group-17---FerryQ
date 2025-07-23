@@ -49,7 +49,7 @@ int main() {
 
             case 2:
                 cout << "\n--- Delete Sailing ---" << endl;
-                deleteSailing(); 
+                deleteSailing();
                 break;
 
             case 3:
