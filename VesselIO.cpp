@@ -1,15 +1,23 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-/*
-MODULE NAME: VesselFileIO.cpp
-Rev.1 - 24/07/2025 - Implementation of Vessel file I/O operations.
-
-----------------------------------------------------------------------------
-This module implements low-level binary file access for Vessel records.
-Functions include writing, searching, and retrieving capacities from the
-binary vessel file. These are utility functions called by higher-level
-modules to manipulate database files.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: VesselFileIO.cpp
+// Rev.1 - 24/07/2025 - Implementation of Vessel file I/O operations.
+//
+// ----------------------------------------------------------------------------
+// This module performs all low-level binary file operations for vessel records.
+//
+// What it does:
+// - Provides functions to write, search for, and read the capacities of
+//   Vessel objects from the "vessel.txt" binary file.
+//
+// Implementation Strategy:
+// - Data is stored as fixed-length binary records (using sizeof(Vessel)).
+// - All lookups are performed using a linear search of the file.
+// - String data (vessel name) is stored in a fixed-size char array to
+//   ensure a consistent record size for binary I/O.
+//
+// Used By: Called by the SailingUserIO.cpp and VesselUserIO.cpp modules.
+// ----------------------------------------------------------------------------
 
 #include "VesselIO.h"
 #include "Vessel.h"

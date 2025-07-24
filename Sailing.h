@@ -1,15 +1,18 @@
-//==========================================================================
-//==========================================================================
-
-/*
-MODULE NAME: SailingUserIO.h
-Rev.1 - 09/07/2025 - SailingUserIO module header created
-Rev.2 - 24/07/2025 - SailingUserIO module header edited
-----------------------------------------------------------------------------
-This module contains the Sailing class and high-level operations related to
-creating, deleting, and querying sailing records using binary file I/O.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: SailingUserIO.h
+// Rev.1 - 09/07/2025 - SailingUserIO module header created
+// Rev.2 - 24/07/2025 - SailingUserIO module header edited
+//
+// ----------------------------------------------------------------------------
+// This module defines the public interface for all high-level, user-facing
+// sailing operations. It contains the Sailing class definition, which is
+// structured for fixed-length binary record storage using fixed-size char
+// arrays for string data.
+//
+// The functions declared here handle the interactive workflows for creating,
+// deleting, and reporting on sailings, and are called from the UI.
+// ----------------------------------------------------------------------------
 
 #ifndef SAILING_H
 #define SAILING_H

@@ -1,19 +1,27 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-/*
-MODULE NAME: BookingFileIO.cpp
-Rev.1 – 24/07/2025 – Implements low-level file I/O for Booking records.
-----------------------------------------------------------------------------
-This module handles binary file access for Booking records. It provides
-functions for writing, deleting, searching, and counting bookings using 
-fixed-length binary storage. Deletion is handled by overwriting the target 
-record with the last and truncating the file.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: BookingFileIO.cpp
+// Rev.1 – 24/07/2025 – Implements low-level file I/O for Booking records.
+//
+// ----------------------------------------------------------------------------
+// This module performs all low-level binary file operations for booking records.
+//
+// What it does:
+// - Provides functions to read, write, search, and delete Booking objects
+//   from the "booking.txt" binary file.
+//
+// Implementation Strategy:
+// - Data is stored as fixed-length binary records (using sizeof(Booking)).
+// - All lookups are performed using a linear search of the file.
+// - Deletion is handled with a "swap-and-truncate" method to maintain a
+//   compact, unordered data file.
+//
+// Used By: Called by the BookingUserIO.cpp module to persist booking data.
+// ----------------------------------------------------------------------------
 
 #include "BookingIO.h"
 #include <iostream>
-#include <io.h> 
+
 using namespace std;
 extern "C" int truncate(const char* path, long long length);  //Needed on some systems for file truncation
 static const char* BOOKING_FILENAME = "booking.txt";  //Physical file name

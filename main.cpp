@@ -1,12 +1,19 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//==========================================================================
-//MODULE NAME: main.cpp
-//Rev.1 - 09/07/2025 - Main module created
-//--------------------------------------------------------------------------
-//This module contains the entry point for the FerryQ system. It handles
-//initialization and final shutdown of all file streams and launches the
-//main user interface loop that drives the application.
-//==========================================================================
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: main.cpp
+// Rev.1 - 09/07/2025 - Main module created
+//
+// --------------------------------------------------------------------------
+// This module serves as the entry point for the FerryQ application.
+//
+// What it does:
+// - Initializes all fstream objects for binary file I/O.
+// - Creates the data files (.txt) if they do not already exist.
+// - Launches the main user interface loop, passing the open file streams.
+// - Handles the final closing of all file streams upon program termination.
+//
+// Used By: This module is called by the operating system to start the program.
+// --------------------------------------------------------------------------
 
 #include "UserInterface.h"
 #include "Vessel.h"

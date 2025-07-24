@@ -1,15 +1,18 @@
-//==========================================================================
-//==========================================================================
-
-/*
-MODULE NAME: BookingUserIO.h
-Rev.1 - 09/07/2025 - BookingUserIO module header created
-Rev.2 - 24/07/2025 - BookingUserIO module header edited
-----------------------------------------------------------------------------
-This module contains the Booking class and related mid-level functions
-for creating, deleting, and processing bookings and check-ins.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: BookingUserIO.h
+// Rev.1 - 09/07/2025 - BookingUserIO module header created
+// Rev.2 - 24/07/2025 - BookingUserIO module header edited
+//
+// ----------------------------------------------------------------------------
+// This module provides the high-level interface for all user-facing booking
+// operations. It defines the Booking class structure for fixed-length binary
+// I/O and declares the functions that orchestrate the workflows for creating,
+// deleting, and checking-in bookings.
+//
+// These functions are called from the user interface and coordinate actions
+// between multiple low-level FileIO modules.
+// ----------------------------------------------------------------------------
 
 #ifndef BOOKING_H
 #define BOOKING_H

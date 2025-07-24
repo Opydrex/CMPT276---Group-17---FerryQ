@@ -1,15 +1,20 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-/*
-MODULE NAME: BookingUserIO.cpp
-Rev.1 – 24/07/2025 – Initial implementation of Booking class and UI functions.
-----------------------------------------------------------------------------
-This module handles all booking-related logic: creating new bookings,
-checking in existing bookings, deleting bookings, and fare calculation.
-It interacts with the BookingIO and SailingIO modules to verify data
-and persist booking records.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: BookingUserIO.cpp
+// Rev.1 – 24/07/2025 – Initial implementation of Booking class and UI functions.
+//
+// ----------------------------------------------------------------------------
+// This module handles all high-level, interactive logic for managing bookings.
+//
+// What it does:
+// - Implements the user-facing workflows for creating a new booking, deleting
+//   an existing booking, and processing a vehicle check-in.
+// - Contains all console prompts and data validation for booking details.
+// - Orchestrates calls to low-level FileIO modules to verify data (e.g.,
+//   checking if a sailing exists) and persist records.
+//
+// Used By: Called by UserInterface.cpp from the "Bookings" and "Check-in" menus.
+// ----------------------------------------------------------------------------
 
 #include "Booking.h"
 #include "Vehicle.h"

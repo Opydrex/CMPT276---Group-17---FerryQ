@@ -1,18 +1,17 @@
-//==========================================================================
-//==========================================================================
-
-/*
-MODULE NAME: VesselUserIO.h
-Rev.1 - 09/07/2025 - Vessel class header created.
-Rev.2 - 24/07/2025 - Minor changes
-----------------------------------------------------------------------------
-This module contains Mid-level interface functions (called from UI or logic,
-not from file I/O layers) It holds function declarations and data structures
-related to Vessels. It defines the Vessel class, which stores information 
-about avessel’s name and lane capacities, as well as file-level functions 
-used for creating and querying vessels.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: VesselUserIO.h
+// Rev.1 - 09/07/2025 - Vessel class header created.
+// Rev.2 - 24/07/2025 - Minor changes
+//
+// ----------------------------------------------------------------------------
+// This module provides the high-level interface for vessel management. It
+// defines the Vessel class, structured with fixed-size char arrays for use in
+// binary files. It also declares the functions for the interactive creation
+// and validation of vessel records.
+//
+// These functions are intended to be called from the user interface layer.
+// ----------------------------------------------------------------------------
 
 #ifndef VESSEL_H
 #define VESSEL_H

@@ -1,21 +1,24 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: VehicleFileIO.cpp
+// Rev.1 - 24/07/2025 - Vehicle class implementation.
+//
+// ----------------------------------------------------------------------------
+// This module performs all low-level binary file operations for vehicle records.
+//
+// What it does:
+// - Provides functions to write, search for, and read the dimensions of
+//   Vehicle objects from the "vehicle.txt" binary file.
+//
+// Implementation Strategy:
+// - Data is stored as fixed-length binary records (using sizeof(Vehicle)).
+// - All lookups are performed using a linear search of the file.
+// - String data (license plate) is stored in a fixed-size char array to
+//   ensure a consistent record size for binary I/O.
+//
+// Used By: Called by the BookingUserIO.cpp module to manage vehicle data.
+// ----------------------------------------------------------------------------
 
-/*
-MODULE NAME: VehicleFileIO.cpp
-Rev.1 - 24/07/2025 - Vehicle class implementation.
-
-----------------------------------------------------------------------------
-This module contains the implementation of the Vehicle class and basic
-functions for reading/writing vehicle records to a binary file.
-
-Design notes:
-- Vehicles are stored as fixed-length binary records.
-- All I/O is done one record at a time.
-- Linear search is used for lookup.
-- License plate is stored in a fixed-size char array to ensure consistent record size.
-*/
-
-//----------------------------------------------------------------------------
 #include "Vehicle.h"
 #include <fstream>
 #include <iostream>

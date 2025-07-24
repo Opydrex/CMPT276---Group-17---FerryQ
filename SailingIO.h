@@ -1,8 +1,16 @@
-//==========================================================================
-//==========================================================================
-//MODULE NAME: SailingFileIO.h - Low-level file I/O for Sailings
-//Rev.1 - 24/07/2025 - Created for modular design separation
-//==========================================================================
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: SailingFileIO.h - Low-level file I/O for Sailings
+// Rev.1 - 24/07/2025 - Created for modular design separation
+//
+// ----------------------------------------------------------------------------
+// This header declares the low-level functions for direct binary file access
+// to sailing records. As the data access layer for sailings, it provides an
+// interface for record manipulation based on index or key values.
+//
+// These functions encapsulate the details of the binary file layout and are
+// called by the SailingUserIO module.
+// --------------------------------------------------------------------------
 
 #ifndef SAILING_IO_H
 #define SAILING_IO_H

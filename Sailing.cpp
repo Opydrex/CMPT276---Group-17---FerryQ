@@ -1,20 +1,25 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-/*
-MODULE NAME: SailingUserIO.cpp
-Rev.1 - 9/07/2025 - Module created.
-Rev.2 - 24/07/2025 - Updated to match UI stream logic and core operations.
-----------------------------------------------------------------------------
-This module implements all mid-level functions related to sailings,
-including creating, deleting, printing, and querying sailing records.
-
-It works closely with SailingIO.cpp for file access and with VesselIO.cpp
-for retrieving deck capacities of vessels. Input validation is interactive.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: SailingUserIO.cpp
+// Rev.1 - 9/07/2025 - Module created.
+// Rev.2 - 24/07/2025 - Updated to match UI stream logic and core operations.
+//
+// ----------------------------------------------------------------------------
+// This module handles all high-level, interactive logic for managing sailings.
+//
+// What it does:
+// - Implements the user-facing workflows for creating a sailing, deleting
+//   sailings, viewing the full sailing report, and querying a single sailing.
+// - Contains all console prompts and data validation for sailing details.
+// - Calls low-level functions from SailingFileIO.cpp and VesselFileIO.cpp
+//   to retrieve data and persist changes.
+//
+// Used By: Called by UserInterface.cpp from the "Sailings" menu.
+// ----------------------------------------------------------------------------
 
 #include "Sailing.h"
 #include "SailingIO.h"
-#include "VesselIO.h"
+#include "Vessel.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -51,9 +56,9 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 
         //Check that vessel exists and retrieve capacities
         vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-        float capSmall = readMaxRegularLength(vesselFile, vesselName);
+        float capSmall = getMaxRegularLength(vesselName, vesselFile);
         vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-        float capBig = readMaxSpecialLength(vesselFile, vesselName);
+        float capBig = getMaxSpecialLength(vesselName, vesselFile);
         if (capSmall < 0 || capBig < 0){
             cout << "Error: Vessel not found. Please re-enter." << endl;
             continue;

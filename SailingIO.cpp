@@ -1,17 +1,22 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-/*
-MODULE NAME: SailingFileIO.cpp
-Rev.1 – 24/07/2025 – Implements low-level file I/O for Sailing records.
-----------------------------------------------------------------------------
-This module provides binary file access functions for reading, writing,
-searching, deleting, and counting Sailing records. It assumes the calling
-code opens and manages the file stream, while these functions perform 
-record-level operations.
-
-Deletion is done by swapping with the last record and truncating the file.
-Binary fixed-length records ensure direct access using indexing.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: SailingFileIO.cpp
+// Rev.1 – 24/07/2025 – Implements low-level file I/O for Sailing records.
+//
+// ----------------------------------------------------------------------------
+// This module performs all low-level binary file operations for sailing records.
+//
+// What it does:
+// - Provides functions to read, write, search, and delete Sailing objects
+//   from the "sailing.txt" binary file.
+//
+// Implementation Strategy:
+// - Data is stored as fixed-length binary records (using sizeof(Sailing)).
+// - All lookups are performed using a linear search of the file.
+// - Deletion is handled with a "swap-and-truncate" method.
+//
+// Used By: Called by the SailingUserIO.cpp and BookingUserIO.cpp modules.
+// ----------------------------------------------------------------------------
 
 #include "SailingIO.h"
 #include <cstdio>    //for truncate()

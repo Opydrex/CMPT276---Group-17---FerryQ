@@ -1,13 +1,17 @@
-//==========================================================================
-//==========================================================================
-/*
-MODULE NAME: VehicleFileIO.h
-Rev.1 - 09/07/2025 - Vehicle class header created
-Rev.2 - 24/07/2025 - Minor changes
-----------------------------------------------------------------------------
-This module contains functions and implementations related to Vehicles.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: VehicleFileIO.h
+// Rev.1 - 09/07/2025 - Vehicle class header created
+// Rev.2 - 24/07/2025 - Minor changes
+// 
+// ----------------------------------------------------------------------------
+// This module provides the interface for all vehicle-related data operations.
+// It defines the Vehicle class, which is designed for fixed-length binary
+// storage by using a fixed-size char array for the license plate.
+//
+// It also declares the low-level functions for writing, reading, and searching
+// for vehicle records in the binary data file.
+// ----------------------------------------------------------------------------
 
 #ifndef VEHICLE_H
 #define VEHICLE_H

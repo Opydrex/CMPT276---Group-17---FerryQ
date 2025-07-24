@@ -1,13 +1,21 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//MODULE NAME: UserInterface.cpp
-//Rev.1 - 21/07/2025 - UserInterface class implementation.
-//Rev.2 - 22/07/2025 - Updated to match new module signatures and added Query Sailing.
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: UserInterface.cpp
+// Rev.1 - 21/07/2025 - UserInterface class implementation.
+// Rev.2 - 22/07/2025 - Updated to match new module signatures and added Query Sailing.
+//
 //--------------------------------------------------------------------------
-//This module contains the implementation for the user interface, including
-//the main program loop and menu navigation, as specified in the architectural
-//design and user manual. It dispatches user commands to the appropriate
-//modules and coordinates file stream usage.
-//==========================================================================
+// This module contains the main user interface loop and all menu navigation logic.
+//
+// What it does:
+// - Displays the main menu and sub-menus for Sailings and Bookings.
+// - Uses a robust getline/stoi pattern to handle user input safely, preventing
+//   crashes from invalid (non-numeric) entries.
+// - Acts as a controller, dispatching user commands to the appropriate
+//   mid-level UserIO modules (e.g., createSailing, promptToDeleteBooking).
+//
+// Used By: Called by main.cpp to run the application's primary event loop.
+// ---------------------------------------------------------------------------
 
 #include "UserInterface.h"
 #include "Booking.h"

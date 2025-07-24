@@ -1,16 +1,16 @@
-//==========================================================================
-//==========================================================================
-
-/*
-MODULE NAME: VesselFileIO.h
-Rev.1 - 24/07/2025 - Initial creation of low-level Vessel file I/O header.
-----------------------------------------------------------------------------
-This module provides low-level binary file operations for handling Vessel
-records. These functions are called by mid-level modules like Vessel.cpp
-to append, read, or search vessel data in the vessel file. File must be 
-opened before calling any of these functions.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: VesselFileIO.h
+// Rev.1 - 24/07/2025 - Initial creation of low-level Vessel file I/O header.
+// 
+// ----------------------------------------------------------------------------
+// This header declares the low-level functions for direct binary file access
+// to vessel records. It serves as the data persistence layer for vessels,
+// abstracting away the details of reading and writing fixed-length vessel
+// records from the data file.
+//
+// These functions are called by the VesselUserIO and SailingUserIO modules.
+// ----------------------------------------------------------------------------
 
 #ifndef VESSEL_IO_H
 #define VESSEL_IO_H

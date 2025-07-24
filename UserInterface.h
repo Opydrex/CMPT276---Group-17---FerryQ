@@ -1,12 +1,13 @@
-//==========================================================================
-//==========================================================================
-//MODULE NAME: UserInterface.h
-//Rev.1 - 09/07/2025 - UserInterface class header created.
-//--------------------------------------------------------------------------
-//This module contains functions declarations related to the
-//User Interface. It declares the main program loop entry point
-//for interacting with all system modules.
-//==========================================================================
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: UserInterface.h
+// Rev.1 - 09/07/2025 - UserInterface class header created.
+//
+// --------------------------------------------------------------------------
+// This module declares the public functions for the main user interface.
+// The primary function, userInterfaceLoop, is the entry point for the
+// application's interactive menu system and drives all user-facing workflows.
+// ---------------------------------------------------------------------------
 
 #ifndef USERINTERFACE_H
 #define USERINTERFACE_H

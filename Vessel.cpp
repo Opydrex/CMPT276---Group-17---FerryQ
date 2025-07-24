@@ -1,21 +1,19 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-/*
-MODULE NAME: VesselUserIO.cpp
-Rev.1 - 24/07/2025 - Vessel class implementation.
-
-----------------------------------------------------------------------------
-This file handles vessel creation and implements the Vessel class. It prompts
-the user for vessel details, checks for duplicates, and saves valid entries
-to a binary file via the VesselIO module.
-
-Design notes:
-- All records are stored as fixed-length binary entries.
-- We rely on simple linear search and append-style file writes.
-- No virtual functions — keeps the object layout clean for file I/O.
-- UI handles file opening/closing; this module assumes file is open.
-*/
-
-//----------------------------------------------------------------------------
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: VesselUserIO.cpp
+// Rev.1 - 24/07/2025 - Vessel class implementation.
+//
+// ----------------------------------------------------------------------------
+// This module handles the user interaction workflow for creating a new vessel.
+//
+// What it does:
+// - Prompts the user for all necessary vessel details (name, capacities).
+// - Performs input validation, including checking for duplicate vessel names.
+// - Calls the VesselFileIO module to write the new, validated vessel
+//   record to the binary data file.
+//
+// Used By: Called by UserInterface.cpp from the "Sailings" menu.
+// ----------------------------------------------------------------------------
 #include "Vessel.h"
 #include "VesselIO.h"
 #include <iostream>

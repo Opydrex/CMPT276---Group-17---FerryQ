@@ -1,15 +1,17 @@
-//==========================================================================
-//==========================================================================
-
-/*
-MODULE NAME: BookingFileIO.h
-Rev.1 – 24/07/2025 – Interface for low-level Booking file I/O operations.
-----------------------------------------------------------------------------
-This header defines functions for writing, reading, searching, deleting,
-and counting Booking records in a binary file. Each record is fixed-length.
-All operations assume the file stream is already opened by the caller.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: BookingFileIO.h
+// Rev.1 – 24/07/2025 – Interface for low-level Booking file I/O operations.
+//
+// ----------------------------------------------------------------------------
+// This header declares the low-level functions for direct, binary file
+// manipulation of Booking records. It serves as the data persistence layer
+// for bookings, abstracting away the specifics of file access patterns like
+// linear searching and the swap-and-truncate deletion method.
+//
+// All operations assume the file stream is opened and managed by a
+// higher-level module.
+// ----------------------------------------------------------------------------
 
 #ifndef BOOKING_IO_H
 #define BOOKING_IO_H

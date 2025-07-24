@@ -1,12 +1,12 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-/*
-MODULE NAME: createBookingTest.cpp
-Rev.1 - 09/07/2025 - Implemented a test driver for vehicle file IO
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// 
+// MODULE NAME: createBookingTest.cpp
+// Rev.1 - 09/07/2025 - Implemented a test driver for vehicle file IO
+//
+// ----------------------------------------------------------------------------
+// This module contains a test driver for creating a vehicle
+// ----------------------------------------------------------------------------
 
-----------------------------------------------------------------------------
-This module contains a test driver for creating a vehicle
-----------------------------------------------------------------------------
-*/
 #include "Booking.h"
 #include <iostream>
 #include <fstream>
