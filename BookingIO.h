@@ -11,7 +11,11 @@
 #endif
 using namespace std;
 
+<<<<<<< HEAD
 // Low-level binary file I/O for bookings, using already-opened fstream
+=======
+//const string fileNameBooking = "booking.dat";
+>>>>>>> 3f151b7dd6005ca069753f81fb5528a18e28d7fa
 
 // Appends a booking to the file
 bool appendBookingRecord(const Booking&, std::fstream&);

@@ -18,7 +18,7 @@ using namespace std;
 
 const float maxLength = 99.9;  // maximum allowed vehicle length (meters)
 const float maxHeight = 9.9;   // maximum allowed vehicle height (meters)
-const string fileNameVehicle = "vehicle.dat";
+const string fileNameVehicle = "vehicle.txt";
 
 class Vehicle {
     public:
@@ -31,10 +31,7 @@ class Vehicle {
         // Usage: Automatically called when creating a Vehicle record.
         // Restrictions: licensePlate 3-10 characters; height/length within allowed domain.
 
-        void writeVehicle(fstream& outFile);
-        // Job: Writes this Vehicle to the open vehicle file (binary).
-        // Usage: Called when adding a new vehicle to persistent storage.
-        // Restrictions: Only call if vehicle does not already exist in file.
+
 
         // Setters
         void setLicensePlate(const string& licensePlate);
@@ -49,5 +46,16 @@ class Vehicle {
         float height;
         float length;
 };
+
+bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle);
+// Job: Writes this Vehicle to the open vehicle file (binary).
+// Usage: Called when adding a new vehicle to file.
+// Restrictions: Only call if vehicle does not already exist in file.
+
+bool isVehicleExist(fstream& vehicleFile, const string& licensePlate);
+// Checks if a vehicle with the given license plate exists in the open vehicle file.
+
+bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, float& length, float& height);
+// Finds a vehicle by license plate in the open file and outputs its length and height (returns true if found).
 
 #endif // VEHICLE_H

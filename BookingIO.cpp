@@ -1,6 +1,7 @@
 // BookingIO.cpp
 #include "BookingIO.h"
 #include <iostream>
+#include <io.h>
 using namespace std;
 static const char* BOOKING_FILENAME = "booking.txt";
 
@@ -76,4 +77,8 @@ int countBookingRecords(fstream& bookingFile) {
     if (!bookingFile.good()) return 0;
     bookingFile.clear(); bookingFile.seekg(0, ios::end);
     return static_cast<int>(bookingFile.tellg() / sizeof(Booking));
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3f151b7dd6005ca069753f81fb5528a18e28d7fa

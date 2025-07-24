@@ -9,19 +9,19 @@
 #include <string>
 using namespace std;
 
-// Constants
-const string fileNameVessel = "vessel.txt";  // Change to .txt if text-based
+//const string fileNameVessel = "vessel.txt";  // vessel data file name (binary)
 
-// Appends a new vessel record to the vessel file
-bool writeVesselToFile(const Vessel& vessel);
+// Low-level Vessel file I/O operations:
+bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel);
+// Appends a Vessel record to the vessel file (open fstream).
 
-// Returns true if a vessel with the given name exists in the file
-bool doesVesselExist(const string& vesselName);
+bool doesVesselExist(fstream& vesselFile, const string& vesselName);
+// Returns true if a vessel with given name exists in the open vessel file.
 
-// Returns max regular deck length of the vessel (or -1 if not found)
-float readMaxRegularLength(const string& vesselName);
+float readMaxRegularLength(fstream& vesselFile, const string& vesselName);
+// Gets the max regular deck length for the vessel (returns -1 if not found).
 
-// Returns max special deck length of the vessel (or -1 if not found)
-float readMaxSpecialLength(const string& vesselName);
+float readMaxSpecialLength(fstream& vesselFile, const string& vesselName);
+// Gets the max oversize deck length for the vessel (returns -1 if not found).
 
-#endif
+#endif // VESSEL_IO_H

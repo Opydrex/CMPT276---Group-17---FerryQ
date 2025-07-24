@@ -118,7 +118,7 @@ void SailingsMenu(fstream& vesselFile, fstream& sailingFile) {
                 deleteSailing(sailingFile);
                 break;
             case 3:
-                createVessel(vesselFile, vesselFile);
+                createVessel(vesselFile);
                 break;
             case 4:
                 printReport(sailingFile);
