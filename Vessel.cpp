@@ -11,6 +11,7 @@ This module contains Vessel class implementation.
 #include "VesselIO.h"
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 using namespace std;
 
@@ -24,7 +25,7 @@ void createVessel(fstream& vesselFile) {
             cout << "Name too long. Try again." << endl;
             continue;
         }
-        if (isVesselExist(name, vesselFile)) {
+        if (doesVesselExist(vesselFile, name)) {
             cout << "Vessel exists. Enter a unique name." << endl;
             continue;
         }
@@ -66,34 +67,7 @@ void createVessel(fstream& vesselFile) {
         createVessel(vesselFile);
 }
 
-bool isVesselExist(const string& name, fstream& vesselFile) {
-    vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-    Vessel temp;
-    while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(temp))) {
-        if (temp.getName() == name) return true;
-    }
-    return false;
-}
 
-float getMaxRegularLength(const string& vesselName, fstream& vesselFile) {
-    vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-    Vessel temp;
-    while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(temp))) {
-        if (temp.getName() == vesselName)
-            return temp.getMaxSmall();
-    }
-    return -1.0f;
-}
-
-float getMaxSpecialLength(const string& vesselName, fstream& vesselFile) {
-    vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-    Vessel temp;
-    while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(temp))) {
-        if (temp.getName() == vesselName)
-            return temp.getMaxBig();
-    }
-    return -1.0f;
-}
 
 // Setters/Getters
 Vessel::Vessel(const string& nameStr, float s, float b) {
