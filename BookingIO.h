@@ -14,18 +14,13 @@ using namespace std;
 // Low-level binary file I/O for bookings, using already-opened fstream
 
 // Appends a booking to the file
-bool appendBookingRecord(const Booking& booking, fstream& bookingFile);
+bool appendBookingRecord(const Booking&, std::fstream&);
 
 // Deletes a booking by SailingID and License Plate
-bool deleteBookingRecord(const string& sailingID,
-                         const string& licensePlate,
-                         fstream& bookingFile);
+bool deleteBookingRecord(const string&, const string&, std::fstream&);
 
 // Loads a booking by SailingID and License Plate
-bool loadBookingByKey(const string& sailingID,
-                      const string& licensePlate,
-                      Booking& result,
-                      fstream& bookingFile);
+bool loadBookingByKey(const string&, const string&, Booking&, std::fstream&);
 
 // Rewrites all bookings except the one to delete (used for check-in overwrite)
 // bool overwriteBookingsExcluding(const string& sailingID,
