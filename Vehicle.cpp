@@ -15,6 +15,7 @@ This module contains Vehicle class implementation.
 #include <cstring>
 using namespace std;
 
+//Constructor
 Vehicle::Vehicle(const string& licensePlate, const float& height, const float& length) {
     // Store licensePlate in fixed-size char array (ensure null termination)
     strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
@@ -23,15 +24,43 @@ Vehicle::Vehicle(const string& licensePlate, const float& height, const float& l
     this->length = length;
 }
 
-void Vehicle::writeVehicle(fstream& outFile) {
-    if (outFile.is_open()) {
-        outFile.clear();
-        outFile.seekp(0, ios::end);
-        outFile.write(reinterpret_cast<const char*>(this), sizeof(Vehicle));
-        outFile.flush();
-    } else {
-        cerr << "Error: Unable to open vehicle file for writing." << endl;
+//File I/O Functions
+bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle) {
+    vehicleFile.clear();
+    vehicleFile.seekp(0, ios::end);
+    if (!vehicleFile) {
+        cerr << "Error: Vehicle file stream not available for writing.\n";
+        return false;
     }
+    vehicleFile.write(reinterpret_cast<const char*>(&vehicle), sizeof(Vehicle));
+    vehicleFile.flush();
+    return true;
+}
+
+bool isVehicleExist(fstream& vehicleFile, const string& licensePlate) {
+    vehicleFile.clear(); // reset EOF state
+    vehicleFile.seekg(0, ios::beg);
+    Vehicle temp;
+    while (vehicleFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
+        if (temp.getLicensePlate() == licensePlate) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, float& length, float& height) {
+    vehicleFile.clear();
+    vehicleFile.seekg(0, ios::beg);
+    Vehicle temp;
+    while (vehicleFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
+        if (temp.getLicensePlate() == licensePlate) {
+            length = temp.getLength();
+            height = temp.getHeight();
+            return true;
+        }
+    }
+    return false;
 }
 
 // Setters

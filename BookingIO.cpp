@@ -1,44 +1,70 @@
-//==========================================================================
-// BookingIO.cpp - Implementation of Booking file I/O operations
-//==========================================================================
+// BookingIO.cpp
 #include "BookingIO.h"
-#include <fstream>
 #include <iostream>
+#include <io.h>
 using namespace std;
+static const char* BOOKING_FILENAME = "booking.txt";
 
-bool appendBookingRecord(const Booking& booking) {
-    ofstream out(fileNameBooking, ios::binary | ios::app);
-    if (!out) return false;
-    out.write(reinterpret_cast<const char*>(&booking), sizeof(Booking));
-    return true;
+bool appendBookingRecord(const Booking& booking, fstream& bookingFile) {
+    bookingFile.clear();
+    bookingFile.seekp(0, ios::end);
+    bookingFile.write(reinterpret_cast<const char*>(&booking), sizeof(Booking));
+    bookingFile.flush();
+    return bookingFile.good();
 }
 
-bool deleteBookingRecord(const string& sailingID, const string& licensePlate) {
-    // Delete a specific booking identified by sailingID and licensePlate by copying others to a temp file
-    ifstream in(fileNameBooking, ios::binary);
-    ofstream out("booking_tmp.dat", ios::binary | ios::trunc);
-    if (!in || !out) return false;
+bool deleteBookingRecord(const string& sailingID,
+                         const string& licensePlate,
+                         fstream& bookingFile) {
+    if (!bookingFile.good()) return false;
+    // Compute total records
+    bookingFile.clear(); bookingFile.seekg(0, ios::end);
+    int total = static_cast<int>(bookingFile.tellg() / sizeof(Booking));
+    if (total <= 0) return false;
+    // Find target index
+    bookingFile.clear(); bookingFile.seekg(0, ios::beg);
     Booking temp;
-    bool found = false;
-    while (in.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
+    int targetIndex = -1;
+    for (int i = 0; i < total; ++i) {
+        bookingFile.read(reinterpret_cast<char*>(&temp), sizeof(Booking));
         if (temp.getSailingID() == sailingID && temp.getLicensePlate() == licensePlate) {
-            found = true;
-            continue;
+            targetIndex = i;
+            break;
         }
-        out.write(reinterpret_cast<const char*>(&temp), sizeof(Booking));
     }
-    in.close();
-    out.close();
-    remove(fileNameBooking.c_str());
-    rename("booking_tmp.dat", fileNameBooking.c_str());
-    return found;
+    if (targetIndex < 0) return false;
+    int lastIndex = total - 1;
+    // Overwrite if not last
+    if (targetIndex != lastIndex) {
+        bookingFile.clear();
+        bookingFile.seekg(lastIndex * sizeof(Booking), ios::beg);
+        Booking lastRec;
+        bookingFile.read(reinterpret_cast<char*>(&lastRec), sizeof(Booking));
+        bookingFile.clear();
+        bookingFile.seekp(targetIndex * sizeof(Booking), ios::beg);
+        bookingFile.write(reinterpret_cast<const char*>(&lastRec), sizeof(Booking));
+        bookingFile.flush();
+    }
+    // Truncate file
+    bookingFile.close();
+#ifdef _WIN32
+    FILE* f = fopen(BOOKING_FILENAME, "rb+");
+    if (f) { _chsize_s(_fileno(f), lastIndex * sizeof(Booking)); fclose(f); }
+#else
+    truncate(BOOKING_FILENAME, lastIndex * sizeof(Booking));
+#endif
+    bookingFile.open(BOOKING_FILENAME, ios::binary | ios::in | ios::out);
+    return bookingFile.good();
 }
 
-bool loadBookingByKey(const string& sailingID, const string& licensePlate, Booking& result) {
-    ifstream in(fileNameBooking, ios::binary);
-    if (!in) return false;
+bool loadBookingByKey(const string& sailingID,
+                      const string& licensePlate,
+                      Booking& result,
+                      fstream& bookingFile) {
+    if (!bookingFile.good()) return false;
+    bookingFile.clear(); bookingFile.seekg(0, ios::beg);
     Booking temp;
-    while (in.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
+    while (bookingFile.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
         if (temp.getSailingID() == sailingID && temp.getLicensePlate() == licensePlate) {
             result = temp;
             return true;
@@ -47,28 +73,8 @@ bool loadBookingByKey(const string& sailingID, const string& licensePlate, Booki
     return false;
 }
 
-bool overwriteBookingsExcluding(const string& sailingID, const string& licensePlate) {
-    // Writes all bookings except the specified one to a new file (used internally for check-in updates)
-    ifstream in(fileNameBooking, ios::binary);
-    ofstream out("booking_tmp.dat", ios::binary | ios::trunc);
-    if (!in || !out) return false;
-    Booking temp;
-    while (in.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
-        if (temp.getSailingID() == sailingID && temp.getLicensePlate() == licensePlate) {
-            continue;
-        }
-        out.write(reinterpret_cast<const char*>(&temp), sizeof(Booking));
-    }
-    in.close();
-    out.close();
-    remove(fileNameBooking.c_str());
-    rename("booking_tmp.dat", fileNameBooking.c_str());
-    return true;
-}
-
-int countBookingRecords() {
-    ifstream in(fileNameBooking, ios::binary | ios::ate);
-    if (!in) return 0;
-    streampos size = in.tellg();
-    return static_cast<int>(size / sizeof(Booking));
+int countBookingRecords(fstream& bookingFile) {
+    if (!bookingFile.good()) return 0;
+    bookingFile.clear(); bookingFile.seekg(0, ios::end);
+    return static_cast<int>(bookingFile.tellg() / sizeof(Booking));
 }
