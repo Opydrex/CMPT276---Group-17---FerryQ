@@ -1,98 +1,93 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// VesselIO.cpp - Implementation of Vessel file I/O operations
-// Rev.1 - 24/07/2025 - Added binary random-access I/O for Vessel records
-//
-// This module provides low-level functions to append, search, and read
-// Vessel records in a fixed-length binary file. It assumes each record is
-// sizeof(Vessel) bytes and uses fstream in binary mode for random-access.
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//==========================================================================
+//==========================================================================
+
+/*
+MODULE NAME: VesselIO.cpp
+Rev.1 - 24/07/2025 - Implementation of Vessel file I/O operations.
+
+----------------------------------------------------------------------------
+This module implements low-level binary file access for Vessel records.
+Functions include writing, searching, and retrieving capacities from the
+binary vessel file. These are utility functions called by higher-level
+modules such as Vessel.cpp.
+----------------------------------------------------------------------------
+*/
 
 #include "VesselIO.h"
 #include "Vessel.h"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
 using namespace std;
 
 //----------------------------------------------------------------------------
-// writeVesselToFile
-// Job: Append a Vessel record to the end of the already-open binary file.
-// Implementation: Clears EOF flags, seeks to file end, writes raw bytes of
-// sizeof(Vessel), then flushes to ensure data integrity.
-// Usage: Called when creating a new Vessel in the Sailings menu.
-// Restrictions: vesselFile must be open in ios::in|ios::out|ios::binary.
-//----------------------------------------------------------------------------
+// Appends a new Vessel record to the end of the vessel file.
+// Assumes file is already opened by caller.
 bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel) {
-    // Reset any error flags and position write pointer at file end
-    vesselFile.clear();
-    vesselFile.seekp(0, ios::end);
+    vesselFile.clear();                // Reset any fail/eof flags
+    vesselFile.seekp(0, ios::end);     // Move to the end for appending
 
-    // Verify stream is valid for writing
     if (!vesselFile) {
         cerr << "Error: Vessel file stream is not available for writing.\n";
         return false;
     }
 
-    // Write the raw bytes of the Vessel object
     vesselFile.write(reinterpret_cast<const char*>(&vessel), sizeof(Vessel));
-    vesselFile.flush();  // ensure the record is actually written
+    vesselFile.flush();                // Ensure write hits disk
     return true;
 }
 
 //----------------------------------------------------------------------------
-// doesVesselExist
-// Job: Check if a vessel with the given name exists in the binary file.
-// Implementation: Clears flags, seeks to file start, then loops reading each
-// sizeof(Vessel)-byte record and compares temp.getName() to vesselName.
-// Usage: Called before creating a new Vessel to enforce uniqueness.
-//----------------------------------------------------------------------------
+// Checks if a vessel with the given name exists in the file.
+// Uses a linear search through the entire file.
 bool doesVesselExist(fstream& vesselFile, const string& vesselName) {
-    //Reset flags and position read pointer at file start
-    vesselFile.clear();
-    vesselFile.seekg(0, ios::beg);
+    vesselFile.clear();                // Reset stream flags
+    vesselFile.seekg(0, ios::beg);     // Start reading from beginning
 
-    Vessel temp;  //temporary storage for each record
+    Vessel temp;
+    // Linear search: read one record at a time
     while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
         if (temp.getName() == vesselName) {
-            //Found a matching vessel name
             return true;
         }
     }
-    return false;  //no match found
+    return false;
 }
 
 //----------------------------------------------------------------------------
-// readMaxRegularLength
-// Job: Locate a vessel by name and return its max regular capacity.
-// Implementation: Sequentially reads records, compares names, returns
-// temp.getMaxSmall() on match; returns -1.0f if not found.
-//----------------------------------------------------------------------------
+// Retrieves the max regular (low vehicle) capacity for a given vessel name.
+// Returns -1.0f if vessel not found.
 float readMaxRegularLength(fstream& vesselFile, const string& vesselName) {
-    vesselFile.clear();
-    vesselFile.seekg(0, ios::beg);
+    vesselFile.clear();                // Reset stream flags
+    vesselFile.seekg(0, ios::beg);     // Start from beginning
 
     Vessel temp;
+    // Linear search to find matching vessel
     while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
         if (temp.getName() == vesselName) {
-            return temp.getMaxSmall();  // return regular capacity
+            return temp.getMaxSmall(); // Return regular capacity
         }
     }
-    return -1.0f;  // sentinel for "not found"
+    return -1.0f;  // Not found
 }
 
 //----------------------------------------------------------------------------
-// readMaxSpecialLength
-// Job: Locate a vessel by name and return its max special capacity.
-// Implementation: Same pattern as readMaxRegularLength, uses temp.getMaxBig().
-//----------------------------------------------------------------------------
+// Retrieves the max special (oversize vehicle) capacity for a given vessel.
+// Returns -1.0f if vessel not found.
 float readMaxSpecialLength(fstream& vesselFile, const string& vesselName) {
     vesselFile.clear();
     vesselFile.seekg(0, ios::beg);
 
     Vessel temp;
+    // Linear search to find matching vessel
     while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
         if (temp.getName() == vesselName) {
-            return temp.getMaxBig();  // return special capacity
+            return temp.getMaxBig();  // Return special capacity
         }
     }
-    return -1.0f;  // sentinel for "not found"
+    return -1.0f;
 }
+
+//----------------------------------------------------------------------------
