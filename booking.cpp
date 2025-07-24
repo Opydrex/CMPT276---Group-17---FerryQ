@@ -46,20 +46,20 @@ Booking::Booking(const string& licensePlate, const string& sailingId, const stri
     this->checkedIn = checkedIn;
 }
 
-void Booking::writeBooking(ofstream& outFile) {
-    if (outFile.is_open()) {
-        outFile.write(reinterpret_cast<const char*>(this), sizeof(Booking));
-        outFile.flush();
-    } else {
-        cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
-    }
-}
+// void Booking::writeBooking(ofstream& outFile) {
+//     if (outFile.is_open()) {
+//         outFile.write(reinterpret_cast<const char*>(this), sizeof(Booking));
+//         outFile.flush();
+//     } else {
+//         cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
+//     }
+// }
 
 void createBooking(ifstream& inFile, // Vehicle file
                    ofstream& outFile, // Vehicle file (write)
                    ifstream& sailingInFile) // Sailing file
 {
-    string vehicleLength, vehicleHeight;
+    string vehicleLength = 0, vehicleHeight = 0;
     float floatVehicleLength, floatVehicleHeight;
     bool exitFlag = false;
 
@@ -117,7 +117,7 @@ void createBooking(ifstream& inFile, // Vehicle file
         }
 
         if (isVehicleExist(licensePlate)) {
-            getVehicleDimensions(licensePlate, &vehicleLength, &vehicleHeight);
+            getVehicleDimensions(licensePlate, floatVehicleLength, floatVehicleHeight);
         } else {
             while (true) {
                 cout << "Enter vehicle length (up to 99.9 meters): ";
@@ -241,15 +241,16 @@ void checkIn(ifstream& inFileVehicle, ifstream& sailingInFile) {
             }
 
             // Calculate fare
-            string len, height;
-            getVehicleDimensions(licensePlate, &len, &height); 
-            float vLength = stof(len);
-            float vHeight = stof(height);
+            float vLength, vHeight;
+            if (!getVehicleDimensions(licensePlate, vLength, vHeight)) {
+                cout << "Vehicle not found. Cannot calculate fare.\n";
+                continue;
+            }
+
             cout << "The fare is " << calculateFare(vLength, vHeight)
-                 << ". Press <enter> once it has been collected. ";
+                << ". Press <enter> once it has been collected. ";
             string dummy;
             getline(cin, dummy);
-
             // Update booking: delete old and write new with checkedIn = true
             deleteBookingRecord(sailingID, licensePlate);
 

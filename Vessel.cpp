@@ -28,16 +28,16 @@ using namespace std;
 
 
 
-void Vessel::writeVessel(ofstream& outFile) {
-    if (outFile.is_open()) {
-        outFile.write(reinterpret_cast<const char*>(this), sizeof(Vessel));
-        outFile.flush();
-    }
-    else
-    {
-        cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
-    }
-}
+// void Vessel::writeVessel(ofstream& outFile) {
+//     if (outFile.is_open()) {
+//         outFile.write(reinterpret_cast<const char*>(this), sizeof(Vessel));
+//         outFile.flush();
+//     }
+//     else
+//     {
+//         cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
+//     }
+// }
 
 
 
@@ -61,7 +61,19 @@ bool isVesselExist(const string& name, ifstream& inFile) {
     return false;
 }
 
-void createVessel(ifstream& inFile, ofstream& outFile) {
+//==========================================================================
+// Vessel.cpp - Vessel class logic and user I/O
+//==========================================================================
+
+#include "Vessel.h"
+#include "VesselIO.h"
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <cstring>
+using namespace std;
+
+void createVessel() {
     string name;
     float maxCapacitySmall;
     float maxCapacityBig;
@@ -74,7 +86,6 @@ void createVessel(ifstream& inFile, ofstream& outFile) {
         while (true) {
             cout << "Enter Vessel name (1 - 25 characters): ";
             getline(cin >> ws, name);
-
             if (name.empty()) return;
 
             if (name.length() > 25) {
@@ -82,7 +93,7 @@ void createVessel(ifstream& inFile, ofstream& outFile) {
                 continue;
             }
 
-            if (isVesselExist(name, inFile)) {
+            if (doesVesselExist(name)) {
                 cout << "Error: Vessel with this name already exists. Please enter a unique name.\n";
                 continue;
             }
@@ -94,7 +105,6 @@ void createVessel(ifstream& inFile, ofstream& outFile) {
         while (true) {
             cout << "Enter vessel capacity for low vehicles (0 - 3,600 meters): ";
             getline(cin >> ws, inputForCapacities);
-
             if (inputForCapacities.empty()) return;
 
             stringstream ss(inputForCapacities);
@@ -109,7 +119,6 @@ void createVessel(ifstream& inFile, ofstream& outFile) {
         while (true) {
             cout << "Enter vessel capacity for special vehicles (0 - 3,600 meters): ";
             getline(cin >> ws, inputForBigCapacities);
-
             if (inputForBigCapacities.empty()) return;
 
             stringstream ss(inputForBigCapacities);
@@ -120,14 +129,12 @@ void createVessel(ifstream& inFile, ofstream& outFile) {
             }
         }
 
-        // Write new vessel to file
+        // Create vessel and write to file
         Vessel v;
         v.setName(name);
         v.setMaxCapacitySmall(maxCapacitySmall);
         v.setMaxCapacityBig(maxCapacityBig);
-
-        outFile.write(reinterpret_cast<const char*>(&v), sizeof(Vessel));
-        outFile.flush();
+        writeVesselToFile(v);
 
         cout << "A vessel called " << name
              << " with " << maxCapacitySmall
@@ -135,12 +142,13 @@ void createVessel(ifstream& inFile, ofstream& outFile) {
              << maxCapacityBig
              << " special vehicle capacity has been created."
              << " Would you like to create another vessel? (Y/N): ";
-        
+
         cin >> anotherVessel;
         cin.ignore(1000, '\n');
         if (anotherVessel != "Y") return;
     }
 }
+
 
 float getMaxRegularLength(const string& vesselName, ifstream& inFile) {
     inFile.clear();
