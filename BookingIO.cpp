@@ -2,7 +2,7 @@
 #include "BookingIO.h"
 #include <iostream>
 using namespace std;
-static const char* BOOKING_FILENAME = "booking.dat";
+static const char* BOOKING_FILENAME = "booking.txt";
 
 bool appendBookingRecord(const Booking& booking, fstream& bookingFile) {
     bookingFile.clear();
