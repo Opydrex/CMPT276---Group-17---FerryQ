@@ -20,27 +20,27 @@ to append, read, or search vessel data in the vessel file.
 #include <fstream>
 using namespace std;
 
-// Low-level file I/O operations for binary vessel file access.
-// File must be opened before calling any of these functions.
+//Low-level file I/O operations for binary vessel file access.
+//File must be opened before calling any of these functions.
 
 bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel);
-// Job: Appends a Vessel record to the end of the binary vessel file.
-// Usage: Called by createVessel after validating input.
-// Restrictions: File must be open in write mode. Record must be valid.
+//Job: Appends a Vessel record to the end of the binary vessel file.
+//Usage: Called by createVessel after validating input.
+//Restrictions: File must be open in write mode. Record must be valid.
 
 bool doesVesselExist(fstream& vesselFile, const string& vesselName);
-// Job: Checks if a vessel with the given name exists in the file.
-// Usage: Called before writing a new vessel to prevent duplicates.
-// Restrictions: File must be open in read mode.
+//Job: Checks if a vessel with the given name exists in the file.
+//Usage: Called before writing a new vessel to prevent duplicates.
+//Restrictions: File must be open in read mode.
 
 float readMaxRegularLength(fstream& vesselFile, const string& vesselName);
-// Job: Retrieves the max regular vehicle capacity for a specific vessel.
-// Usage: Used during sailing or booking validation.
-// Restrictions: File must be open in read mode. Returns -1 if not found.
+//Job: Retrieves the max regular vehicle capacity for a specific vessel.
+//Usage: Used during sailing or booking validation.
+//Restrictions: File must be open in read mode. Returns -1 if not found.
 
 float readMaxSpecialLength(fstream& vesselFile, const string& vesselName);
-// Job: Retrieves the max special vehicle capacity for a specific vessel.
-// Usage: Used during sailing or booking validation.
-// Restrictions: File must be open in read mode. Returns -1 if not found.
+//Job: Retrieves the max special vehicle capacity for a specific vessel.
+//Usage: Used during sailing or booking validation.
+//Restrictions: File must be open in read mode. Returns -1 if not found.
 
-#endif // VESSEL_IO_H
+#endif //VESSEL_IO_H
