@@ -12,7 +12,6 @@ functions.
 #include "Vehicle.h"
 #include "Sailing.h"
 #include "BookingIO.h"
-#include "VehicleIO.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -150,7 +149,7 @@ void createBooking(fstream& vehicleFile, fstream& bookingFile, fstream& sailingF
     // Add new vehicle to file if it didn't exist
     if (!vehicleExists) {
         Vehicle newVeh(licensePlate, vehHeight, vehLength);
-        newVeh.writeVehicle(vehicleFile);
+        writeVehicle(vehicleFile,newVeh);
     }
     // Create new Booking and append to booking file
     Booking newBooking(licensePlate, sailingId, phone, false);
