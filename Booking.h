@@ -63,10 +63,10 @@ void checkIn(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile);
 // Job: Process vehicle check-in for a sailing (mark booking as checked in).
 // Usage: Called from main menu. Verifies sailing exists and booking exists, calculates fare, then updates booking status in file (by removal and re-add).
 
-bool isBookingExist(const string& sailingId, const string& licensePlate, fstream& inFile);
+// bool isBookingExist(const string& sailingId, const string& licensePlate, fstream& inFile);
 // Job: Checks if a booking with given sailingId and licensePlate exists in the booking file.
 
-void promptToDeleteBooking();
+void promptToDeleteBooking(fstream& bookingFile);
 // Job: Prompt user for a booking to delete by SailingID and license plate, and remove it from file.
 // Usage: Called from Bookings menu. Uses BookingIO low-level deletion function.
 

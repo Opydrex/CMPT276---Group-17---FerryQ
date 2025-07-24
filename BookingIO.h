@@ -28,9 +28,9 @@ bool loadBookingByKey(const string& sailingID,
                       fstream& bookingFile);
 
 // Rewrites all bookings except the one to delete (used for check-in overwrite)
-bool overwriteBookingsExcluding(const string& sailingID,
-                                const string& licensePlate,
-                                fstream& bookingFile);
+// bool overwriteBookingsExcluding(const string& sailingID,
+//                                 const string& licensePlate,
+//                                 fstream& bookingFile);
 
 // Counts total bookings in file
 int countBookingRecords(fstream& bookingFile);
