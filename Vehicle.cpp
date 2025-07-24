@@ -26,6 +26,14 @@ using namespace std;
 //     this->length = length;
 // }
 
+Vehicle::Vehicle(const string& licensePlate, const float& height, const float& length) {
+    strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
+    this->licensePlate[sizeof(this->licensePlate) - 1] = '\0';
+
+    this->height = height;
+    this->length = length;
+}
+
 void Vehicle::writeVehicle(ofstream& outFile) {
     if (outFile.is_open()) {
         outFile.write(reinterpret_cast<const char*>(this), sizeof(Vehicle));
@@ -38,35 +46,35 @@ void Vehicle::writeVehicle(ofstream& outFile) {
 }
 
 
-bool isVehicleExist(const string& licensePlate, ifstream& inFile) {
-    inFile.clear();
-    inFile.seekg(0, ios::beg);
+// bool isVehicleExist(const string& licensePlate, ifstream& inFile) {
+//     inFile.clear();
+//     inFile.seekg(0, ios::beg);
 
-    Vehicle temp;
-    while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
-        if (licensePlate == temp.getLicensePlate()) {
-            return true;
-        }
-    }
+//     Vehicle temp;
+//     while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
+//         if (licensePlate == temp.getLicensePlate()) {
+//             return true;
+//         }
+//     }
 
-    return false;
-}
+//     return false;
+// }
 
-void getVehicleDimensions(string licensePlate, string* length, string* height, ifstream& inFile) {
-    inFile.clear();
-    inFile.seekg(0, ios::beg);
+// void getVehicleDimensions(string licensePlate, string* length, string* height, ifstream& inFile) {
+//     inFile.clear();
+//     inFile.seekg(0, ios::beg);
 
-    Vehicle temp;
-    while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
-        if (licensePlate == temp.getLicensePlate()) {
-            *height = to_string(temp.getHeight());
-            *length = to_string(temp.getLength());
-            return;
-        }
-    }
+//     Vehicle temp;
+//     while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
+//         if (licensePlate == temp.getLicensePlate()) {
+//             *height = to_string(temp.getHeight());
+//             *length = to_string(temp.getLength());
+//             return;
+//         }
+//     }
 
-    cout << "Vehicle not found." << endl;
-}
+//     cout << "Vehicle not found." << endl;
+// }
 
 // Setters
 void Vehicle::setLicensePlate(const string& licensePlate) {

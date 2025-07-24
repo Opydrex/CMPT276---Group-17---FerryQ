@@ -57,22 +57,22 @@ class Vehicle {
 
 //----------------------------------------------------------------------------
 
-bool isVehicleExist(const string& licensePlate, // input
-                    ifstream& inFile            // input
-);
-// Job: Returns a boolean flag indicating if the Vehicle exists.
-// Usage: Call when need to find out if the Vehicle exists
-// Restrictions: licensePlate must comply to domain.
+// bool isVehicleExist(const string& licensePlate, // input
+//                     ifstream& inFile            // input
+// );
+// // Job: Returns a boolean flag indicating if the Vehicle exists.
+// // Usage: Call when need to find out if the Vehicle exists
+// // Restrictions: licensePlate must comply to domain.
 
-//----------------------------------------------------------------------------
+// //----------------------------------------------------------------------------
 
-void getVehicleDimensions(string licensePlate, // input
-                          string* length,      // output
-                          string* height,      // output
-                          ifstream& inFile     // input
-);
-// Job: Assigns vehicle length and height to two pointers.
-// Usage: acts as a getter for a vehicle's height and length.
-// Restrictions: licensePlate must comply to domain. Vehicle must exist.
+// void getVehicleDimensions(string licensePlate, // input
+//                           string* length,      // output
+//                           string* height,      // output
+//                           ifstream& inFile     // input
+// );
+// // Job: Assigns vehicle length and height to two pointers.
+// // Usage: acts as a getter for a vehicle's height and length.
+// // Restrictions: licensePlate must comply to domain. Vehicle must exist.
 
 #endif // VEHICLE_H

@@ -43,8 +43,8 @@ void userInterfaceLoop() {
     ifstream vehicleInFile(fileNameVehicle);
     ofstream bookingOutFile(fileNameBooking, ios::app);
     ifstream bookingInFile(fileNameBooking);
-    ofstream sailingOutFile(fileNameSailing, ios::app);
-    ifstream sailingInFile(fileNameSailing);
+    ofstream sailingOutFile(fileNameSailing, ios::binary | ios::app);
+    ifstream sailingInFile(fileNameSailing, ios::binary);
 
     // Check if all files opened successfully
     if (!vesselOutFile || !vesselInFile || !vehicleOutFile || !vehicleInFile || !bookingOutFile || !bookingInFile || !sailingOutFile || !sailingInFile) {

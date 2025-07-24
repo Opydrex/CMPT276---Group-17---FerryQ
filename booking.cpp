@@ -11,6 +11,8 @@ functions.
 #include "Booking.h"
 #include "Sailing.h"
 #include "Vehicle.h"
+#include "BookingIO.h"
+#include "VehicleIO.h"
 #include <fstream>
 #include <iostream>
 #include <cstring>
@@ -31,6 +33,19 @@ using namespace std;
 //     this->checkedIn = checkedIn;
 // }
 
+Booking::Booking(const string& licensePlate, const string& sailingId, const string& phoneNumber, const bool& checkedIn) {
+    strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
+    this->licensePlate[sizeof(this->licensePlate) - 1] = '\0';
+
+    strncpy(this->sailingId, sailingId.c_str(), sizeof(this->sailingId) - 1);
+    this->sailingId[sizeof(this->sailingId) - 1] = '\0';
+
+    strncpy(this->phoneNumber, phoneNumber.c_str(), sizeof(this->phoneNumber) - 1);
+    this->phoneNumber[sizeof(this->phoneNumber) - 1] = '\0';
+
+    this->checkedIn = checkedIn;
+}
+
 void Booking::writeBooking(ofstream& outFile) {
     if (outFile.is_open()) {
         outFile.write(reinterpret_cast<const char*>(this), sizeof(Booking));
@@ -42,7 +57,6 @@ void Booking::writeBooking(ofstream& outFile) {
 
 void createBooking(ifstream& inFile, // Vehicle file
                    ofstream& outFile, // Vehicle file (write)
-                   ofstream& outFileBooking, // Booking file
                    ifstream& sailingInFile) // Sailing file
 {
     string vehicleLength, vehicleHeight;
@@ -102,8 +116,8 @@ void createBooking(ifstream& inFile, // Vehicle file
             break;
         }
 
-        if (isVehicleExist(licensePlate, inFile)) {
-            getVehicleDimensions(licensePlate, &vehicleLength, &vehicleHeight, inFile);
+        if (isVehicleExist(licensePlate)) {
+            getVehicleDimensions(licensePlate, &vehicleLength, &vehicleHeight);
         } else {
             while (true) {
                 cout << "Enter vehicle length (up to 99.9 meters): ";
@@ -128,13 +142,16 @@ void createBooking(ifstream& inFile, // Vehicle file
             }
 
             Vehicle newVehicle(licensePlate, floatVehicleHeight, floatVehicleLength);
-            newVehicle.writeVehicle(outFile);
+            newVehicle.writeVehicle(outFile); // still OK for now
         }
 
+        // Create the booking
         Booking newBooking(licensePlate, sailingID, phoneNumber, false);
-        newBooking.writeBooking(outFileBooking);
+        if (!appendBookingRecord(newBooking)) {
+            cerr << "Error writing booking to file.\n";
+        }
 
-        cout << (floatVehicleHeight > maxHeightForRegularSizedVehicle || floatVehicleLength > maxLengthForRegularSizedVehicle
+        cout << (stof(vehicleHeight) > maxHeightForRegularSizedVehicle || stof(vehicleLength) > maxLengthForRegularSizedVehicle
                  ? "Special-sized"
                  : "Normal-sized")
              << " vehicle with license plate " << licensePlate << " has been booked for Sailing " << sailingID << ".\n";
@@ -146,28 +163,9 @@ void createBooking(ifstream& inFile, // Vehicle file
     }
 }
 
-bool isBookingExist(const string& sailingId,      // input
-                    const string& licensePlate,   // input
-                    ifstream& inFile              // input; the booking's file
-) {
-    inFile.clear();
-    inFile.seekg(0, ios::beg);
-
-    string line;
-    while (getline(inFile, line)) {
-        stringstream ss(line);
-        string sailingIDFromFile, licensePlateFromFile;
-
-        if (getline(ss, sailingIDFromFile, ',') &&
-            getline(ss, licensePlateFromFile, ',')) {
-
-            if (sailingIDFromFile == sailingId &&
-                licensePlateFromFile == licensePlate) {
-                return true;
-            }
-        }
-    }
-    return false;
+bool isBookingExist(const string& sailingID, const string& licensePlate) {
+    Booking temp;
+    return loadBookingByKey(sailingID, licensePlate, temp);
 }
 
 float calculateFare(const float& length, // input
@@ -188,14 +186,7 @@ float calculateFare(const float& length, // input
     return regularSizedVehicleFare + totalExtra;
 }
 
-void checkIn(ifstream& inFile,             // Booking file (binary, read mode)
-             ifstream& inFileVehicle,      // Vehicle file (text mode, used as-is)
-             ofstream& outFile,            // Booking file (binary, append mode)
-             ifstream& sailingInFile       // Sailing file (text mode, used as-is)
-) {
-    inFile.clear();
-    inFile.seekg(0, ios::beg);
-
+void checkIn(ifstream& inFileVehicle, ifstream& sailingInFile) {
     string sailingID;
     bool exitFlag = false;
 
@@ -239,113 +230,60 @@ void checkIn(ifstream& inFile,             // Booking file (binary, read mode)
             }
 
             if (licensePlate.length() < 3 || licensePlate.length() > 10) {
-                cout << "licensePlate format is incorrect. Please try again, or press Enter to exit\n";
+                cout << "License plate format is incorrect. Please try again, or press Enter to exit\n";
                 continue;
             }
 
-            if (!isBookingExist(sailingID, licensePlate, inFile)) {
-                cout << "licensePlate does not have an associated booking. Please enter a different license plate, or press Enter to exit\n";
+            Booking match;
+            if (!loadBookingByKey(sailingID, licensePlate, match)) {
+                cout << "License plate does not have an associated booking. Try another or press Enter to exit.\n";
                 continue;
             }
 
+            // Calculate fare
+            string len, height;
+            getVehicleDimensions(licensePlate, &len, &height); 
+            float vLength = stof(len);
+            float vHeight = stof(height);
+            cout << "The fare is " << calculateFare(vLength, vHeight)
+                 << ". Press <enter> once it has been collected. ";
+            string dummy;
+            getline(cin, dummy);
+
+            // Update booking: delete old and write new with checkedIn = true
+            deleteBookingRecord(sailingID, licensePlate);
+
+            Booking updated(
+                match.getLicensePlate(),
+                match.getSailingID(),
+                match.getPhoneNumber(),
+                true
+            );
+
+            appendBookingRecord(updated);
             break;
         }
 
         if (exitFlag) break;
-
-        // Locate the booking record in binary mode
-        inFile.clear();
-        inFile.seekg(0, ios::beg);
-
-        Booking matchedBooking;
-        bool found = false;
-        while (inFile.read(reinterpret_cast<char*>(&matchedBooking), sizeof(Booking))) {
-            if (sailingID == matchedBooking.getSailingID() &&
-                licensePlate == matchedBooking.getLicensePlate()) {
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            cout << "No booking found for this license plate " << licensePlate
-                 << " and sailing " << sailingID << ".\n";
-            continue;
-        }
-
-        // Calculate fare
-        string len, height;
-        getVehicleDimensions(licensePlate, &len, &height, inFileVehicle);
-        float vLength = stof(len);
-        float vHeight = stof(height);
-        cout << "The fare is " << calculateFare(vLength, vHeight)
-             << ". Press <enter> once it has been collected. ";
-        string dummy;
-        getline(cin, dummy);
-
-        // Update booking: delete old and write new with checkedIn = true
-        deleteBooking(sailingID, licensePlate, inFile, outFile);
-
-        Booking updatedBooking(
-            matchedBooking.getLicensePlate(),
-            matchedBooking.getSailingID(),
-            matchedBooking.getPhoneNumber(),
-            true
-        );
-
-        updatedBooking.writeBooking(outFile);
     }
 }
 
 
-bool deleteBooking(const string& licensePlate,
-                   const string& sailingId,
-                   ifstream& inFile,
-                   ofstream& outFile)
-{
-    inFile.clear();
-    inFile.seekg(0, ios::beg);
-
-    bool found = false;
-    Booking record;
-
-    while (inFile.read(reinterpret_cast<char*>(&record), sizeof(Booking))) {
-        if (record.getLicensePlate() == licensePlate && record.getSailingID() == sailingId) {
-            found = true;
-            continue; // Skip writing this booking
-        }
-        outFile.write(reinterpret_cast<const char*>(&record), sizeof(Booking));
-    }
-
-    return found;
-}
-
-// WARNING FOR WHOEVER'S IMPLEMENTING THIS: make sure you check line 327 to see how I want to use it in checkIn. keep in mind, for booking,
-//  you don't need to prompt the user for whether he wants to delete another booking or not!
-
-void promptToDeleteBooking(ifstream &inFile, ofstream &outFile)
-{
-    string sailingId;
-    string licensePlate;
+void promptToDeleteBooking() {
+    string sailingId, licensePlate;
 
     // Prompt for sailing ID
-    while (true)
-    {
+    while (true) {
         cout << "Enter Sailing ID (ccc-dd-dd): ";
         getline(cin >> ws, sailingId);
-
-        if (sailingId.empty())
-            return;
+        if (sailingId.empty()) return;
 
         if (sailingId.length() != 9 || sailingId[3] != '-' || sailingId[6] != '-' ||
             !isalpha(sailingId[0]) || !isalpha(sailingId[1]) || !isalpha(sailingId[2]) ||
             !isdigit(sailingId[4]) || !isdigit(sailingId[5]) ||
-            !isdigit(sailingId[7]) || !isdigit(sailingId[8]))
-        {
+            !isdigit(sailingId[7]) || !isdigit(sailingId[8])) {
             cout << "Bad entry! Sailing ID must follow the format ccc-dd-dd.\n";
-        }
-        else
-        {
+        } else {
             break;
         }
     }
@@ -353,27 +291,40 @@ void promptToDeleteBooking(ifstream &inFile, ofstream &outFile)
     while (true) {
         cout << "Enter license plate number (3 - 10 characters): ";
         getline(cin >> ws, licensePlate);
+        if (licensePlate.empty()) return;
 
-        if (licensePlate.empty())
-            return;
-
-        if (licensePlate.length() < 3 || licensePlate.length() > 10)
-        {
+        if (licensePlate.length() < 3 || licensePlate.length() > 10) {
             cout << "Bad entry! License plate must be between 3 and 10 characters.\n";
-        }
-        else
-        {
+        } else {
             break;
         }
     }
 
-    // Call deleteBooking
-    if (deleteBooking(licensePlate, sailingId, inFile, outFile))
-    {
-        cout << "Booking has been successfully deleted.\n";
-    } else {
-        cout << "Booking not found.\n";
+    // Internal file I/O and deletion
+    ifstream in(fileNameBooking, ios::binary);
+    ofstream out("booking_tmp.dat", ios::binary | ios::trunc);
+    if (!in || !out) {
+        cerr << "Error opening booking file.\n";
+        return;
     }
+
+    Booking temp;
+    bool found = false;
+    while (in.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
+        if (temp.getSailingID() == sailingId && temp.getLicensePlate() == licensePlate) {
+            found = true;
+            continue;
+        }
+        out.write(reinterpret_cast<const char*>(&temp), sizeof(Booking));
+    }
+
+    in.close();
+    out.close();
+    remove(fileNameBooking.c_str());
+    rename("booking_tmp.dat", fileNameBooking.c_str());
+
+    cout << (found ? "Booking has been successfully deleted.\n"
+                   : "Booking not found.\n");
 }
 
 // Setters

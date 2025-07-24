@@ -78,9 +78,7 @@ bool isSailingExist(const string& sailingId,//input
 
 //----------------------------------------------------------------------------
 
-bool deleteSailing(ofstream& outFile,//input
-                   ifstream& inFile//input
-                   );
+bool deleteSailing(fstream& sailingIO);
 
 //Job: Deletes a Sailing and all related bookings.
 //Usage: Call when need to delete a sailing and all related bookings.
