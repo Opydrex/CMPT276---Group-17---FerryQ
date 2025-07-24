@@ -25,8 +25,8 @@ extern "C" int truncate(const char* path, long long length);  //Needed on some s
 using namespace std;
 
 //----------------------------------------------------------------------------
-//Appends a new Sailing record to the end of an open file.
 bool appendSailingRecord(fstream& outFile, const Sailing& record){
+    //Description: Appends a new Sailing record to the end of an open file.
     if (!outFile.is_open()) return false;
 
     outFile.clear();
@@ -37,8 +37,9 @@ bool appendSailingRecord(fstream& outFile, const Sailing& record){
 }
 
 //----------------------------------------------------------------------------
-//Searches for a Sailing record by ID and returns its index, or -1 if not found.
 int findSailingIndexByID(fstream& inFile, const string& id){
+    //Description: Searches for a Sailing record by ID and returns its index, 
+    //             or -1 if not found.
     if (!inFile.is_open()) return -1;
 
     inFile.clear();
@@ -55,9 +56,9 @@ int findSailingIndexByID(fstream& inFile, const string& id){
 }
 
 //----------------------------------------------------------------------------
-//Loads the Sailing record at a given index (zero-based).
-//Returns true if read succeeded.
 bool loadSailingByIndex(fstream& inFile, int index, Sailing& result){
+    //Description: Loads the Sailing record at a given index (zero-based).
+    //             Returns true if read succeeded.
     if (!inFile.is_open()) return false;
 
     inFile.clear();
@@ -67,9 +68,9 @@ bool loadSailingByIndex(fstream& inFile, int index, Sailing& result){
 }
 
 //----------------------------------------------------------------------------
-//Overwrites a Sailing record at a specific index.
-//Returns true if the write was successful.
 bool writeSailingByIndex(fstream& ioFile, int index, const Sailing& data){
+    //Description: Overwrites a Sailing record at a specific index.
+    //             Returns true if the write was successful.
     if (!ioFile.is_open()) return false;
 
     ioFile.clear();
@@ -80,9 +81,9 @@ bool writeSailingByIndex(fstream& ioFile, int index, const Sailing& data){
 }
 
 //----------------------------------------------------------------------------
-//Returns the number of Sailing records in the file.
-//Assumes file is binary and uses fixed-length records.
 int countSailingRecords(fstream& inFile){
+    //Description: Returns the number of Sailing records in the file.
+    //             Assumes file is binary and uses fixed-length records.
     if (!inFile.is_open()) return 0;
 
     inFile.clear();
@@ -92,10 +93,10 @@ int countSailingRecords(fstream& inFile){
 }
 
 //----------------------------------------------------------------------------
-//Deletes a Sailing record by its ID by swapping with the last record
-//and truncating the file by one record size.
-//Reopens the file after truncation to restore original state.
 bool deleteSailingByID(fstream& ioFile, const string& sailingID){
+    //Description: Deletes a Sailing record by its ID by swapping with the last record
+    //             and truncating the file by one record size. Reopens the file
+    //             after truncation to restore original state.
     int target = findSailingIndexByID(ioFile, sailingID);
     if (target < 0) return false;
 

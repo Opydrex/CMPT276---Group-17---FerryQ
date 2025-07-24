@@ -21,8 +21,8 @@ extern "C" int truncate(const char* path, long long length);  //Needed on some s
 static const char* BOOKING_FILENAME = "booking.txt";  //Physical file name
 
 //----------------------------------------------------------------------------
-//Appends a Booking record to the end of the file.
 bool writeBooking(const Booking& booking, fstream& bookingFile){
+    //Description: Appends a Booking record to the end of the file.
     bookingFile.clear();
     bookingFile.seekp(0, ios::end);  //Go to end of file
     bookingFile.write(reinterpret_cast<const char*>(&booking), sizeof(Booking));
@@ -31,11 +31,12 @@ bool writeBooking(const Booking& booking, fstream& bookingFile){
 }
 
 //----------------------------------------------------------------------------
-//Deletes a Booking record by matching sailing ID and license plate.
-//Replaces the target with the last record and truncates the file.
 bool deleteBookingRecord(const string& sailingID,
                          const string& licensePlate,
                          fstream& bookingFile){
+    //Description: Deletes a Booking record by matching sailing ID and license plate.
+    //             Replaces the target with the last record and truncates the file.
+
     if (!bookingFile.good()) return false;
     //Compute total records
     bookingFile.clear();
@@ -79,12 +80,12 @@ bool deleteBookingRecord(const string& sailingID,
 }
 
 //----------------------------------------------------------------------------
-//Loads a booking by sailing ID and license plate into result.
-//Returns true if found.
 bool loadBookingByKey(const string& sailingID,
                       const string& licensePlate,
                       Booking& result,
                       fstream& bookingFile){
+    //Description: Loads a booking by sailing ID and license plate into result.
+    //             Returns true if found.
     if (!bookingFile.good()) return false;
 
     bookingFile.clear();
@@ -102,8 +103,8 @@ bool loadBookingByKey(const string& sailingID,
 }
 
 //----------------------------------------------------------------------------
-//Returns the number of Booking records in the file.
 int countBookingRecords(fstream& bookingFile){
+    //Description: Returns the number of Booking records in the file.
     if (!bookingFile.good()) return 0;
 
     bookingFile.clear();

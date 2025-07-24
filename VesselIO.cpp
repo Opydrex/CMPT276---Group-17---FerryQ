@@ -23,9 +23,9 @@ modules such as Vessel.cpp.
 using namespace std;
 
 //----------------------------------------------------------------------------
-//Appends a new Vessel record to the end of the vessel file.
-//Assumes file is already opened by caller.
 bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel){
+    //Description: Appends a new Vessel record to the end of the vessel file.
+    //             Assumes file is already opened by caller.
     vesselFile.clear();                //Reset any fail/eof flags
     vesselFile.seekp(0, ios::end);     //Move to the end for appending
 
@@ -40,9 +40,9 @@ bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel){
 }
 
 //----------------------------------------------------------------------------
-//Checks if a vessel with the given name exists in the file.
-//Uses a linear search through the entire file.
 bool doesVesselExist(fstream& vesselFile, const string& vesselName){
+    //Description: Checks if a vessel with the given name exists in the file.
+    //             Uses a linear search through the entire file.
     vesselFile.clear();                //Reset stream flags
     vesselFile.seekg(0, ios::beg);     //Start reading from beginning
 
@@ -57,9 +57,9 @@ bool doesVesselExist(fstream& vesselFile, const string& vesselName){
 }
 
 //----------------------------------------------------------------------------
-//Retrieves the max regular (low vehicle) capacity for a given vessel name.
-//Returns -1.0f if vessel not found.
 float readMaxRegularLength(fstream& vesselFile, const string& vesselName){
+    //Description: Retrieves the max regular (low vehicle) capacity for a given vessel name.
+    //             Returns -1.0f if vessel not found.
     vesselFile.clear();                //Reset stream flags
     vesselFile.seekg(0, ios::beg);     //Start from beginning
 
@@ -74,9 +74,9 @@ float readMaxRegularLength(fstream& vesselFile, const string& vesselName){
 }
 
 //----------------------------------------------------------------------------
-//Retrieves the max special (oversize vehicle) capacity for a given vessel.
-//Returns -1.0f if vessel not found.
 float readMaxSpecialLength(fstream& vesselFile, const string& vesselName){
+    //Description: Retrieves the max special (oversize vehicle) capacity 
+    //             for a given vessel. Returns -1.0f if vessel not found.
     vesselFile.clear();
     vesselFile.seekg(0, ios::beg);
 

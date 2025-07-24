@@ -34,15 +34,35 @@ public:
     //Usage: Automatically called when creating a vessel record.
     //Restrictions: name length 1–25 characters, capacity values in valid range.
 
-    //Setters
-    void setName(const std::string& name);             //Sets vessel name
-    void setMaxCapacitySmall(float capSmall);          //Sets low vehicle capacity
-    void setMaxCapacityBig(float capBig);              //Sets special vehicle capacity
+    void setName(const std::string& name);
+    //Job: Sets the vessel’s name.
+    //Usage: Used when creating or modifying a vessel.
+    //Restrictions: Name should be 1–25 characters, no commas.
 
-    //Getters
-    std::string getName() const;       //Returns vessel name as string
-    float getMaxSmall() const;         //Returns low vehicle capacity
-    float getMaxBig() const;           //Returns special vehicle capacity
+    void setMaxCapacitySmall(float capSmall);
+    //Job: Sets the vessel’s regular vehicle deck capacity.
+    //Usage: Called during vessel creation or updates.
+    //Restrictions: Must be a non-negative float.
+
+    void setMaxCapacityBig(float capBig);
+    //Job: Sets the vessel’s special (oversized) vehicle deck capacity.
+    //Usage: Called during vessel creation or updates.
+    //Restrictions: Must be a non-negative float.
+
+    std::string getName() const;
+    //Job: Retrieves the vessel’s name.
+    //Usage: Used for reports, searching, or I/O.
+    //Restrictions: None.
+
+    float getMaxSmall() const;
+    //Job: Retrieves the regular deck capacity.
+    //Usage: Used for validations, reports, or file I/O.
+    //Restrictions: None.
+
+    float getMaxBig() const;
+    //Job: Retrieves the special vehicle deck capacity.
+    //Usage: Used for validations, reports, or file I/O.
+    //Restrictions: None.
 
 private:
     char name[26];             //Vessel name (max 25 chars + null terminator)

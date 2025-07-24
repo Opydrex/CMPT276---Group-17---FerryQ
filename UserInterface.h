@@ -17,17 +17,28 @@
 #include <string>
 using namespace std;
 
-//----------------------------------------------------------------------------
-//userInterfaceLoop
-//----------------------------------------------------------------------------
-//Job: Entry point for executing the FerryQ main menu loop. Provides high-
-//     level navigation between the Bookings, Sailings, and Check-in modules.
-//Usage: Called from main() with all open file streams. This function loops
-//       until the user chooses to exit the system.
-//Restriction: Must be called from main. File streams must be open.
-void userInterfaceLoop(fstream& vesselFile,
-                       fstream& vehicleFile,
-                       fstream& bookingFile,
-                       fstream& sailingFile);
+void userInterfaceLoop(fstream& vesselFile, //input
+                       fstream& vehicleFile,//input
+                       fstream& bookingFile,//input
+                       fstream& sailingFile //input
+                       );
+//Job: Runs the main menu loop for navigating the FerryQ system.
+//Usage: Called from main() to route control to Bookings, Sailings, and Check-in.
+//Restrictions: All file streams must be open and valid before calling.
+
+void SailingsMenu(fstream& vesselFile,//input
+                  fstream& sailingFile//input
+                  );
+//Job: Displays and handles the Sailings submenu (create/delete sailings, add vessels, view reports).
+//Usage: Called from userInterfaceLoop when user selects Sailings.
+//Restrictions: Requires valid, open file streams.
+
+void BookingsMenu(fstream& vehicleFile,//input
+                  fstream& bookingFile,//input 
+                  fstream& sailingFile //input
+                  );
+//Job: Displays and handles the Bookings submenu (create/delete bookings).
+//Usage: Called from userInterfaceLoop when user selects Bookings.
+//Restrictions: Requires valid, open file streams.
 
 #endif //USERINTERFACE_H

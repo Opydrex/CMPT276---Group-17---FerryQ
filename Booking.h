@@ -39,17 +39,45 @@ public:
     //Usage: Called when creating a new Booking object.
     //Restrictions: Fields must be within their character limits.
 
-    //Setters
     void setSailingID(const string& id);
-    void setLicensePlate(const string& plate);
-    void setPhoneNumber(const string& phone);
-    void setCheckedIn(bool status);
+    //Job: Sets the SailingID for the booking.
+    //Usage: Called when creating or editing a booking.
+    //Restrictions: ID must be a valid formatted string (e.g., "YVR-08-10").
 
-    //Getters
+    void setLicensePlate(const string& plate);
+    //Job: Sets the license plate for the booking.
+    //Usage: Called during booking creation or modification.
+    //Restrictions: Should match expected license plate format (no commas, length limit).
+
+    void setPhoneNumber(const string& phone);
+    //Job: Sets the phone number associated with the booking.
+    //Usage: Used during booking creation or contact info update.
+    //Restrictions: String must be numeric and reasonably sized.
+
+    void setCheckedIn(bool status);
+    //Job: Marks whether the booking is checked in.
+    //Usage: Called during check-in process.
+    //Restrictions: Accepts true (checked in) or false (not checked in).
+
     string getSailingID() const;
+    //Job: Retrieves the SailingID of the booking.
+    //Usage: Used for searching, validation, or report output.
+    //Restrictions: None.
+
     string getLicensePlate() const;
+    //Job: Retrieves the license plate from the booking.
+    //Usage: Used in search, deletion, or report generation.
+    //Restrictions: None.
+
     string getPhoneNumber() const;
+    //Job: Retrieves the contact phone number from the booking.
+    //Usage: Used when contacting customers or displaying booking info.
+    //Restrictions: None.
+
     bool getCheckedIn() const;
+    //Job: Returns the check-in status of the booking.
+    //Usage: Used in validation, reporting, or boarding checks.
+    //Restrictions: None.
 
 private:
     char sailingId[16];      //Format: ccc-dd-dd (max 15 chars + null)

@@ -34,17 +34,45 @@ public:
     //Job: Writes this Sailing record to the given open file stream.
     //Usage: Legacy only. Prefer calling low-level I/O from SailingIO.cpp.
 
-    //Setters
     void setSailingID(const string& id);
-    void setVesselName(const string& name);
-    void setCurrentCapacitySmall(float cap);
-    void setCurrentCapacityBig(float cap);
+    //Job: Sets the unique Sailing ID.
+    //Usage: Called during creation or editing of a sailing record.
+    //Restrictions: Must follow the format ccc-dd-dd (e.g., YVR-08-13).
 
-    //Getters
+    void setVesselName(const string& name);
+    //Job: Sets the name of the vessel assigned to the sailing.
+    //Usage: Used when linking a vessel to a sailing.
+    //Restrictions: Name must match an existing vessel in the vessel file.
+
+    void setCurrentCapacitySmall(float cap);
+    //Job: Sets the current deck usage for regular vehicles.
+    //Usage: Called during check-in or booking cancellation.
+    //Restrictions: Must be a non-negative float.
+
+    void setCurrentCapacityBig(float cap);
+    //Job: Sets the current deck usage for special vehicles.
+    //Usage: Called during check-in or booking cancellation.
+    //Restrictions: Must be a non-negative float.
+
     string getSailingID() const;
+    //Job: Retrieves the Sailing ID.
+    //Usage: Used in reports, lookups, or file operations.
+    //Restrictions: None.
+
     string getVesselName() const;
+    //Job: Retrieves the name of the vessel assigned to this sailing.
+    //Usage: Used for display, reporting, or file matching.
+    //Restrictions: None.
+
     float getCurrentCapacitySmall() const;
+    //Job: Retrieves the current deck usage for regular vehicles.
+    //Usage: Used for validation, capacity checks, or reporting.
+    //Restrictions: None.
+
     float getCurrentCapacityBig() const;
+    //Job: Retrieves the current deck usage for special vehicles.
+    //Usage: Used for validation, capacity checks, or reporting.
+    //Restrictions: None.
 
 private:
     char sailingID[16];         //Format: ccc-dd-hh (15 + null)
@@ -53,9 +81,6 @@ private:
     float currentCapacityBig;   //Remaining oversize deck length (HHR)
 };
 
-//============================================================================
-//High-level UI-driven Sailing functions (require open file streams)
-//============================================================================
 
 bool isValidSailingID(const string& id);
 //Job: Validates that the given ID is in correct format: "ccc-dd-dd".

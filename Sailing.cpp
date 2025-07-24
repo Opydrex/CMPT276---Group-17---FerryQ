@@ -27,10 +27,9 @@ for retrieving deck capacities of vessels. Input validation is interactive.
 using namespace std;
 
 //----------------------------------------------------------------------------
-//createSailing
-//Prompts the user for sailing info and appends a new Sailing record.
-//Checks validity of each field and ensures vessel exists.
 void createSailing(fstream& vesselFile, fstream& sailingFile){
+    //Description: Prompts the user for sailing info and appends a new Sailing record. 
+    //             Also, it Checks validity of each field and makes sure the vessel exits.
     string term, vesselName, dayStr, hourStr;
 
     while (true){
@@ -117,9 +116,8 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 }
 
 //----------------------------------------------------------------------------
-//deleteSailing
-//Prompts user for sailing ID and deletes it from the file if found.
 bool deleteSailing(fstream& sailingFile){
+    //Description: Prompts user for sailing ID and deletes it from the file if found.
     string sailingID;
     cout << "Enter SailingID (ccc-dd-dd): ";
     getline(cin >> ws, sailingID);
@@ -133,15 +131,15 @@ bool deleteSailing(fstream& sailingFile){
 }
 
 //----------------------------------------------------------------------------
-//Checks if a string matches the expected "ccc-dd-dd" sailing format.
 bool isValidSailingID(const string& id){
+    //Description: Checks if a string matches the expected "ccc-dd-dd" sailing format.
     regex pattern("^[A-Za-z]{3}-\\d{2}-\\d{2}$");
     return regex_match(id, pattern);
 }
 
 //----------------------------------------------------------------------------
-//Prints column headers for sailing reports (used in multiple functions).
 void printSailingReportHeader(){
+    //Description: Prints column headers for sailing reports (used in more than one function).
     cout << "     "
          << left << setw(12) << "SailingID" << " "
          << setw(24) << "Vessel Name" << " "
@@ -160,8 +158,8 @@ void printSailingReportHeader(){
 }
 
 //----------------------------------------------------------------------------
-//Displays all sailings from file, 5 per screen with pagination.
 void printReport(fstream& sailingFile){
+    //Description: Displays all sailings from file, 5 per screen.
     cout << "== Sailings Report ==" << endl;
     printSailingReportHeader();
 
@@ -192,8 +190,8 @@ void printReport(fstream& sailingFile){
 }
 
 //----------------------------------------------------------------------------
-//Asks for one SailingID and shows its detailed info.
 void querySailing(fstream& sailingFile){
+    //Description: Asks for one SailingID and shows its detailed info.
     while (true){
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sid; 
@@ -228,39 +226,51 @@ void querySailing(fstream& sailingFile){
 }
 
 //----------------------------------------------------------------------------
-//Sailing class setters
 void Sailing::setSailingID(const string& id){
+    //Description: Sets the sailingID in the Sailing object
     strncpy(sailingID, id.c_str(), sizeof(sailingID) - 1);
     sailingID[sizeof(sailingID) - 1] = '\0';
 }
 
+//----------------------------------------------------------------------------
 void Sailing::setVesselName(const string& name){
+    //Description: Sets the vesselName in the Sailing object
     strncpy(vesselName, name.c_str(), sizeof(vesselName) - 1);
     vesselName[sizeof(vesselName) - 1] = '\0';
 }
 
+//----------------------------------------------------------------------------
 void Sailing::setCurrentCapacitySmall(float cap){
+    //Description: Sets the currentCapacitySmall in the Sailing object
     currentCapacitySmall = cap;
 }
 
+//----------------------------------------------------------------------------
 void Sailing::setCurrentCapacityBig(float cap){
+    //Description: Sets the currentCapacityBig in the Sailing object 
     currentCapacityBig = cap;
 }
 
 //----------------------------------------------------------------------------
-//Sailing class getters
 string Sailing::getSailingID() const{
+    //Description: Gets the sailingID from the Sailing object  
     return string(sailingID);
 }
 
+//----------------------------------------------------------------------------
 string Sailing::getVesselName() const{
+    //Description: Gets the vesselName from the Sailing object  
     return string(vesselName);
 }
 
+//----------------------------------------------------------------------------
 float Sailing::getCurrentCapacitySmall() const{
+    //Description: Gets the currentCapacitySmall from the Sailing object   
     return currentCapacitySmall;
 }
 
+//----------------------------------------------------------------------------
 float Sailing::getCurrentCapacityBig() const{
+    //Description: Gets the currentCapacityBig from the Sailing object 
     return currentCapacityBig;
 }
