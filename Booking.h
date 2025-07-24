@@ -3,8 +3,9 @@
 //==========================================================================
 
 /*
-MODULE NAME: Booking.h
-Rev.1 - 09/07/2025 - Booking class header created
+MODULE NAME: BookingUserIO.h
+Rev.1 - 09/07/2025 - BookingUserIO module header created
+Rev.2 - 24/07/2025 - BookingUserIO module header edited
 ----------------------------------------------------------------------------
 This module contains the Booking class and related mid-level functions
 for creating, deleting, and processing bookings and check-ins.

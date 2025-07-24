@@ -3,7 +3,8 @@
 //==========================================================================
 
 /*
-MODULE NAME: Sailing.cpp
+MODULE NAME: SailingUserIO.cpp
+Rev.1 - 9/07/2025 - Module created.
 Rev.2 - 24/07/2025 - Updated to match UI stream logic and core operations.
 ----------------------------------------------------------------------------
 This module implements all mid-level functions related to sailings,
@@ -43,7 +44,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         }
 
         //Prompt for vessel name
-        cout << "Enter vessel name (1-25 chars): ";
+        cout << "Enter vessel name (1-25 characters): ";
         getline(cin >> ws, vesselName);
         if (vesselName.empty()) return;
         if (vesselName.size() > 25){

@@ -3,7 +3,7 @@
 //==========================================================================
 
 /*
-MODULE NAME: BookingIO.h
+MODULE NAME: BookingFileIO.h
 Rev.1 – 24/07/2025 – Interface for low-level Booking file I/O operations.
 ----------------------------------------------------------------------------
 This header defines functions for writing, reading, searching, deleting,

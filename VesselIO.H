@@ -3,7 +3,7 @@
 //==========================================================================
 
 /*
-MODULE NAME: VesselIO.h
+MODULE NAME: VesselFileIO.h
 Rev.1 - 24/07/2025 - Initial creation of low-level Vessel file I/O header.
 ----------------------------------------------------------------------------
 This module provides low-level binary file operations for handling Vessel

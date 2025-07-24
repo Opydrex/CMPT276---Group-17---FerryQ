@@ -3,7 +3,7 @@
 //==========================================================================
 
 /*
-MODULE NAME: booking.cpp
+MODULE NAME: BookingUserIO.cpp
 Rev.1 – 24/07/2025 – Initial implementation of Booking class and UI functions.
 ----------------------------------------------------------------------------
 This module handles all booking-related logic: creating new bookings,

@@ -3,8 +3,9 @@
 //==========================================================================
 
 /*
-MODULE NAME: Sailing.h
-Rev.1 - 09/07/2025 - Sailing class header created
+MODULE NAME: SailingUserIO.h
+Rev.1 - 09/07/2025 - SailingUserIO module header created
+Rev.2 - 24/07/2025 - SailingUserIO module header edited
 ----------------------------------------------------------------------------
 This module contains the Sailing class and high-level operations related to
 creating, deleting, and querying sailing records using binary file I/O.
