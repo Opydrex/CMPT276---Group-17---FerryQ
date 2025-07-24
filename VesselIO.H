@@ -9,7 +9,7 @@
 #include <string>
 using namespace std;
 
-const string fileNameVessel = "vessel.dat";  // vessel data file name (binary)
+//const string fileNameVessel = "vessel.txt";  // vessel data file name (binary)
 
 // Low-level Vessel file I/O operations:
 bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel);

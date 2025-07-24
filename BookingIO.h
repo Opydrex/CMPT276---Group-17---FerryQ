@@ -9,7 +9,7 @@
 #include <string>
 using namespace std;
 
-const string fileNameBooking = "booking.dat";
+//const string fileNameBooking = "booking.dat";
 
 // Low-level Booking file operations:
 bool appendBookingRecord(const Booking& booking);
