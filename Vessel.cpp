@@ -54,7 +54,7 @@ void createVessel(fstream& vesselFile) {
     }
 
     Vessel v(name, capSmall, capBig);
-    if (!writeVesselToFile(v)) {
+    if (!writeVesselToFile(vesselFile, v)) {
         cerr << "Error writing vessel to file." << endl;
         return;
     }
