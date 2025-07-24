@@ -3,7 +3,8 @@
 //==========================================================================
 
 /*
-MODULE NAME: Sailing.cpp
+MODULE NAME: SailingUserIO.cpp
+Rev.1 - 9/07/2025 - Module created.
 Rev.2 - 24/07/2025 - Updated to match UI stream logic and core operations.
 ----------------------------------------------------------------------------
 This module implements all mid-level functions related to sailings,
@@ -35,7 +36,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 
     while (true){
         //Prompt for 3-letter terminal code
-        cout << "Enter departure terminal ID (ccc) or blank to cancel: ";
+        cout << "Enter departure terminal ID (ccc): ";
         getline(cin >> ws, term);
         if (term.empty()) return;
         if (term.size() != 3 || !isalpha(term[0]) || !isalpha(term[1]) || !isalpha(term[2])){
@@ -44,7 +45,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         }
 
         //Prompt for vessel name
-        cout << "Enter vessel name (1-25 chars) or blank to cancel: ";
+        cout << "Enter vessel name (1-25 characters): ";
         getline(cin >> ws, vesselName);
         if (vesselName.empty()) return;
         if (vesselName.size() > 25){
@@ -63,7 +64,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         }
 
         //Prompt for departure day
-        cout << "Enter departure day (dd) or blank to cancel: ";
+        cout << "Enter departure day (dd): ";
         getline(cin >> ws, dayStr);
         if (dayStr.empty()) return;
         if (dayStr.size() != 2 || !isdigit(dayStr[0]) || !isdigit(dayStr[1])){
@@ -77,7 +78,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         }
 
         //Prompt for departure hour
-        cout << "Enter departure hour (hh) or blank to cancel: ";
+        cout << "Enter departure hour (hh): ";
         getline(cin >> ws, hourStr);
         if (hourStr.empty()) return;
         if (hourStr.size() != 2 || !isdigit(hourStr[0]) || !isdigit(hourStr[1])){
@@ -103,7 +104,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             s.setCurrentCapacitySmall(capSmall);
             s.setCurrentCapacityBig(capBig);
             if (appendSailingRecord(sailingFile, s)){
-                cout << "Created sailing " << sailingID << ". Create another? (Y/N): ";
+                cout << "Sailing successfully created. The SailingID is " << sailingID << ". Would you like to create another sailing? (Y/N): ";
             } else{
                 cout << "Error writing sailing to file." << endl;
                 return;
@@ -121,11 +122,14 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 //Prompts user for sailing ID and deletes it from the file if found.
 bool deleteSailing(fstream& sailingFile){
     string sailingID;
-    cout << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
+    cout << "Enter SailingID (ccc-dd-dd): ";
     getline(cin >> ws, sailingID);
     if (sailingID.empty() || !isValidSailingID(sailingID)) return false;
     bool ok = deleteSailingByID(sailingFile, sailingID);
-    cout << (ok ? "Sailing deleted." : "Sailing not found.") << endl;
+    if (ok)
+        cout << "Sailing with SailingID " << sailingID << " deleted successfully." << endl;
+    else
+        cout << "No sailing with SailingID " << sailingID << " was found." << endl;
     return ok;
 }
 

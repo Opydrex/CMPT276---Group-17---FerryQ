@@ -3,7 +3,7 @@
 //==========================================================================
 
 /*
-MODULE NAME: SailingIO.cpp
+MODULE NAME: SailingFileIO.cpp
 Rev.1 – 24/07/2025 – Implements low-level file I/O for Sailing records.
 ----------------------------------------------------------------------------
 This module provides binary file access functions for reading, writing,

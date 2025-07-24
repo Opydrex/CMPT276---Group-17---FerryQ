@@ -3,7 +3,7 @@
 //==========================================================================
 
 /*
-MODULE NAME: BookingIO.cpp
+MODULE NAME: BookingFileIO.cpp
 Rev.1 – 24/07/2025 – Implements low-level file I/O for Booking records.
 ----------------------------------------------------------------------------
 This module handles binary file access for Booking records. It provides
