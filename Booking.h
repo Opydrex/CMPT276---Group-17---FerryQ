@@ -33,9 +33,6 @@ class Booking {
         );
         // Job: Booking constructor initializes a booking with given details.
 
-        void writeBooking(fstream& outFile);
-        // Job: Writes this Booking to the open booking file (binary).
-        // Usage: Called when adding or updating a booking record.
 
         // Setters
         void setSailingID(const string& id);

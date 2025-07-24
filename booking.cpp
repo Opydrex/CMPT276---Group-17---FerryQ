@@ -40,11 +40,6 @@ Booking::Booking(const string& licensePlate,
 //-----------------------------------------------------------------------------
 // Write this booking to the end of the already-open bookingFile
 //----------------------------------------------------------------------------- 
-void Booking::writeBooking(fstream& bookingFile) {
-    if (!appendBookingRecord(*this, bookingFile)) {
-        cerr << "Error: Unable to append booking record." << endl;
-    }
-}
 
 //-----------------------------------------------------------------------------
 // createBooking
