@@ -1,6 +1,4 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//==========================================================================
-//==========================================================================
 
 /*
 MODULE NAME: BookingUserIO.cpp
@@ -152,8 +150,8 @@ void createBooking(fstream& vehicleFile,
 void checkIn(fstream& bookingFile,
              fstream& vehicleFile,
              fstream& sailingFile){
-    //Description: Marks a booking as checked in and recalculates fare.
-    //             Rewrites the record with checkedIn=true.
+//Description: Marks a booking as checked in and recalculates fare.
+//             Rewrites the record with checkedIn=true.
 
     while (true){
         string sid, plate;
@@ -211,7 +209,7 @@ void checkIn(fstream& bookingFile,
 
 //----------------------------------------------------------------------------
 void promptToDeleteBooking(fstream& bookingFile){
-    //Description: Interactive prompt to delete a booking by sailing ID and license plate.
+//Description: Interactive prompt to delete a booking by sailing ID and license plate.
     string sid, plate;
     cout << "Enter SailingID (ccc-dd-dd): ";
     getline(cin >> ws, sid);
@@ -227,8 +225,8 @@ void promptToDeleteBooking(fstream& bookingFile){
 
 //----------------------------------------------------------------------------
 float calculateFare(const float& length, const float& height){
-    //Description: Calculates the fare based on vehicle dimensions. Adds a 
-    //             surcharge if length or height exceed allowed limits.
+//Description: Calculates the fare based on vehicle dimensions. Adds a 
+//             surcharge if length or height exceed allowed limits.
     float extra = 0;
     if (length > maxLengthForRegularSizedVehicle)
         extra += static_cast<int>(length - maxLengthForRegularSizedVehicle) * extraPerMeterInLength;
@@ -239,52 +237,53 @@ float calculateFare(const float& length, const float& height){
 
 //----------------------------------------------------------------------------
 void Booking::setSailingID(const string& id){
+//Description: Sets the SailingID (e.g., "YVR-08-10") for this booking.
     strncpy(this->sailingId, id.c_str(), sizeof(this->sailingId) - 1);
-    //Description: Sets the SailingID (e.g., "YVR-08-10") for this booking.
+
     this->sailingId[sizeof(this->sailingId) - 1] = '\0'; //Force null termination
 }
 
 //----------------------------------------------------------------------------
 void Booking::setLicensePlate(const string& plate){
-    //Description: Sets the license plate for the booking.
+//Description: Sets the license plate for the booking.
     strncpy(this->licensePlate, plate.c_str(), sizeof(this->licensePlate) - 1);
     this->licensePlate[sizeof(this->licensePlate) - 1] = '\0'; //Force null termination
 }
 
 //----------------------------------------------------------------------------
 void Booking::setPhoneNumber(const string& phone){
-    //Description: Sets the phone number associated with the booking.
+//Description: Sets the phone number associated with the booking.
     strncpy(this->phoneNumber, phone.c_str(), sizeof(this->phoneNumber) - 1);
     this->phoneNumber[sizeof(this->phoneNumber) - 1] = '\0'; //Force null termination
 }
 
 //----------------------------------------------------------------------------
 void Booking::setCheckedIn(bool status){
-    //Description: Marks whether the booking is checked in.
+//Description: Marks whether the booking is checked in.
     this->checkedIn = status;
 }
 
 //----------------------------------------------------------------------------
 string Booking::getSailingID() const{ 
-    //Description: Returns the SailingID for this booking.
+//Description: Returns the SailingID for this booking.
     return sailingId; 
 }
 
 //----------------------------------------------------------------------------
 string Booking::getLicensePlate() const{ 
-    //Description: Returns the license plate for this booking.
+//Description: Returns the license plate for this booking.
     return licensePlate; 
 }
 
 //----------------------------------------------------------------------------
 string Booking::getPhoneNumber() const{ 
-    //Description: Returns the phone number associated with the booking.
+//Description: Returns the phone number associated with the booking.
     return phoneNumber; 
 }
 
 //----------------------------------------------------------------------------
 bool Booking::getCheckedIn() const{ 
-    //Description: Returns whether the booking has been checked in.
+//Description: Returns whether the booking has been checked in.
     return checkedIn; 
 }
 

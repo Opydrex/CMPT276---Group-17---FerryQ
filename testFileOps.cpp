@@ -1,11 +1,21 @@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+/*
+MODULE NAME: testFileOps.cpp
+Rev.1 - 09/07/2025 - Implemented a test driver for vehicle file IO
 
+----------------------------------------------------------------------------
+This module contains a test driver for vehicle file IO
+----------------------------------------------------------------------------
+*/
 #include <iostream>
 #include <fstream>
 #include "Vehicle.h"
 
 using namespace std;
 
+//----------------------------------------------------------------------------
 int main() {
+//Description: This is a test driver! not the actual main function of the program
     // Open (and truncate) the vehicle file
     fstream file(fileNameVehicle, ios::binary | ios::in | ios::out | ios::trunc);
     if (!file) {
