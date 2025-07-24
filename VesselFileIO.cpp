@@ -19,7 +19,7 @@
 // Used By: Called by the SailingUserIO.cpp and VesselUserIO.cpp modules.
 // ----------------------------------------------------------------------------
 
-#include "VesselIO.h"
+#include "VesselFileIO.h"
 #include "VesselUserIO.h"
 #include <fstream>
 #include <iostream>
@@ -62,7 +62,7 @@ bool doesVesselExist(fstream& vesselFile, const string& vesselName){
 }
 
 //----------------------------------------------------------------------------
-float readMaxRegularLength(fstream& vesselFile, const string& vesselName){
+float getMaxRegularLength(const string& vesselName, fstream& vesselFile){
 //Description: Retrieves the max regular (low vehicle) capacity for a given vessel name.
 //             Returns -1.0f if vessel not found.
     vesselFile.clear();                //Reset stream flags
@@ -79,7 +79,7 @@ float readMaxRegularLength(fstream& vesselFile, const string& vesselName){
 }
 
 //----------------------------------------------------------------------------
-float readMaxSpecialLength(fstream& vesselFile, const string& vesselName){
+float getMaxSpecialLength(const string& vesselName, fstream& vesselFile){
 //Description: Retrieves the max special (oversize vehicle) capacity 
 //             for a given vessel. Returns -1.0f if vessel not found.
     vesselFile.clear();

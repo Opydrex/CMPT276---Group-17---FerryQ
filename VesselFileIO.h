@@ -15,7 +15,7 @@
 #ifndef VESSEL_IO_H
 #define VESSEL_IO_H
 
-#include "Vessel.h"
+#include "VesselUserIO.h"
 #include <string>
 #include <fstream>
 using namespace std;
@@ -34,13 +34,13 @@ bool doesVesselExist(fstream& vesselFile, const string& vesselName);
 //Restrictions: File must be open in read mode.
 
 //----------------------------------------------------------------------------
-float readMaxRegularLength(fstream& vesselFile, const string& vesselName);
+float getMaxRegularLength(fstream& vesselFile, const string& vesselName);
 //Job: Retrieves the max regular vehicle capacity for a specific vessel.
 //Usage: Used during sailing or booking validation.
 //Restrictions: File must be open in read mode. Returns -1 if not found.
 
 //----------------------------------------------------------------------------
-float readMaxSpecialLength(fstream& vesselFile, const string& vesselName);
+float getMaxSpecialLength(fstream& vesselFile, const string& vesselName);
 //Job: Retrieves the max special vehicle capacity for a specific vessel.
 //Usage: Used during sailing or booking validation.
 //Restrictions: File must be open in read mode. Returns -1 if not found.

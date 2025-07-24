@@ -18,7 +18,7 @@
 // Used By: Called by the SailingUserIO.cpp and BookingUserIO.cpp modules.
 // ----------------------------------------------------------------------------
 
-#include "SailingIO.h"
+#include "SailingFileIO.h"
 #include <cstdio>    //for truncate()
 #include <fstream>
 

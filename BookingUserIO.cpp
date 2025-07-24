@@ -16,11 +16,11 @@
 // Used By: Called by UserInterface.cpp from the "Bookings" and "Check-in" menus.
 // ----------------------------------------------------------------------------
 
-#include "Booking.h"
-#include "Vehicle.h"
-#include "Sailing.h"
-#include "BookingIO.h"
-#include "SailingIO.h"
+#include "BookingUserIO.h"
+#include "VehicleFileIO.h"
+#include "SailingUserIO.h"
+#include "BookingFileIO.h"
+#include "SailingFileIO.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>

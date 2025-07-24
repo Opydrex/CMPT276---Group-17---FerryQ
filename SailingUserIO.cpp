@@ -17,9 +17,9 @@
 // Used By: Called by UserInterface.cpp from the "Sailings" menu.
 // ----------------------------------------------------------------------------
 
-#include "SailingIO.h"
+#include "SailingFileIO.h"
 #include "SailingUserIO.h"
-#include "VesselUserIO.h"
+#include "VesselFileIO.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>

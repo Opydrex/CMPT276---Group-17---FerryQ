@@ -16,7 +16,7 @@
 #ifndef BOOKING_IO_H
 #define BOOKING_IO_H
 
-#include "Booking.h"
+#include "BookingUserIO.h"
 #include <fstream>
 #include <string>
 using namespace std;

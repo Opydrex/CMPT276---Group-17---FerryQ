@@ -15,7 +15,7 @@
 #ifndef SAILING_IO_H
 #define SAILING_IO_H
 
-#include "Sailing.h"
+#include "SailingUserIO.h"
 #include <fstream>
 #include <string>
 using namespace std;

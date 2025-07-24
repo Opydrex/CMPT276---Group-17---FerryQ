@@ -123,4 +123,4 @@ void querySailing(fstream& sailingFile);
 //Usage: Called from Sailings menu (option [5]).
 //Requirements: SailingID must be valid; record must exist in file.
 
-#endif SAILING_H
+#endif // SAILING_H
