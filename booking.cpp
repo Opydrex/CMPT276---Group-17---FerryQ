@@ -223,7 +223,7 @@ void checkIn(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile) {
             // Update booking status: remove old record and add new record with checkedIn=true
             deleteBookingRecord(sailingID, licensePlate);
             Booking updated(match.getLicensePlate(), match.getSailingID(), match.getPhoneNumber(), true);
-            appendBookingRecord(updated);
+            appendBookingRecord(updated, bookingFile);
             cout << "Booking for " << licensePlate << " on " << sailingID << " is now checked in.\n";
             break;
         }
