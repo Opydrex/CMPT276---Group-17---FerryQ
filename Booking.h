@@ -87,37 +87,27 @@ private:
     bool checkedIn;          //Check-in status
 };
 
-//----------------------------------------------------------------------------
-//createBooking
-//----------------------------------------------------------------------------
-//Interactively collects booking details and appends a record to the file.
-//Usage: Called from Bookings menu.
-//Requirements: All three files (vehicle, booking, sailing) must be open.
-//Ensures SailingID is valid, vehicle exists or is created, and phone is collected.
 void createBooking(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFile);
+//Job: Interactively collects booking details and appends a record to the file.
+//Usage: Called from Bookings menu.
+//Restrictions: All three files (vehicle, booking, sailing) must be open and valid. 
+//              Ensures SailingID is valid, vehicle exists or is created, and phone is collected.
 
-//----------------------------------------------------------------------------
-//checkIn
-//----------------------------------------------------------------------------
-//Marks a booking as checked-in and prints the calculated fare.
-//Usage: Called from main menu. Searches booking and vehicle records,
-//confirms dimensions, calculates fare, and rewrites booking with status.
 void checkIn(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile);
+//Job: Marks a booking as checked-in and prints the calculated fare.
+//Usage: Called from main menu. Searches booking and vehicle records,  
+//       confirms dimensions, calculates fare, and rewrites booking with status.
+//Restrictions: All files must be open. Assumes booking exists and vehicle info is valid.
 
-//----------------------------------------------------------------------------
-//promptToDeleteBooking
-//----------------------------------------------------------------------------
-//Prompts user for a booking and deletes it from the file if found.
-//Usage: Called from Bookings menu. Uses BookingIO low-level delete.
-//Requires: Booking file must be open for read/write.
 void promptToDeleteBooking(fstream& bookingFile);
+//Job: Prompts user for a booking and deletes it from the file if found.
+//Usage: Called from Bookings menu.
+//Restrictions: Booking file must be open for read/write.
 
-//----------------------------------------------------------------------------
-//calculateFare
-//----------------------------------------------------------------------------
-//Computes fare based on regular base and oversize surcharges.
-//Usage: Used during check-in to calculate price before confirmation.
-//Adds extra cost per meter if height/length exceed regular size limits.
 float calculateFare(const float& length, const float& height);
+//Job: Computes fare based on regular base and oversize surcharges.
+//Usage: Used during check-in to calculate price before confirmation.
+//Restrictions: Length and height must be positive floats. 
+//              Applies surcharge if either dimension exceeds regular limits.
 
 #endif //BOOKING_H
