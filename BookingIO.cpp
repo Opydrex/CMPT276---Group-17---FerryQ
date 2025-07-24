@@ -13,16 +13,18 @@ bool writeBooking(const Booking& booking, fstream& bookingFile) {
     return bookingFile.good();
 }
 
-bool deleteBookingRecord(const string& sailingID,
-                         const string& licensePlate,
-                         fstream& bookingFile) {
-    if (!bookingFile.good()) return false;
-    // Compute total records
-    bookingFile.clear(); bookingFile.seekg(0, ios::end);
-    int total = static_cast<int>(bookingFile.tellg() / sizeof(Booking));
+bool deleteBookingRecord(const std::string& sailingID,
+                         const std::string& licensePlate,
+                         std::fstream& bookingFile) {
+    if (!bookingFile) return false;
+    // Determine record count
+    bookingFile.clear(); bookingFile.seekg(0, std::ios::end);
+    std::streamoff size = bookingFile.tellg();
+    int total = static_cast<int>(size / sizeof(Booking));
     if (total <= 0) return false;
-    // Find target index
-    bookingFile.clear(); bookingFile.seekg(0, ios::beg);
+
+    // Find target record index
+    bookingFile.clear(); bookingFile.seekg(0, std::ios::beg);
     Booking temp;
     int targetIndex = -1;
     for (int i = 0; i < total; ++i) {
@@ -33,28 +35,29 @@ bool deleteBookingRecord(const string& sailingID,
         }
     }
     if (targetIndex < 0) return false;
+
     int lastIndex = total - 1;
-    // Overwrite if not last
+    // Overwrite target with last record if necessary
     if (targetIndex != lastIndex) {
         bookingFile.clear();
-        bookingFile.seekg(lastIndex * sizeof(Booking), ios::beg);
-        Booking lastRec;
-        bookingFile.read(reinterpret_cast<char*>(&lastRec), sizeof(Booking));
+        bookingFile.seekg(lastIndex * sizeof(Booking), std::ios::beg);
+        bookingFile.read(reinterpret_cast<char*>(&temp), sizeof(Booking));
         bookingFile.clear();
-        bookingFile.seekp(targetIndex * sizeof(Booking), ios::beg);
-        bookingFile.write(reinterpret_cast<const char*>(&lastRec), sizeof(Booking));
+        bookingFile.seekp(targetIndex * sizeof(Booking), std::ios::beg);
+        bookingFile.write(reinterpret_cast<const char*>(&temp), sizeof(Booking));
         bookingFile.flush();
     }
-    // Truncate file
+
+    // Close stream before truncating
     bookingFile.close();
-#ifdef _WIN32
-    FILE* f = fopen(BOOKING_FILENAME, "rb+");
-    if (f) { _chsize_s(_fileno(f), lastIndex * sizeof(Booking)); fclose(f); }
-#else
-    truncate(BOOKING_FILENAME, lastIndex * sizeof(Booking));
-#endif
-    bookingFile.open(BOOKING_FILENAME, ios::binary | ios::in | ios::out);
-    return bookingFile.good();
+    // Truncate file to remove last record
+    if (truncate(BOOKING_FILENAME, static_cast<long long>(lastIndex) * sizeof(Booking)) != 0) {
+        std::perror("truncate");
+        return false;
+    }
+    // Reopen for read/write
+    bookingFile.open(BOOKING_FILENAME, std::ios::binary | std::ios::in | std::ios::out);
+    return static_cast<bool>(bookingFile);
 }
 
 bool loadBookingByKey(const string& sailingID,
