@@ -7,7 +7,7 @@
 // This module contains a test driver for creating a vehicle
 // ----------------------------------------------------------------------------
 
-#include "Booking.h"
+#include "BookingUserIO.h"
 #include <iostream>
 #include <fstream>
 using namespace std;
