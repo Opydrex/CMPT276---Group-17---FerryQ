@@ -19,10 +19,14 @@ int findSailingIndexByID(fstream& inFile, const string& id) {
 }
 
 bool appendSailingRecord(fstream& outFile, const Sailing& record) {
-    if (!outFile) return false;
     outFile.clear();
     outFile.seekp(0, ios::end);
+    if (!outFile) {
+        cerr << "appendSailingRecord: file stream not open." << endl;
+        return false;
+    }
     outFile.write(reinterpret_cast<const char*>(&record), sizeof(Sailing));
+    outFile.flush();  // Ensure the data is written
     return outFile.good();
 }
 
