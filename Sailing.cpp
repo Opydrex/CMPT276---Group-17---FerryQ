@@ -45,7 +45,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         }
 
         //Prompt for vessel name
-        cout << "Enter vessel name (1-25 chars): ";
+        cout << "Enter vessel name (1-25 characters): ";
         getline(cin >> ws, vesselName);
         if (vesselName.empty()) return;
         if (vesselName.size() > 25){
