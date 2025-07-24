@@ -16,10 +16,10 @@
 // --------------------------------------------------------------------------
 
 #include "UserInterface.h"
-#include "Vessel.h"
-#include "Vehicle.h"
-#include "Booking.h"
-#include "Sailing.h"
+#include "VesselUserIO.h"
+#include "VehicleFileIO.h"
+#include "BookingUserIO.h"
+#include "SailingUserIO.h"
 #include <iostream>
 #include <fstream>
 using namespace std;

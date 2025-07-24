@@ -20,7 +20,7 @@
 // ----------------------------------------------------------------------------
 
 #include "VesselIO.h"
-#include "Vessel.h"
+#include "VesselUserIO.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>

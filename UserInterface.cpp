@@ -18,10 +18,10 @@
 // ---------------------------------------------------------------------------
 
 #include "UserInterface.h"
-#include "Booking.h"
-#include "Sailing.h"
-#include "Vessel.h"
-#include "Vehicle.h"
+#include "VesselUserIO.h"
+#include "VehicleFileIO.h"
+#include "BookingUserIO.h"
+#include "SailingUserIO.h"
 #include <iostream>
 #include <string>
 #include <limits> 

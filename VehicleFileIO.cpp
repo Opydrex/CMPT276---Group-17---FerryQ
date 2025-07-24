@@ -19,7 +19,7 @@
 // Used By: Called by the BookingUserIO.cpp module to manage vehicle data.
 // ----------------------------------------------------------------------------
 
-#include "Vehicle.h"
+#include "VehicleFileIO.h"
 #include <fstream>
 #include <iostream>
 #include <string>
