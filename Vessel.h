@@ -16,7 +16,7 @@ This module contains functions and implementations related to Vessels.
 #include <fstream>
 
 const float maxLaneLength = 3600.0f;
-const std::string fileNameVessel = "vessel.dat";
+const std::string fileNameVessel = "vessel.txt";
 
 class Vessel {
 public:
