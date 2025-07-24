@@ -2,10 +2,9 @@
 // Implements file I/O operations for Sailing records using provided streams
 
 #include "SailingIO.h"
-
-
-using namespace std;
+#include <cstdio>    // for truncate
 extern "C" int truncate(const char* path, long long length);
+using namespace std;
 
 int findSailingIndexByID(fstream& inFile, const string& id) {
     inFile.clear();
@@ -73,5 +72,5 @@ bool deleteSailingByID(fstream& ioFile, const string& sailingID) {
     // truncate file
     ioFile.close();
     long newSize = lastIndex * sizeof(Sailing);
-    return (truncate("sailing.dat", newSize) == 0);
+    return truncate("sailing.txt", newSize) == 0;
 }

@@ -4,11 +4,14 @@
 //==========================================================================
 #include "Sailing.h"
 #include "SailingIO.h"
-#include "VesselIO.cpp"
+#include "VesselIO.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include <cstring>
+#include <regex>
+
 
 using namespace std;
 
@@ -111,6 +114,30 @@ bool deleteSailing(fstream& sailingFile) {
     cout << (ok ? "Sailing deleted." : "Sailing not found.") << endl;
     return ok;
 }
+// Checks if a string is in valid "ccc-dd-dd" format
+bool isValidSailingID(const string& id) {
+    regex pattern("^[A-Za-z]{3}-\\d{2}-\\d{2}$");
+    return regex_match(id, pattern);
+}
+
+void printSailingReportHeader() {
+    // Print column headers for sailing listings
+    cout << "     " 
+         << left << setw(12) << "SailingID" << " "
+         << setw(24) << "Vessel Name" << " "
+         << setw(6)  << "LHR" << " "
+         << setw(6)  << "HHR" << " "
+         << setw(14) << "Total Vehicles" << " "
+         << setw(13) << "Deck Usage(%)" << "\n";
+    cout << "     " 
+         << string(12, '-') << " "
+         << string(24, '-') << " "
+         << string(6, '-')  << " "
+         << string(6, '-')  << " "
+         << string(14, '-') << " "
+         << string(13, '-') << "\n";
+}
+
 
 //----------------------------------------------------------------------------
 // printReport
@@ -153,7 +180,7 @@ void querySailing(fstream& sailingFile) {
         if (sid.empty() || !isValidSailingID(sid)) return;
         Sailing s;
         sailingFile.clear(); sailingFile.seekg(0, ios::beg);
-        if (findSailingByID(sailingFile, sid, s)) {
+        if (findSailingIndexByID(sailingFile, sid)) {
             cout << "== Sailing Details ==" << endl;
             printSailingReportHeader();
             cout << setw(4) << "1) "

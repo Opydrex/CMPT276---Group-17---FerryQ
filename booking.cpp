@@ -12,7 +12,7 @@ functions.
 #include "Vehicle.h"
 #include "Sailing.h"
 #include "BookingIO.h"
-
+#include "SailingIO.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -56,11 +56,11 @@ void createBooking(fstream& vehicleFile,
         cout << "Enter Sailing ID (ccc-dd-dd) or blank to cancel: ";
         getline(cin >> ws, sailingId);
         if (sailingId.empty()) return;
-        if (!isValidSailingID(sailingId)) {
+        if (findSailingIndexByID(sailingFile, sailingId) == -1) {
             cout << "Bad entry! Sailing ID format is ccc-dd-dd." << endl;
             continue;
         }
-        if (!isSailingExist(sailingId, sailingFile)) {
+        if (findSailingIndexByID(sailingFile, sailingId) == -1) {
             cout << "Error: Sailing not found." << endl;
             continue;
         }
@@ -159,7 +159,7 @@ void checkIn(fstream& bookingFile,
         cout << "Enter SailingID (ccc-dd-dd) or blank to exit: ";
         getline(cin >> ws, sid);
         if (sid.empty()) return;
-        if (!isValidSailingID(sid) || !isSailingExist(sid, sailingFile)) {
+        if (!isValidSailingID(sid) || findSailingIndexByID(sailingFile, sid) == -1) {
             cout << "Invalid or missing sailing. Try again." << endl;
             continue;
         }
