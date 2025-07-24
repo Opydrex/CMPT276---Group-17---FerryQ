@@ -3,7 +3,8 @@
 //==========================================================================
 
 /*
-MODULE NAME: Sailing.cpp
+MODULE NAME: SailingUserIO.cpp
+Rev.1 - 9/07/2025 - Module created.
 Rev.2 - 24/07/2025 - Updated to match UI stream logic and core operations.
 ----------------------------------------------------------------------------
 This module implements all mid-level functions related to sailings,

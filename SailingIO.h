@@ -1,6 +1,6 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //==========================================================================
-//SailingIO.h - Low-level file I/O for Sailings
+//MODULE NAME: SailingFileIO.h - Low-level file I/O for Sailings
 //Rev.1 - 24/07/2025 - Created for modular design separation
 //==========================================================================
 
