@@ -14,7 +14,7 @@ int main() {
 
     // Open a binary file to test writeVehicle
     fstream outFile("vehicle.txt", ios::out | ios::binary);
-    v.writeVehicle(outFile);
+    writeVehicle(outFile, v);
     outFile.close();
 
     // Confirm that file was created
