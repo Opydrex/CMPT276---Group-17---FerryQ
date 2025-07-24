@@ -1,7 +1,4 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//==========================================================================
-//==========================================================================
-
 /*
 MODULE NAME: VesselFileIO.cpp
 Rev.1 - 24/07/2025 - Implementation of Vessel file I/O operations.
@@ -10,7 +7,7 @@ Rev.1 - 24/07/2025 - Implementation of Vessel file I/O operations.
 This module implements low-level binary file access for Vessel records.
 Functions include writing, searching, and retrieving capacities from the
 binary vessel file. These are utility functions called by higher-level
-modules such as Vessel.cpp.
+modules to manipulate database files.
 ----------------------------------------------------------------------------
 */
 
@@ -24,8 +21,8 @@ using namespace std;
 
 //----------------------------------------------------------------------------
 bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel){
-    //Description: Appends a new Vessel record to the end of the vessel file.
-    //             Assumes file is already opened by caller.
+//Description: Appends a new Vessel record to the end of the vessel file.
+//             Assumes file is already opened by caller.
     vesselFile.clear();                //Reset any fail/eof flags
     vesselFile.seekp(0, ios::end);     //Move to the end for appending
 
@@ -41,8 +38,8 @@ bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel){
 
 //----------------------------------------------------------------------------
 bool doesVesselExist(fstream& vesselFile, const string& vesselName){
-    //Description: Checks if a vessel with the given name exists in the file.
-    //             Uses a linear search through the entire file.
+//Description: Checks if a vessel with the given name exists in the file.
+//             Uses a linear search through the entire file.
     vesselFile.clear();                //Reset stream flags
     vesselFile.seekg(0, ios::beg);     //Start reading from beginning
 
@@ -58,8 +55,8 @@ bool doesVesselExist(fstream& vesselFile, const string& vesselName){
 
 //----------------------------------------------------------------------------
 float readMaxRegularLength(fstream& vesselFile, const string& vesselName){
-    //Description: Retrieves the max regular (low vehicle) capacity for a given vessel name.
-    //             Returns -1.0f if vessel not found.
+//Description: Retrieves the max regular (low vehicle) capacity for a given vessel name.
+//             Returns -1.0f if vessel not found.
     vesselFile.clear();                //Reset stream flags
     vesselFile.seekg(0, ios::beg);     //Start from beginning
 
@@ -75,8 +72,8 @@ float readMaxRegularLength(fstream& vesselFile, const string& vesselName){
 
 //----------------------------------------------------------------------------
 float readMaxSpecialLength(fstream& vesselFile, const string& vesselName){
-    //Description: Retrieves the max special (oversize vehicle) capacity 
-    //             for a given vessel. Returns -1.0f if vessel not found.
+//Description: Retrieves the max special (oversize vehicle) capacity 
+//             for a given vessel. Returns -1.0f if vessel not found.
     vesselFile.clear();
     vesselFile.seekg(0, ios::beg);
 
@@ -90,4 +87,3 @@ float readMaxSpecialLength(fstream& vesselFile, const string& vesselName){
     return -1.0f;
 }
 
-//----------------------------------------------------------------------------

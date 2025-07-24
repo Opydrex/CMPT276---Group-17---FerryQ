@@ -1,6 +1,4 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//==========================================================================
-//==========================================================================
 
 /*
 MODULE NAME: VehicleFileIO.cpp
@@ -27,8 +25,8 @@ Design notes:
 using namespace std;
 
 //----------------------------------------------------------------------------
-//Description: This is a constructor that initializes a Vehicle object with license, height, and length.
 Vehicle::Vehicle(const string& licensePlate, const float& height, const float& length){
+//Description: This is a constructor that initializes a Vehicle object with license, height, and length.
     strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
     this->licensePlate[sizeof(this->licensePlate) - 1] = '\0'; //Null-terminate
     this->height = height;
@@ -36,9 +34,9 @@ Vehicle::Vehicle(const string& licensePlate, const float& height, const float& l
 }
 
 //----------------------------------------------------------------------------
+bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle){
 //Description: Appends a vehicle record to the end of the vehicle file.
 //             Returns true if successful.
-bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle){
     vehicleFile.clear();                       //Clear EOF or fail flags
     vehicleFile.seekp(0, ios::end);            //Move to end to append
 
@@ -53,9 +51,9 @@ bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle){
 }
 
 //----------------------------------------------------------------------------
+bool isVehicleExist(fstream& vehicleFile, const string& licensePlate){
 //Description: Checks if a vehicle with the given license plate exists in the file.
 //             Returns true if found.
-bool isVehicleExist(fstream& vehicleFile, const string& licensePlate){
     vehicleFile.clear();
     vehicleFile.seekg(0, ios::beg);
     Vehicle temp;
@@ -71,8 +69,8 @@ bool isVehicleExist(fstream& vehicleFile, const string& licensePlate){
 
 //----------------------------------------------------------------------------
 bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, float& length, float& height){
-    //Description: Retrieves the dimensions of a vehicle by license plate.
-    //             Stores the length and height in output parameters and returns true if found.
+//Description: Retrieves the dimensions of a vehicle by license plate.
+//             Stores the length and height in output parameters and returns true if found.
     vehicleFile.clear();
     vehicleFile.seekg(0, ios::beg);
     Vehicle temp;
@@ -91,36 +89,38 @@ bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, floa
 
 //----------------------------------------------------------------------------
 void Vehicle::setLicensePlate(const string& licensePlate){
-    //Description: Sets the license plate string (fixed-size char array).
+//Description: Sets the license plate string (fixed-size char array).
     strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
     this->licensePlate[10] = '\0'; //Null-terminate
 }
+
 //----------------------------------------------------------------------------
 void Vehicle::setHeight(float height){
-    //Description: Sets the height of the vehicle.
+//Description: Sets the height of the vehicle.
     this->height = height;
 }
+
 //----------------------------------------------------------------------------
 void Vehicle::setLength(float length){
-    //Description: Sets the length of the vehicle.
+//Description: Sets the length of the vehicle.
     this->length = length;
 }
 
 //----------------------------------------------------------------------------
 string Vehicle::getLicensePlate() const{
-    //Description: Returns the license plate as a std::string.
+//Description: Returns the license plate as a std::string.
     return string(this->licensePlate);
 }
 
 //----------------------------------------------------------------------------
 float Vehicle::getHeight() const{
-    //Description: Returns the height of the vehicle.
+//Description: Returns the height of the vehicle.
     return this->height;
 }
 
 //----------------------------------------------------------------------------
 float Vehicle::getLength() const{
-    //Description: Returns the length of the vehicle.
+//Description: Returns the length of the vehicle.
     return this->length;
 }
 

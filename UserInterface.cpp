@@ -1,6 +1,4 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//==========================================================================
-//==========================================================================
 //MODULE NAME: UserInterface.cpp
 //Rev.1 - 21/07/2025 - UserInterface class implementation.
 //Rev.2 - 22/07/2025 - Updated to match new module signatures and added Query Sailing.
@@ -23,13 +21,8 @@
 using namespace std;
 
 //----------------------------------------------------------------------------
-//Function Prototypes for submenus
-//----------------------------------------------------------------------------
-
-
-//----------------------------------------------------------------------------
 void userInterfaceLoop(fstream& vesselFile, fstream& vehicleFile, fstream& bookingFile, fstream& sailingFile){
-    //Description: Runs the main program menu and dispatches user input to check-in, booking, or sailing modules.
+//Description: Runs the main program menu and dispatches user input to check-in, booking, or sailing modules.
     bool running = true;
     while (running){
         cout << "=== Main Menu ===" << endl;
@@ -78,7 +71,7 @@ void userInterfaceLoop(fstream& vesselFile, fstream& vehicleFile, fstream& booki
 
 //----------------------------------------------------------------------------
 void SailingsMenu(fstream& vesselFile, fstream& sailingFile){
-    //Description: Displays the Sailings submenu and handles create, delete, report, and query actions.
+//Description: Displays the Sailings submenu and handles create, delete, report, and query actions.
     string inputLine;
     int choice = -1;
     bool inMenu = true;
@@ -133,7 +126,7 @@ void SailingsMenu(fstream& vesselFile, fstream& sailingFile){
 
 //----------------------------------------------------------------------------
 void BookingsMenu(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFile){
-    //Description: Displays the Bookings submenu and handles creating or deleting bookings.
+//Description: Displays the Bookings submenu and handles creating or deleting bookings.
     string inputLine;
     int choice = -1;
     bool inMenu = true;

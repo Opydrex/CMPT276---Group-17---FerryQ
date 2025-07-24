@@ -1,7 +1,4 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//==========================================================================
-//==========================================================================
-
 /*
 MODULE NAME: VesselUserIO.cpp
 Rev.1 - 24/07/2025 - Vessel class implementation.
@@ -28,9 +25,9 @@ using namespace std;
 
 //----------------------------------------------------------------------------
 void createVessel(fstream& vesselFile){
-    //Description: Prompts the user to create a new vessel and saves 
-    //             it to file if valid. Recursively asks if the user 
-    //             wants to create another. Assumes vesselFile is already open.
+//Description: Prompts the user to create a new vessel and saves 
+//             it to file if valid. Recursively asks if the user 
+//             wants to create another. Assumes vesselFile is already open.
     string name;
     while (true){
         cout << "Enter Vessel name (1-25 characters): ";
@@ -89,7 +86,7 @@ void createVessel(fstream& vesselFile){
 
 //----------------------------------------------------------------------------
 Vessel::Vessel(const string& nameStr, float s, float b){
-    //Description: Basic constructor that sets all member values using setters.
+//Description: Basic constructor that sets all member values using setters.
     setName(nameStr);
     setMaxCapacitySmall(s);
     setMaxCapacityBig(b);
@@ -97,40 +94,40 @@ Vessel::Vessel(const string& nameStr, float s, float b){
 
 //----------------------------------------------------------------------------
 void Vessel::setName(const string& n){
-    //Description: Copies the name into the internal char array (C-style string).
+//Description: Copies the name into the internal char array (C-style string).
     strncpy(name, n.c_str(), sizeof(name)-1);
     name[sizeof(name)-1] = '\0'; //Force null termination
 }
 
 //----------------------------------------------------------------------------
 void Vessel::setMaxCapacitySmall(float c){
-    //Description: Sets the capacity for regular vehicles (low height).
+//Description: Sets the capacity for regular vehicles (low height).
     maxCapacitySmall = c;
 }
 
 //----------------------------------------------------------------------------
-//Description: Sets the capacity for special vehicles (taller or larger).
 void Vessel::setMaxCapacityBig(float c){
+//Description: Sets the capacity for special vehicles (taller or larger).
     //Description: Sets the capacity for special vehicles (taller or larger).
     maxCapacityBig = c;
 }
 
 //----------------------------------------------------------------------------
 string Vessel::getName() const{
-    //Description: Returns the vessel name as a string.
+//Description: Returns the vessel name as a string.
     return string(name);
 }
 
 //----------------------------------------------------------------------------
 float Vessel::getMaxSmall() const{
-    //Description: Returns how many regular vehicles this vessel can carry.
+//Description: Returns how many regular vehicles this vessel can carry.
     return maxCapacitySmall;
 }
 
 //----------------------------------------------------------------------------
 float Vessel::getMaxBig() const{
-    //Description: Returns how many special vehicles this vessel can carry.
+//Description: Returns how many special vehicles this vessel can carry.
     return maxCapacityBig;
 }
 
-//----------------------------------------------------------------------------
+

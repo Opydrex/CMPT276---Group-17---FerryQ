@@ -1,10 +1,9 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //==========================================================================
 //==========================================================================
 //MODULE NAME: UserInterface.h
 //Rev.1 - 09/07/2025 - UserInterface class header created.
 //--------------------------------------------------------------------------
-//This module contains functions and declarations related to the
+//This module contains functions declarations related to the
 //User Interface. It declares the main program loop entry point
 //for interacting with all system modules.
 //==========================================================================
@@ -17,6 +16,7 @@
 #include <string>
 using namespace std;
 
+//----------------------------------------------------------------------------
 void userInterfaceLoop(fstream& vesselFile, //input
                        fstream& vehicleFile,//input
                        fstream& bookingFile,//input
@@ -26,6 +26,7 @@ void userInterfaceLoop(fstream& vesselFile, //input
 //Usage: Called from main() to route control to Bookings, Sailings, and Check-in.
 //Restrictions: All file streams must be open and valid before calling.
 
+//----------------------------------------------------------------------------
 void SailingsMenu(fstream& vesselFile,//input
                   fstream& sailingFile//input
                   );
@@ -33,6 +34,7 @@ void SailingsMenu(fstream& vesselFile,//input
 //Usage: Called from userInterfaceLoop when user selects Sailings.
 //Restrictions: Requires valid, open file streams.
 
+//----------------------------------------------------------------------------
 void BookingsMenu(fstream& vehicleFile,//input
                   fstream& bookingFile,//input 
                   fstream& sailingFile //input
