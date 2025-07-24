@@ -21,7 +21,7 @@ const float extraPerMeterInHeight = 2.0;
 const float extraPerMeterInLength = 3.0;
 const float maxHeightForRegularSizedVehicle = 2.0;
 const float maxLengthForRegularSizedVehicle = 7.0;
-const string fileNameBooking = "booking.dat";
+const string fileNameBooking = "booking.txt";
 
 class Booking {
     public:
