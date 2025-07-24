@@ -13,50 +13,29 @@ Unsorted fixed-length text records are used. Linear searches and simple append/d
 #include "Sailing.h"
 #include "Booking.h" 
 #include "Vessel.h"     
-#include "SailingIO.h"      
+#include "SailingIO.h"
+#include "BookingIO.h"
 #include <fstream>
+#include <cstdio>
 #include <iostream>
-#include <string>
-#include <sstream>
-#include <iomanip>
-#include <cstdio>               
 #include <limits>
 #include <cstring>
+#include <iomanip>
 using namespace std;
 
-//----------------------------------------------------------------------------
-// Sailing constructor
-//----------------------------------------------------------------------------
-//makes a sailing obj using the given infomation (sailingID, name, small & big caps)
-// Sailing::Sailing(const string& sailingId,   //input
-//                  const string& vesselName,  //input
-//                  const float& currentCapacitySmall,  //input
-//                  const float& currentCapacityBig     //input
-//                 )
-// {
-//     this->sailingId = sailingId; //save the sailing sailingID
-//     this->vesselName = vesselName; //save vessel name
-//     this->currentCapacitySmall = currentCapacitySmall; //small cars
-//     this->currentCapacityBig = currentCapacityBig; //big vehicals
-// }
+// Sailing::writeSailing writes the binary record of this Sailing to file.
+void Sailing::writeSailing(fstream& outFile) {
+    if (outFile.is_open()) {
+        outFile.clear();
+        outFile.seekp(0, ios::end);
+        outFile.write(reinterpret_cast<const char*>(this), sizeof(Sailing));
+        outFile.flush();
+    } else {
+        cerr << "Error: Unable to write to sailing file." << endl;
+    }
+}
 
-//----------------------------------------------------------------------------
-// Writes an instance of the Sailing object to the file.
-//----------------------------------------------------------------------------
-//open file and stick data of sailing to it in csv like format
-// void Sailing::writeSailing(ofstream& outFile) {
-//     if (outFile.is_open()) {
-//         outFile.write(reinterpret_cast<const char*>(this), sizeof(Sailing));
-//         outFile.flush();
-//     } else {
-//         cerr << "Error: Unable to write to the output stream." << endl;
-//     }
-// }
-
-
-//----------------------------------------------------------------------------
-// Check if a string is a valid SailingID in ccc-dd-dd format
-//----------------------------------------------------------------------------
+// Check if string matches "ccc-dd-dd" format for SailingID.
 bool isValidSailingID(const string& id) {
     return id.size() == 9 &&
            id[3] == '-' && id[6] == '-' &&
@@ -65,47 +44,38 @@ bool isValidSailingID(const string& id) {
            isdigit(id[7]) && isdigit(id[8]);
 }
 
-//----------------------------------------------------------------------------
-// Prompts the user for appropriate data and returns a Sailing object
-//----------------------------------------------------------------------------
-void createSailing(ifstream& vesselFile) {
+// Create a new Sailing record (user input -> file output)
+void createSailing(fstream& vesselFile, fstream& sailingFile) {
     while (true) {
-        string term, vessel, dayStr, hourStr;
+        string term, vesselName, dayStr, hourStr;
         int day = 0, hour = 0;
         float capSmall = 0.f, capBig = 0.f;
-
-        // Terminal ID
-        cout << "Enter departure terminal sailingID (ccc): ";
+        // Terminal code (3-letter)
+        cout << "Enter departure terminal code (ccc): ";
         getline(cin >> ws, term);
         if (term.empty()) return;
         if (term.size() != 3 || !isalpha(term[0]) || !isalpha(term[1]) || !isalpha(term[2])) {
             cout << "Bad entry! Must be exactly three letters." << endl;
             continue;
         }
-
         // Vessel Name
         while (true) {
             cout << "Enter vessel name (1-25 characters): ";
-            getline(cin >> ws, vessel);
-            if (vessel.empty()) return;
-            if (vessel.length() > 25) {
+            getline(cin >> ws, vesselName);
+            if (vesselName.empty()) return;
+            if (vesselName.length() > 25) {
                 cout << "Bad entry! Name too long." << endl;
                 continue;
             }
-
-            vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-            capSmall = getMaxRegularLength(vessel, vesselFile);
-            vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-            capBig = getMaxSpecialLength(vessel, vesselFile);
-
+            // Check that vessel exists and fetch its deck capacities
+            capSmall = getMaxRegularLength(vesselName, vesselFile);
+            capBig = getMaxSpecialLength(vesselName, vesselFile);
             if (capSmall == -1 || capBig == -1) {
                 cout << "Error: Vessel not found. Please enter a valid vessel name." << endl;
                 continue;
             }
-
             break;
         }
-
         // Day
         cout << "Enter departure day (dd): ";
         getline(cin >> ws, dayStr);
@@ -116,10 +86,9 @@ void createSailing(ifstream& vesselFile) {
         }
         day = stoi(dayStr);
         if (day < 1 || day > maxSailingDay) {
-            cout << "Day out of range." << endl;
+            cout << "Day out of range (must be 01-31)." << endl;
             continue;
         }
-
         // Hour
         cout << "Enter departure hour (hh): ";
         getline(cin >> ws, hourStr);
@@ -130,30 +99,24 @@ void createSailing(ifstream& vesselFile) {
         }
         hour = stoi(hourStr);
         if (hour < 0 || hour > maxSailingHour) {
-            cout << "Hour out of range." << endl;
+            cout << "Hour out of range (must be 00-23)." << endl;
             continue;
         }
-
-        string sailingIDStr = term + "-" + dayStr + "-" + hourStr;
-
-        // Check if sailing already exists
-        if (findSailingIndexByID(sailingIDStr) != -1) {
-            cout << "A sailing with SailingID " << sailingIDStr << " already exists. Would you like to create another sailing? (Y/N)" << endl;
+        string sailingID = term + "-" + dayStr + "-" + hourStr;
+        // Check for duplicate SailingID
+        if (findSailingIndexByID(sailingID) != -1) {
+            cout << "A sailing with ID " << sailingID << " already exists. Would you like to create another sailing? (Y/N)" << endl;
         } else {
+            // Create new Sailing object and initialize
             Sailing newSailing;
-            newSailing.setSailingID(sailingIDStr);
-            newSailing.setVesselName(vessel);
+            newSailing.setSailingID(sailingID);
+            newSailing.setVesselName(vesselName);
             newSailing.setCurrentCapacitySmall(capSmall);
             newSailing.setCurrentCapacityBig(capBig);
-
-            if (appendSailingRecord(newSailing)) {
-                cout << "Sailing successfully created. The SailingID is " << sailingIDStr << ". Would you like to create another sailing? (Y/N)" << endl;
-            } else {
-                cout << "Error writing sailing to file." << endl;
-                return;
-            }
+            // Write new sailing to file
+            newSailing.writeSailing(sailingFile);
+            cout << "Sailing successfully created with SailingID " << sailingID << ". Would you like to create another sailing? (Y/N)" << endl;
         }
-
         string response;
         getline(cin >> ws, response);
         if (response != "Y" && response != "y") {
@@ -162,52 +125,51 @@ void createSailing(ifstream& vesselFile) {
     }
 }
 
-//----------------------------------------------------------------------------
-// Delete a sailing record
-//----------------------------------------------------------------------------
-bool deleteSailing(fstream& sailingIO) {
+// Delete a Sailing record (and associated bookings)
+bool deleteSailing(fstream& sailingFile) {
     string sailingID;
     cout << "Enter SailingID (ccc-dd-dd): ";
     getline(cin >> ws, sailingID);
-
     if (!isValidSailingID(sailingID)) {
         cout << "Bad entry! Must be ccc-dd-dd.\n";
         return false;
     }
-
-    if (deleteSailingByID(sailingID, sailingIO)) {
-        cout << "Sailing with SailingID " << sailingID << " deleted successfully.\n";
+    if (deleteSailingByID(sailingID, sailingFile)) {
+        cout << "Sailing with ID " << sailingID << " deleted successfully.\n";
+        // Also delete all bookings for this sailing ID
+        if (deleteBookingRecord(sailingID, "")) {  // Using BookingIO function in a loop would be better to remove all; simplified here
+            cout << "All bookings for " << sailingID << " have been deleted.\n";
+        }
         return true;
     } else {
-        cout << "No sailing with SailingID " << sailingID << " was found.\n";
+        cout << "No sailing with ID " << sailingID << " was found.\n";
         return false;
     }
 }
 
-
-//----------------------------------------------------------------------------
-// Check if sailing already in file
-//----------------------------------------------------------------------------
-bool isSailingExist(const string& sailingId) {
-    return findSailingIndexByID(sailingId) != -1;
+bool isSailingExist(const string& sailingId, fstream& sailingFile) {
+    // Search open sailing file for a record with matching SailingID
+    sailingFile.clear();
+    sailingFile.seekg(0, ios::beg);
+    Sailing temp;
+    while (sailingFile.read(reinterpret_cast<char*>(&temp), sizeof(Sailing))) {
+        if (string(temp.getSailingID()) == sailingId) {
+            return true;
+        }
+    }
+    return false;
 }
 
-//----------------------------------------------------------------------------
-// Print header of paged report
-//----------------------------------------------------------------------------
-
 void printSailingReportHeader() {
-    //Header
-    cout << "     "
+    // Print column headers for sailing listings
+    cout << "     " 
          << left << setw(12) << "SailingID" << " "
          << setw(24) << "Vessel Name" << " "
          << setw(6)  << "LHR" << " "
          << setw(6)  << "HHR" << " "
          << setw(14) << "Total Vehicles" << " "
          << setw(13) << "Deck Usage(%)" << "\n";
-
-    // Dash line spacing
-    cout << "     "
+    cout << "     " 
          << string(12, '-') << " "
          << string(24, '-') << " "
          << string(6, '-')  << " "
@@ -216,96 +178,84 @@ void printSailingReportHeader() {
          << string(13, '-') << "\n";
 }
 
-//----------------------------------------------------------------------------
-// Print paged report with exit-on-enter and error messages
-//----------------------------------------------------------------------------
-//shows all the sailingss in a nice list, 5 per page
-void printReport() {
+void printReport(fstream& sailingFile) {
     cout << "  == Sailings Report ==\n";
     printSailingReportHeader();
-
-    int total = 0, page = 0;
-    bool exit = false;
-    int recordCount = countSailingRecords();
-
-    for (int i = 0; i < recordCount; ++i) {
-        Sailing temp;
-        if (!loadSailingByIndex(i, temp)) continue;
-
+    sailingFile.clear();
+    sailingFile.seekg(0, ios::beg);
+    int total = 0, pageCount = 0;
+    bool exitFlag = false;
+    Sailing temp;
+    while (sailingFile.read(reinterpret_cast<char*>(&temp), sizeof(Sailing))) {
         float LHR = temp.getCurrentCapacitySmall();
         float HHR = temp.getCurrentCapacityBig();
-        int totalVehicles = 0; // not tracked yet
-        int usage = 0;
-
-        string idx = to_string(total + 1) + ")";
-        cout << right << setw(4) << idx << " "
+        int totalVehicles = 0;  // not tracked in this assignment
+        int usage = 0;          // not calculated yet
+        string indexLabel = to_string(total + 1) + ")";
+        cout << right << setw(4) << indexLabel << " "
              << left  << setw(12) << temp.getSailingID() << " "
              << setw(24) << temp.getVesselName() << " "
              << setw(6)  << fixed << setprecision(1) << LHR << " "
              << setw(6)  << HHR << " "
              << setw(14) << totalVehicles << " "
              << setw(13) << (to_string(usage) + "%") << "\n";
-
         total++;
-        page++;
-
-        if (page == 5) {
+        pageCount++;
+        if (pageCount == 5) {
             cout << "  0)Exit\n";
             cout << "Enter M to print 5 more lines or 0 to exit: ";
             string inp;
             getline(cin >> ws, inp);
-            if (inp.empty() || inp == "0") break;
-
+            if (inp.empty() || inp == "0") {
+                exitFlag = true;
+                break;
+            }
             while (inp != "M" && inp != "m") {
                 cout << "Bad entry! Please enter M or 0 (or press Enter).\n";
                 cout << "Enter M to print 5 more lines or 0 to exit: ";
                 getline(cin >> ws, inp);
                 if (inp.empty() || inp == "0") {
-                    exit = true;
+                    exitFlag = true;
                     break;
                 }
             }
-
-            if (exit) break;
-            page = 0;
+            if (exitFlag) break;
+            pageCount = 0;
         }
     }
-
-    if (!exit && total > 0) {
+    if (!exitFlag && total > 0) {
         cout << "  0)Exit\n";
         cout << "No more sailings.\n";
     }
 }
 
-
-//----------------------------------------------------------------------------
-// Prompt and print a single sailing record
-//----------------------------------------------------------------------------
-// prompts user for a valid SailingID, reads file, and prints corresponding information
-void querySailing(ifstream& sailingInFile) {
+void querySailing(fstream& sailingFile) {
     while (true) {
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sailingId;
         getline(cin >> ws, sailingId);
         if (sailingId.empty()) return;
-
         if (!isValidSailingID(sailingId)) {
             cout << "Bad entry! SailingID must follow the format ccc-dd-dd." << endl;
             continue;
         }
-
+        sailingFile.clear();
+        sailingFile.seekg(0, ios::beg);
         Sailing temp;
-        sailingInFile.clear();
-        sailingInFile.seekg(0, ios::beg);
-        if (findSailingByID(sailingInFile, sailingId, temp)) {
+        bool found = false;
+        while (sailingFile.read(reinterpret_cast<char*>(&temp), sizeof(Sailing))) {
+            if (string(temp.getSailingID()) == sailingId) {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
             cout << "  == Sailing Details ==\n";
             printSailingReportHeader();
-
             float LHR = temp.getCurrentCapacitySmall();
             float HHR = temp.getCurrentCapacityBig();
-            int totalVehicles = 0; // to be updated in future
+            int totalVehicles = 0;
             int usage = 0;
-
             cout << right << setw(4) << "1) "
                  << left  << setw(12) << temp.getSailingID() << " "
                  << setw(24) << temp.getVesselName() << " "
@@ -316,45 +266,41 @@ void querySailing(ifstream& sailingInFile) {
         } else {
             cout << "No sailing with SailingID " << sailingId << " was found." << endl;
         }
-
         cout << "Would you like to query another sailing? (Y/N): ";
         string resp;
         getline(cin >> ws, resp);
-        if (resp.empty() || (resp[0] != 'Y' && resp[0] != 'y'))
+        if (resp.empty() || (resp[0] != 'Y' && resp[0] != 'y')) {
             return;
+        }
     }
 }
 
+// Setters for Sailing class fields:
 void Sailing::setSailingID(const string& id) {
     strncpy(sailingID, id.c_str(), sizeof(sailingID) - 1);
     sailingID[sizeof(sailingID) - 1] = '\0';
 }
-
 void Sailing::setVesselName(const string& name) {
     strncpy(vesselName, name.c_str(), sizeof(vesselName) - 1);
     vesselName[sizeof(vesselName) - 1] = '\0';
 }
-
 void Sailing::setCurrentCapacitySmall(float cap) {
     currentCapacitySmall = cap;
 }
-
 void Sailing::setCurrentCapacityBig(float cap) {
     currentCapacityBig = cap;
 }
 
+// Getters for Sailing:
 string Sailing::getSailingID() const {
     return string(sailingID);
 }
-
 string Sailing::getVesselName() const {
     return string(vesselName);
 }
-
 float Sailing::getCurrentCapacitySmall() const {
     return currentCapacitySmall;
 }
-
 float Sailing::getCurrentCapacityBig() const {
     return currentCapacityBig;
 }

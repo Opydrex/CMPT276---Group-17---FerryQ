@@ -18,24 +18,23 @@ This module contains functions and implementations related to Vessels.
 using namespace std;
 
 const float maxLaneLength = 3600.0; // max length in meters for both the regular-sized and special-sized vehicle lanes
-const string fileNameVessel = "vessel.txt";//constant that stores file name with all vessels
+const string fileNameVessel = "vessel.dat";//constant that stores file name with all vessels
 
 class Vessel {
     public:
         Vessel() = default;
-
-        Vessel(const string& name,             // input
-               const float& maxCapacitySmall,  // input
-               const float& maxCapacityBig     // input
+        Vessel(const string& name,             // input: vessel name (<=25 chars)
+               const float& maxCapacitySmall,  // input: total deck length for regular vehicles
+               const float& maxCapacityBig     // input: total deck length for oversize vehicles
         );
-        // Job: Vessel object constructor.
-        // Usage: Used when a Vessel is being created.
-        // Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
+        // Job: Vessel constructor initializes vessel data.
+        // Usage: Called when adding a new Vessel.
+        // Restrictions: name <= 25 characters.
 
-        void writeVessel(ofstream& outFile); // input
-        // Job: Writes the Vessel data into the file.
-        // Usage: Used when all data about Vessel is collected. It is then written into a data file.
-        // Restrictions: Vessel mustn't already exist in the data file.
+        void writeVessel(fstream& outFile);
+        // Job: Writes this Vessel record to the open vessel file.
+        // Usage: Called after creating a Vessel to save it persistently.
+        // Restrictions: Assumes outFile is an open fstream in binary mode.
 
         // Setters
         void setName(const string& name);
@@ -45,45 +44,32 @@ class Vessel {
         string getName() const;
         float getMaxSmall() const;
         float getMaxBig() const;
-
     private:
-        char name[26]; // Vessel's name, up to 25 characters + null terminator
-        float maxCapacitySmall; // Maximum capacity for regular-sized vehicles. Measured in meters.
-        float maxCapacityBig;   // Maximum capacity for special-sized vehicles. Measured in meters.
+        char name[26];           // vessel name (25 chars + null terminator)
+        float maxCapacitySmall;  // total regular vehicle lane length (meters)
+        float maxCapacityBig;    // total oversize vehicle lane length (meters)
 };
 
 //----------------------------------------------------------------------------
 
-void createVessel(ifstream& inFile,  // input file stream
-                  ofstream& outFile  // output file stream
-);
-// Job: Prompts the user for appropriate data and returns a Vessel object
-// Usage: Called by the UI to collect vessel information from the user. The collected data can then be passed to writeVessel to save it to file.
-// Restrictions: User input must conform to each variable's domain
+void createVessel(fstream& inFile, fstream& outFile);
+// Job: Prompts user for vessel details and saves a new Vessel to file.
+// Usage: Called from Sailings menu to add a new vessel (vesselFile passed for I/O).
+// Restrictions: Vessel name must be unique and <=25 chars; capacities within [0, maxLaneLength].
 
-//----------------------------------------------------------------------------
+bool isVesselExist(const string& name, fstream& inFile);
+// Job: Checks if a vessel with given name exists in the vessel data file.
+// Usage: Used to validate uniqueness when creating new vessel or verifying vessel existence.
+// Restrictions: name <=25 chars.
 
-bool isVesselExist(const string& name,  // input
-                   ifstream& inFile     // input file stream
-);
-// Job: Returns a boolean flag indicating if the Vessel exists.
-// Usage: Call when need to find out if the Vessel exists when creating a Sailing.
-// Restrictions: Vessel name must be under 25 characters. Vessel name must be unique.
+float getMaxRegularLength(const string& vesselName, fstream& inFile);
+// Job: Retrieves the max regular vehicle deck length for a given vessel.
+// Usage: Used when creating a Sailing to initialize capacities.
+// Restrictions: Vessel must exist; returns -1.0 if not found.
 
-//----------------------------------------------------------------------------
-
-float getMaxRegularLength(const string& vesselName, ifstream& inFile);
-// Job: Getter for initial regular-sized vehicles on the vessel.
-// Usage: Called when creating a Sailing.
-// Restrictions: Vessel name must be under 25 characters. Vessel name must exist.
-
-//----------------------------------------------------------------------------
-
-float getMaxSpecialLength(const string& vesselName, ifstream& inFile);
-// Job: Getter for initial special-sized vehicles on the vessel.
-// Usage: Called when creating a Sailing.
-// Restrictions: Vessel name must be under 25 characters. Vessel name must exist.
-
-//----------------------------------------------------------------------------
+float getMaxSpecialLength(const string& vesselName, fstream& inFile);
+// Job: Retrieves the max oversize vehicle deck length for a given vessel.
+// Usage: Used when creating a Sailing to initialize capacities.
+// Restrictions: Vessel must exist; returns -1.0 if not found.
 
 #endif // VESSEL_H

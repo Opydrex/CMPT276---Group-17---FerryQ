@@ -10,14 +10,52 @@ This module contains the main function, as well as functions and implementations
 
 #include "UserInterface.h"
 #include <iostream>
+#include "Vessel.h"
+#include "Vehicle.h"
+#include "Booking.h"
+#include "Sailing.h"
 
 int main() {
     std::cout << "Welcome to the FerryQ!!!" << std::endl << std::endl;
-    userInterfaceLoop();
+    // Open all data files once at program startup (for combined read/write in binary mode)
+    fstream vesselFile(fileNameVessel, ios::in | ios::out | ios::binary);
+    if (!vesselFile) {
+        // Create file if it doesn't exist, then reopen in read/write mode
+        ofstream tmp(fileNameVessel, ios::binary);
+        tmp.close();
+        vesselFile.open(fileNameVessel, ios::in | ios::out | ios::binary);
+    }
+    fstream vehicleFile(fileNameVehicle, ios::in | ios::out | ios::binary);
+    if (!vehicleFile) {
+        ofstream tmp(fileNameVehicle, ios::binary);
+        tmp.close();
+        vehicleFile.open(fileNameVehicle, ios::in | ios::out | ios::binary);
+    }
+    fstream bookingFile(fileNameBooking, ios::in | ios::out | ios::binary);
+    if (!bookingFile) {
+        ofstream tmp(fileNameBooking, ios::binary);
+        tmp.close();
+        bookingFile.open(fileNameBooking, ios::in | ios::out | ios::binary);
+    }
+    fstream sailingFile(fileNameSailing, ios::in | ios::out | ios::binary);
+    if (!sailingFile) {
+        ofstream tmp(fileNameSailing, ios::binary);
+        tmp.close();
+        sailingFile.open(fileNameSailing, ios::in | ios::out | ios::binary);
+    }
+    if (!vesselFile || !vehicleFile || !bookingFile || !sailingFile) {
+        std::cerr << "Error: Could not open one or more data files." << std::endl;
+        return 1;
+    }
+    // Launch the user interface loop, passing in all opened file streams
+    userInterfaceLoop(vesselFile, vehicleFile, bookingFile, sailingFile);
+    // Close all data files before exiting the program
+    vesselFile.close();
+    vehicleFile.close();
+    bookingFile.close();
+    sailingFile.close();
     return 0;
 }
-
-void init();
 
 //Job: Initialises and opens every data file upon program launch.
 //Usage: Used in main.cpp

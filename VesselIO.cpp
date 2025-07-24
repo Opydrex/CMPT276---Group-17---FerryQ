@@ -10,44 +10,51 @@
 #include <string>
 using namespace std;
 
-bool writeVesselToFile(const Vessel& vessel) {
-    ofstream out(fileNameVessel, ios::binary | ios::app);
-    if (!out) return false;
-
-    out.write(reinterpret_cast<const char*>(&vessel), sizeof(Vessel));
+bool writeVesselToFile(fstream& vesselFile, const Vessel& vessel) {
+    // Append a Vessel record to the end of vessel file
+    vesselFile.clear();
+    vesselFile.seekp(0, ios::end);
+    if (!vesselFile) {
+        cerr << "Error: Vessel file stream is not available for writing.\n";
+        return false;
+    }
+    vesselFile.write(reinterpret_cast<const char*>(&vessel), sizeof(Vessel));
+    vesselFile.flush();
     return true;
 }
 
-bool doesVesselExist(const string& vesselName) {
-    ifstream in(fileNameVessel, ios::binary);
-    if (!in) return false;
-
+bool doesVesselExist(fstream& vesselFile, const string& vesselName) {
+    vesselFile.clear();  // reset any EOF flags
+    vesselFile.seekg(0, ios::beg);
     Vessel temp;
-    while (in.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
-        if (temp.getName() == vesselName) return true;
+    while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
+        if (temp.getName() == vesselName) {
+            return true;
+        }
     }
     return false;
 }
 
-float readMaxRegularLength(const string& vesselName) {
-    ifstream in(fileNameVessel, ios::binary);
-    if (!in) return -1.0f;
-
+float readMaxRegularLength(fstream& vesselFile, const string& vesselName) {
+    vesselFile.clear(); // reset flags
+    vesselFile.seekg(0, ios::beg);
     Vessel temp;
-    while (in.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
-        if (temp.getName() == vesselName) return temp.getMaxSmall();
+    while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
+        if (temp.getName() == vesselName) {
+            return temp.getMaxSmall();
+        }
     }
     return -1.0f;
 }
 
-float readMaxSpecialLength(const string& vesselName) {
-    ifstream in(fileNameVessel, ios::binary);
-    if (!in) return -1.0f;
-
+float readMaxSpecialLength(fstream& vesselFile, const string& vesselName) {
+    vesselFile.clear();
+    vesselFile.seekg(0, ios::beg);
     Vessel temp;
-    while (in.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
-        if (temp.getName() == vesselName) return temp.getMaxBig();
+    while (vesselFile.read(reinterpret_cast<char*>(&temp), sizeof(Vessel))) {
+        if (temp.getName() == vesselName) {
+            return temp.getMaxBig();
+        }
     }
     return -1.0f;
 }
-

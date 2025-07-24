@@ -10,13 +10,14 @@ using namespace std;
 
 const string fileNameVehicle = "vehicle.dat";
 
-// Appends a new vehicle to the binary file
-bool appendVehicle(const Vehicle& vehicle);
+// Low-level Vehicle file operations:
+bool appendVehicle(fstream& vehicleFile, const Vehicle& vehicle);
+// Appends a new vehicle record to the vehicle file (open fstream).
 
-// Checks if a vehicle exists by license plate
-bool isVehicleExist(const string& licensePlate);
+bool isVehicleExist(fstream& vehicleFile, const string& licensePlate);
+// Checks if a vehicle with the given license plate exists in the open vehicle file.
 
-// Retrieves vehicle dimensions (length and height) by license plate
-bool getVehicleDimensions(const string& licensePlate, float& length, float& height);
+bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, float& length, float& height);
+// Finds a vehicle by license plate in the open file and outputs its length and height (returns true if found).
 
-#endif
+#endif // VEHICLEIO_H

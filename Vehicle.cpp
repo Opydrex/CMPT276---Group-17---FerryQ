@@ -13,79 +13,35 @@ This module contains Vehicle class implementation.
 #include <string>
 #include <sstream>
 #include <cstring>
-
 using namespace std;
 
-// Vehicle::Vehicle(const string& licensePlate,//input
-//                const float& height,//input
-//                const float& length//input
-// )
-// {
-//     this->licensePlate = licensePlate;
-//     this->height = height;
-//     this->length = length;
-// }
-
 Vehicle::Vehicle(const string& licensePlate, const float& height, const float& length) {
+    // Store licensePlate in fixed-size char array (ensure null termination)
     strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
     this->licensePlate[sizeof(this->licensePlate) - 1] = '\0';
-
     this->height = height;
     this->length = length;
 }
 
-void Vehicle::writeVehicle(ofstream& outFile) {
+void Vehicle::writeVehicle(fstream& outFile) {
     if (outFile.is_open()) {
+        outFile.clear();
+        outFile.seekp(0, ios::end);
         outFile.write(reinterpret_cast<const char*>(this), sizeof(Vehicle));
         outFile.flush();
-    }
-    else
-    {
-        cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
+    } else {
+        cerr << "Error: Unable to open vehicle file for writing." << endl;
     }
 }
-
-
-// bool isVehicleExist(const string& licensePlate, ifstream& inFile) {
-//     inFile.clear();
-//     inFile.seekg(0, ios::beg);
-
-//     Vehicle temp;
-//     while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
-//         if (licensePlate == temp.getLicensePlate()) {
-//             return true;
-//         }
-//     }
-
-//     return false;
-// }
-
-// void getVehicleDimensions(string licensePlate, string* length, string* height, ifstream& inFile) {
-//     inFile.clear();
-//     inFile.seekg(0, ios::beg);
-
-//     Vehicle temp;
-//     while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
-//         if (licensePlate == temp.getLicensePlate()) {
-//             *height = to_string(temp.getHeight());
-//             *length = to_string(temp.getLength());
-//             return;
-//         }
-//     }
-
-//     cout << "Vehicle not found." << endl;
-// }
 
 // Setters
 void Vehicle::setLicensePlate(const string& licensePlate) {
     strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
-    this->licensePlate[10] = '\0'; // Ensure null-termination
+    this->licensePlate[10] = '\0'; // ensure null-termination
 }
-
 void Vehicle::setHeight(float height) {
     this->height = height;
 }
-
 void Vehicle::setLength(float length) {
     this->length = length;
 }
@@ -94,11 +50,9 @@ void Vehicle::setLength(float length) {
 string Vehicle::getLicensePlate() const {
     return string(this->licensePlate);
 }
-
 float Vehicle::getHeight() const {
     return this->height;
 }
-
 float Vehicle::getLength() const {
     return this->length;
 }

@@ -13,147 +13,121 @@ This module contains Vessel class implementation.
 #include <string>
 #include <sstream>
 #include <cstring>
-
 using namespace std;
 
-// Vessel::Vessel(const string& name,//input
-//                const float& maxCapacitySmall,//input
-//                const float& maxCapacityBig//input
-//                )
-// {
-//     this->name = name;
-//     this->maxCapacitySmall = maxCapacitySmall;
-//     this->maxCapacityBig = maxCapacityBig;
-// }
+// Implementation of Vessel class functions:
+Vessel::Vessel(const string& name, const float& maxCapacitySmall, const float& maxCapacityBig) {
+    // Store name as fixed-length char array (ensure null-termination)
+    strncpy(this->name, name.c_str(), sizeof(this->name) - 1);
+    this->name[sizeof(this->name) - 1] = '\0';
+    this->maxCapacitySmall = maxCapacitySmall;
+    this->maxCapacityBig = maxCapacityBig;
+}
 
 
 
-// void Vessel::writeVessel(ofstream& outFile) {
-//     if (outFile.is_open()) {
-//         outFile.write(reinterpret_cast<const char*>(this), sizeof(Vessel));
-//         outFile.flush();
-//     }
-//     else
-//     {
-//         cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
-//     }
-// }
+// Setters
+void Vessel::setName(const string& name) {
+    strncpy(this->name, name.c_str(), sizeof(this->name) - 1);
+    this->name[25] = '\0'; // ensure null-termination (name[25] is last char slot)
+}
+void Vessel::setMaxCapacitySmall(float capSmall) {
+    this->maxCapacitySmall = capSmall;
+}
+void Vessel::setMaxCapacityBig(float capBig) {
+    this->maxCapacityBig = capBig;
+}
 
+// Getters
+string Vessel::getName() const {
+    return string(this->name);
+}
+float Vessel::getMaxSmall() const {
+    return this->maxCapacitySmall;
+}
+float Vessel::getMaxBig() const {
+    return this->maxCapacityBig;
+}
 
+// Mid-level Vessel module functions:
+void createVessel(fstream& inFile, fstream& outFile) {
+    // Prompt user for a new vessel's details and add to file
+    string name;
+    float maxCapacitySmall;
+    float maxCapacityBig;
+    string another;
+    string inputSmall, inputBig;
+    while (true) {
+        // Input Vessel name
+        while (true) {
+            cout << "Enter Vessel name (1 - 25 characters): ";
+            getline(cin >> ws, name);
+            if (name.empty()) return;  // allow cancel by empty input
+            if (name.length() > 25) {
+                cout << "Bad entry! Name is too long.\n";
+                continue;
+            }
+                if (isVesselExist(name, inFile)) {
+                    cout << "Error: A vessel named \"" << name << "\" already exists.\n";
+                    continue;
+            }
+            break;
+        }
+        // Input capacity for regular vehicles
+        while (true) {
+            cout << "Enter vessel capacity for regular vehicles (0 - " << maxLaneLength << " meters): ";
+            getline(cin >> ws, inputSmall);
+            if (inputSmall.empty()) return; 
+            stringstream ss(inputSmall);
+            if (ss >> maxCapacitySmall && maxCapacitySmall >= 0 && maxCapacitySmall <= maxLaneLength) {
+                break;
+            } else {
+                cout << "Bad entry! Please enter a number between 0 and " << maxLaneLength << ".\n";
+            }
+        }
+        // Input capacity for oversize vehicles
+        while (true) {
+            cout << "Enter vessel capacity for oversize vehicles (0 - " << maxLaneLength << " meters): ";
+            getline(cin >> ws, inputBig);
+            if (inputBig.empty()) return;
+            stringstream ss(inputBig);
+            if (ss >> maxCapacityBig && maxCapacityBig >= 0 && maxCapacityBig <= maxLaneLength) {
+                break;
+            } else {
+                cout << "Bad entry! Please enter a number between 0 and " << maxLaneLength << ".\n";
+            }
+        }
+        // Create Vessel object and append to file
+        Vessel v(name, maxCapacitySmall, maxCapacityBig);
+        v.writeVessel(outFile);  // write new vessel record to file
+        cout << "Vessel \"" << name << "\" created with capacities " 
+             << maxCapacitySmall << " (regular) and " << maxCapacityBig << " (oversize).\n";
+        cout << "Would you like to create another vessel? (Y/N): ";
+        cin >> another;
+        cin.ignore(1000, '\n');
+        if (another != "Y" && another != "y") {
+            return;
+        }
+    }
+}
 
-// CREATE QUEURY A SINGLE SAILING AND ALSO ADD IT TO THE MENU (EDIT THE USER MANUAL)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\
-
-
-
-
-bool isVesselExist(const string& name, ifstream& inFile) {
+bool isVesselExist(const string& name, fstream& inFile) {
+    // Search through open vessel file for matching vessel name
     inFile.clear();
     inFile.seekg(0, ios::beg);
-
     Vessel vesselRecord;
-
     while (inFile.read(reinterpret_cast<char*>(&vesselRecord), sizeof(Vessel))) {
         if (strncmp(vesselRecord.getName().c_str(), name.c_str(), 25) == 0) {
             return true;
         }
     }
-
     return false;
 }
 
-//==========================================================================
-// Vessel.cpp - Vessel class logic and user I/O
-//==========================================================================
-
-#include "Vessel.h"
-#include "VesselIO.h"
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstring>
-using namespace std;
-
-void createVessel() {
-    string name;
-    float maxCapacitySmall;
-    float maxCapacityBig;
-    string anotherVessel;
-    string inputForCapacities;
-    string inputForBigCapacities;
-
-    while (true) {
-        // Prompt for vessel name
-        while (true) {
-            cout << "Enter Vessel name (1 - 25 characters): ";
-            getline(cin >> ws, name);
-            if (name.empty()) return;
-
-            if (name.length() > 25) {
-                cout << "Bad entry! Please try again.\n";
-                continue;
-            }
-
-            if (doesVesselExist(name)) {
-                cout << "Error: Vessel with this name already exists. Please enter a unique name.\n";
-                continue;
-            }
-
-            break;
-        }
-
-        // Prompt for regular vehicle capacity
-        while (true) {
-            cout << "Enter vessel capacity for low vehicles (0 - 3,600 meters): ";
-            getline(cin >> ws, inputForCapacities);
-            if (inputForCapacities.empty()) return;
-
-            stringstream ss(inputForCapacities);
-            if (ss >> maxCapacitySmall && maxCapacitySmall > 0 && maxCapacitySmall <= maxLaneLength) {
-                break;
-            } else {
-                cout << "Bad entry! Please try again.\n";
-            }
-        }
-
-        // Prompt for special vehicle capacity
-        while (true) {
-            cout << "Enter vessel capacity for special vehicles (0 - 3,600 meters): ";
-            getline(cin >> ws, inputForBigCapacities);
-            if (inputForBigCapacities.empty()) return;
-
-            stringstream ss(inputForBigCapacities);
-            if (ss >> maxCapacityBig && maxCapacityBig > 0 && maxCapacityBig <= maxLaneLength) {
-                break;
-            } else {
-                cout << "Bad entry! Please try again.\n";
-            }
-        }
-
-        // Create vessel and write to file
-        Vessel v;
-        v.setName(name);
-        v.setMaxCapacitySmall(maxCapacitySmall);
-        v.setMaxCapacityBig(maxCapacityBig);
-        writeVesselToFile(v);
-
-        cout << "A vessel called " << name
-             << " with " << maxCapacitySmall
-             << " low vehicle capacity and "
-             << maxCapacityBig
-             << " special vehicle capacity has been created."
-             << " Would you like to create another vessel? (Y/N): ";
-
-        cin >> anotherVessel;
-        cin.ignore(1000, '\n');
-        if (anotherVessel != "Y") return;
-    }
-}
-
-
-float getMaxRegularLength(const string& vesselName, ifstream& inFile) {
+float getMaxRegularLength(const string& vesselName, fstream& inFile) {
+    // Retrieve maxCapacitySmall for specified vessel by scanning file
     inFile.clear();
     inFile.seekg(0, ios::beg);
-
     Vessel vessel;
     while (inFile.read(reinterpret_cast<char*>(&vessel), sizeof(Vessel))) {
         if (vesselName == vessel.getName()) {
@@ -163,44 +137,15 @@ float getMaxRegularLength(const string& vesselName, ifstream& inFile) {
     return -1.0f; // not found
 }
 
-
-
-float getMaxSpecialLength(const string& vesselName, ifstream& inFile) {
+float getMaxSpecialLength(const string& vesselName, fstream& inFile) {
+    // Retrieve maxCapacityBig for specified vessel
     inFile.clear();
     inFile.seekg(0, ios::beg);
-
     Vessel vessel;
     while (inFile.read(reinterpret_cast<char*>(&vessel), sizeof(Vessel))) {
         if (vesselName == vessel.getName()) {
             return vessel.getMaxBig();
         }
     }
-    return -1.0f; // not found
-}
-
-// Setters
-void Vessel::setName(const string& name) {
-    strncpy(this->name, name.c_str(), sizeof(this->name) - 1);
-    this->name[25] = '\0'; // ensure null-termination
-}
-
-void Vessel::setMaxCapacitySmall(float capSmall) {
-    this->maxCapacitySmall = capSmall;
-}
-
-void Vessel::setMaxCapacityBig(float capBig) {
-    this->maxCapacityBig = capBig;
-}
-
-// Getters
-string Vessel::getName() const {
-    return string(this->name);
-}
-
-float Vessel::getMaxSmall() const {
-    return this->maxCapacitySmall;
-}
-
-float Vessel::getMaxBig() const {
-    return this->maxCapacityBig;
+    return -1.0f;
 }

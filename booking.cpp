@@ -9,358 +9,314 @@ functions.
 ----------------------------------------------------------------------------
 */
 #include "Booking.h"
-#include "Sailing.h"
 #include "Vehicle.h"
+#include "Sailing.h"
 #include "BookingIO.h"
 #include "VehicleIO.h"
-#include <fstream>
 #include <iostream>
+#include <fstream>
 #include <cstring>
 #include <string>
 #include <sstream>
-
 using namespace std;
-
-// Booking::Booking(const string& licensePlate,//Input
-//                  const string& sailingId,//Input
-//                  const string& phoneNumber,//Input
-//                  const bool& checkedIn//Input 
-// )
-// {
-//     this->licensePlate = licensePlate;
-//     this->sailingId = sailingId;
-//     this->phoneNumber = phoneNumber;
-//     this->checkedIn = checkedIn;
-// }
 
 Booking::Booking(const string& licensePlate, const string& sailingId, const string& phoneNumber, const bool& checkedIn) {
     strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
     this->licensePlate[sizeof(this->licensePlate) - 1] = '\0';
-
     strncpy(this->sailingId, sailingId.c_str(), sizeof(this->sailingId) - 1);
     this->sailingId[sizeof(this->sailingId) - 1] = '\0';
-
     strncpy(this->phoneNumber, phoneNumber.c_str(), sizeof(this->phoneNumber) - 1);
     this->phoneNumber[sizeof(this->phoneNumber) - 1] = '\0';
-
     this->checkedIn = checkedIn;
 }
 
-// void Booking::writeBooking(ofstream& outFile) {
-//     if (outFile.is_open()) {
-//         outFile.write(reinterpret_cast<const char*>(this), sizeof(Booking));
-//         outFile.flush();
-//     } else {
-//         cerr << "Error: Unable to open file for writing. Check file path and permissions." << endl;
-//     }
-// }
+void Booking::writeBooking(fstream& outFile) {
+    if (outFile.is_open()) {
+        outFile.clear();
+        outFile.seekp(0, ios::end);
+        outFile.write(reinterpret_cast<const char*>(this), sizeof(Booking));
+        outFile.flush();
+    } else {
+        cerr << "Error: Unable to open booking file for writing." << endl;
+    }
+}
 
-void createBooking(ifstream& inFile, // Vehicle file
-                   ofstream& outFile, // Vehicle file (write)
-                   ifstream& sailingInFile) // Sailing file
-{
-    string vehicleLength = 0, vehicleHeight = 0;
-    float floatVehicleLength, floatVehicleHeight;
-    bool exitFlag = false;
-
+// Create a new booking by gathering user inputs and updating files
+void createBooking(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFile) {
+    string sailingId;
+    string licensePlate;
+    string phone;
+    // Prompt for valid SailingID
     while (true) {
-        string sailingID;
-        while (true) {
-            cout << "Enter SailingID (ccc-dd-dd): ";
-            getline(cin >> ws, sailingID);
-            if (sailingID.empty()) {
-                exitFlag = true;
+        cout << "Enter Sailing ID (ccc-dd-dd) or press Enter to cancel: ";
+        getline(cin >> ws, sailingId);
+        if (sailingId.empty()) return;
+        if (!isValidSailingID(sailingId)) {
+            cout << "Bad entry! Sailing ID format is ccc-dd-dd.\n";
+            continue;
+        }
+        if (!isSailingExist(sailingId, sailingFile)) {
+            cout << "Error: Sailing ID does not exist.\n";
+            continue;
+        }
+        break;
+    }
+    // Prompt for vehicle license plate
+    while (true) {
+        cout << "Enter vehicle license plate (3 - 10 characters) or press Enter to cancel: ";
+        getline(cin >> ws, licensePlate);
+        if (licensePlate.empty()) return;
+        if (licensePlate.length() < 3 || licensePlate.length() > 10) {
+            cout << "Bad entry! License plate must be 3-10 characters.\n";
+            continue;
+        }
+        // Ensure no existing booking with same sailing and vehicle
+        bookingFile.clear();
+        bookingFile.seekg(0, ios::beg);
+        Booking temp;
+        bool bookingFound = false;
+        while (bookingFile.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
+            if (string(temp.getSailingID()) == sailingId && string(temp.getLicensePlate()) == licensePlate) {
+                bookingFound = true;
                 break;
             }
-
-            if (sailingID.length() != 9 || sailingID[3] != '-' || sailingID[6] != '-' ||
-                !isalpha(sailingID[0]) || !isalpha(sailingID[1]) || !isalpha(sailingID[2]) ||
-                !isdigit(sailingID[4]) || !isdigit(sailingID[5]) ||
-                !isdigit(sailingID[7]) || !isdigit(sailingID[8])) {
-                cout << "SailingID format is incorrect. Try again or press Enter to exit.\n";
+        }
+        if (bookingFound) {
+            cout << "Error: A booking for that vehicle on this sailing already exists.\n";
+            continue;
+        }
+        break;
+    }
+    // Check if vehicle is already known in system
+    bool vehicleExists = isVehicleExist(vehicleFile, licensePlate);
+    float vehHeight = 0.0f, vehLength = 0.0f;
+    if (!vehicleExists) {
+        // Prompt for vehicle dimensions if new vehicle
+        string heightStr, lengthStr;
+        while (true) {
+            cout << "Enter vehicle height (up to " << maxHeight << " m): ";
+            getline(cin >> ws, heightStr);
+            if (heightStr.empty()) return;
+            try {
+                vehHeight = stof(heightStr);
+            } catch (...) {
+                vehHeight = -1.0f;
+            }
+            if (vehHeight < 0.0f || vehHeight > maxHeight) {
+                cout << "Bad entry! Height must be between 0 and " << maxHeight << " meters.\n";
                 continue;
             }
-
-            if (!isSailingExist(sailingID, sailingInFile)) {
-                cout << "SailingID does not exist! Try again or press Enter to exit.\n";
-                continue;
-            }
-
             break;
         }
-        if (exitFlag) break;
-
-        string licensePlate;
         while (true) {
-            cout << "Enter license plate number (3 - 10 characters): ";
-            getline(cin >> ws, licensePlate);
-            if (licensePlate.empty()) {
-                exitFlag = true;
-                break;
-            } else if (licensePlate.length() < 3 || licensePlate.length() > 10) {
-                cout << "License plate must be 3-10 characters. Try again or press Enter to exit.\n";
+            cout << "Enter vehicle length (up to " << maxLength << " m): ";
+            getline(cin >> ws, lengthStr);
+            if (lengthStr.empty()) return;
+            try {
+                vehLength = stof(lengthStr);
+            } catch (...) {
+                vehLength = -1.0f;
+            }
+            if (vehLength < 0.0f || vehLength > maxLength) {
+                cout << "Bad entry! Length must be between 0 and " << maxLength << " meters.\n";
                 continue;
             }
             break;
         }
-        if (exitFlag) break;
-
-        string phoneNumber;
-        while (true) {
-            cout << "Enter phone number (8 to 14 characters): ";
-            getline(cin >> ws, phoneNumber);
-            if (phoneNumber.length() < 8 || phoneNumber.length() > 14) {
-                cout << "Phone number must be 8–14 characters. Try again.\n";
-                continue;
-            }
-            break;
-        }
-
-        if (isVehicleExist(licensePlate)) {
-            getVehicleDimensions(licensePlate, floatVehicleLength, floatVehicleHeight);
-        } else {
-            while (true) {
-                cout << "Enter vehicle length (up to 99.9 meters): ";
-                getline(cin >> ws, vehicleLength);
-                floatVehicleLength = stof(vehicleLength);
-                if (floatVehicleLength < 0 || floatVehicleLength > 99.9) {
-                    cout << "Invalid length. Must be between 0 and 99.9\n";
-                    continue;
-                }
-                break;
-            }
-
-            while (true) {
-                cout << "Enter vehicle height (up to 9.9 meters): ";
-                getline(cin >> ws, vehicleHeight);
-                floatVehicleHeight = stof(vehicleHeight);
-                if (floatVehicleHeight < 0 || floatVehicleHeight > 9.9) {
-                    cout << "Invalid height. Must be between 0 and 9.9\n";
-                    continue;
-                }
-                break;
-            }
-
-            Vehicle newVehicle(licensePlate, floatVehicleHeight, floatVehicleLength);
-            newVehicle.writeVehicle(outFile); // still OK for now
-        }
-
-        // Create the booking
-        Booking newBooking(licensePlate, sailingID, phoneNumber, false);
-        if (!appendBookingRecord(newBooking)) {
-            cerr << "Error writing booking to file.\n";
-        }
-
-        cout << (stof(vehicleHeight) > maxHeightForRegularSizedVehicle || stof(vehicleLength) > maxLengthForRegularSizedVehicle
-                 ? "Special-sized"
-                 : "Normal-sized")
-             << " vehicle with license plate " << licensePlate << " has been booked for Sailing " << sailingID << ".\n";
-
-        cout << "Would you like to create another booking? (Y/N): ";
-        string yesNo;
-        cin >> yesNo;
-        if (yesNo != "Y" && yesNo != "y") break;
+    } else {
+        // Retrieve stored dimensions of existing vehicle
+        float storedLen, storedHt;
+        getVehicleDimensions(vehicleFile, licensePlate, storedLen, storedHt);
+        vehLength = storedLen;
+        vehHeight = storedHt;
+        cout << "Vehicle is known. Using stored dimensions: Height=" << vehHeight << "m, Length=" << vehLength << "m.\n";
     }
+    // Prompt for customer phone number
+    while (true) {
+        cout << "Enter customer phone number: ";
+        getline(cin >> ws, phone);
+        if (phone.empty()) return;
+        // Simple validation: require at least 7 digits in input
+        int digitCount = 0;
+        for (char c : phone) {
+            if (isdigit(c)) digitCount++;
+        }
+        if (digitCount < 7) {
+            cout << "Phone number format is incorrect (must contain at least 7 digits).\n";
+            continue;
+        }
+        break;
+    }
+    // Add new vehicle to file if it didn't exist
+    if (!vehicleExists) {
+        Vehicle newVeh(licensePlate, vehHeight, vehLength);
+        newVeh.writeVehicle(vehicleFile);
+    }
+    // Create new Booking and append to booking file
+    Booking newBooking(licensePlate, sailingId, phone, false);
+    newBooking.writeBooking(bookingFile);
+    cout << "Booking created successfully for vehicle " << licensePlate 
+         << " on sailing " << sailingId << ".\n";
 }
 
-bool isBookingExist(const string& sailingID, const string& licensePlate) {
-    Booking temp;
-    return loadBookingByKey(sailingID, licensePlate, temp);
-}
-
-float calculateFare(const float& length, // input
-                    const float& height  // input
-){
-    float totalExtra = 0;
-
-    if (length > maxLengthForRegularSizedVehicle) {
-        int extraLength = static_cast<int>(length - maxLengthForRegularSizedVehicle);
-        totalExtra += extraLength * extraPerMeterInLength;
-    }
-
-    if (height > maxHeightForRegularSizedVehicle) {
-        int extraHeight = static_cast<int>(height - maxHeightForRegularSizedVehicle);
-        totalExtra += extraHeight * extraPerMeterInHeight;
-    }
-
-    return regularSizedVehicleFare + totalExtra;
-}
-
-void checkIn(ifstream& inFileVehicle, ifstream& sailingInFile) {
+// Check-in process: mark an existing booking as checked-in (if found)
+void checkIn(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile) {
     string sailingID;
     bool exitFlag = false;
-
-    while (true) {
-        // Prompt for SailingID
+    while (!exitFlag) {
+        // Prompt for Sailing ID
         while (true) {
             cout << "Enter a SailingID (ccc-dd-dd): ";
             getline(cin >> ws, sailingID);
-
             if (sailingID.empty()) {
                 exitFlag = true;
                 break;
             }
-
-            if (sailingID.length() != 9 || sailingID[3] != '-' || sailingID[6] != '-' ||
-                !isalpha(sailingID[0]) || !isalpha(sailingID[1]) || !isalpha(sailingID[2]) ||
-                !isdigit(sailingID[4]) || !isdigit(sailingID[5]) ||
-                !isdigit(sailingID[7]) || !isdigit(sailingID[8])) {
-                cout << "SailingID format is incorrect. Please try again, or press Enter to exit\n";
+            if (!isValidSailingID(sailingID)) {
+                cout << "SailingID format is incorrect. Try again or press Enter to exit.\n";
                 continue;
             }
-
-            if (!isSailingExist(sailingID, sailingInFile)) {
-                cout << "SailingID does not exist! Please try again, or press Enter to exit\n";
+            if (!isSailingExist(sailingID, sailingFile)) {
+                cout << "SailingID does not exist! Try again or press Enter to exit.\n";
                 continue;
             }
-
             break;
         }
-
         if (exitFlag) break;
-
+        // Prompt for vehicle license plate to check in
         string licensePlate;
         while (true) {
             cout << "Enter the vehicle's license plate (3 - 10 characters): ";
             getline(cin >> ws, licensePlate);
-
             if (licensePlate.empty()) {
                 exitFlag = true;
                 break;
             }
-
             if (licensePlate.length() < 3 || licensePlate.length() > 10) {
-                cout << "License plate format is incorrect. Please try again, or press Enter to exit\n";
+                cout << "License plate format is incorrect. Try again or press Enter to exit.\n";
                 continue;
             }
-
+            // Find matching booking in file
             Booking match;
-            if (!loadBookingByKey(sailingID, licensePlate, match)) {
-                cout << "License plate does not have an associated booking. Try another or press Enter to exit.\n";
+            bookingFile.clear();
+            bookingFile.seekg(0, ios::beg);
+            bool bookingFound = false;
+            while (bookingFile.read(reinterpret_cast<char*>(&match), sizeof(Booking))) {
+                if (string(match.getSailingID()) == sailingID && string(match.getLicensePlate()) == licensePlate && !match.getCheckedIn()) {
+                    bookingFound = true;
+                    break;
+                }
+            }
+            if (!bookingFound) {
+                cout << "No active booking for that license plate on this sailing. Try again or press Enter to exit.\n";
                 continue;
             }
-
-            // Calculate fare
+            // Calculate fare using vehicle dimensions
             float vLength, vHeight;
-            if (!getVehicleDimensions(licensePlate, vLength, vHeight)) {
-                cout << "Vehicle not found. Cannot calculate fare.\n";
+            if (!getVehicleDimensions(vehicleFile, licensePlate, vLength, vHeight)) {
+                cout << "Vehicle not found in database. Cannot calculate fare.\n";
                 continue;
             }
-
-            cout << "The fare is " << calculateFare(vLength, vHeight)
-                << ". Press <enter> once it has been collected. ";
+            float fare = calculateFare(vLength, vHeight);
+            cout << "The fare is " << fare << ". Press <enter> once collected.";
             string dummy;
             getline(cin, dummy);
-            // Update booking: delete old and write new with checkedIn = true
+            // Update booking status: remove old record and add new record with checkedIn=true
             deleteBookingRecord(sailingID, licensePlate);
-
-            Booking updated(
-                match.getLicensePlate(),
-                match.getSailingID(),
-                match.getPhoneNumber(),
-                true
-            );
-
+            Booking updated(match.getLicensePlate(), match.getSailingID(), match.getPhoneNumber(), true);
             appendBookingRecord(updated);
+            cout << "Booking for " << licensePlate << " on " << sailingID << " is now checked in.\n";
             break;
         }
-
         if (exitFlag) break;
     }
 }
 
+bool isBookingExist(const string& sailingId, const string& licensePlate, fstream& inFile) {
+    // Linear search in booking file for a matching record
+    inFile.clear();
+    inFile.seekg(0, ios::beg);
+    Booking temp;
+    while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
+        if (string(temp.getSailingID()) == sailingId && string(temp.getLicensePlate()) == licensePlate) {
+            return true;
+        }
+    }
+    return false;
+}
 
 void promptToDeleteBooking() {
     string sailingId, licensePlate;
-
-    // Prompt for sailing ID
+    // Prompt for Sailing ID
     while (true) {
         cout << "Enter Sailing ID (ccc-dd-dd): ";
         getline(cin >> ws, sailingId);
         if (sailingId.empty()) return;
-
-        if (sailingId.length() != 9 || sailingId[3] != '-' || sailingId[6] != '-' ||
-            !isalpha(sailingId[0]) || !isalpha(sailingId[1]) || !isalpha(sailingId[2]) ||
-            !isdigit(sailingId[4]) || !isdigit(sailingId[5]) ||
-            !isdigit(sailingId[7]) || !isdigit(sailingId[8])) {
+        if (!isValidSailingID(sailingId)) {
             cout << "Bad entry! Sailing ID must follow the format ccc-dd-dd.\n";
         } else {
             break;
         }
     }
-
+    // Prompt for license plate
     while (true) {
         cout << "Enter license plate number (3 - 10 characters): ";
         getline(cin >> ws, licensePlate);
         if (licensePlate.empty()) return;
-
         if (licensePlate.length() < 3 || licensePlate.length() > 10) {
             cout << "Bad entry! License plate must be between 3 and 10 characters.\n";
         } else {
             break;
         }
     }
-
-    // Internal file I/O and deletion
-    ifstream in(fileNameBooking, ios::binary);
-    ofstream out("booking_tmp.dat", ios::binary | ios::trunc);
-    if (!in || !out) {
-        cerr << "Error opening booking file.\n";
-        return;
-    }
-
-    Booking temp;
-    bool found = false;
-    while (in.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
-        if (temp.getSailingID() == sailingId && temp.getLicensePlate() == licensePlate) {
-            found = true;
-            continue;
-        }
-        out.write(reinterpret_cast<const char*>(&temp), sizeof(Booking));
-    }
-
-    in.close();
-    out.close();
-    remove(fileNameBooking.c_str());
-    rename("booking_tmp.dat", fileNameBooking.c_str());
-
-    cout << (found ? "Booking has been successfully deleted.\n"
-                   : "Booking not found.\n");
+    // Use low-level function to delete matching booking record
+    bool result = deleteBookingRecord(sailingId, licensePlate);
+    cout << (result ? "Booking has been successfully deleted.\n" : "Booking not found.\n");
 }
 
-// Setters
+// Fare calculation for a booking (base fare + extras for oversize)
+float calculateFare(const float& length, const float& height) {
+    float totalExtra = 0.0;
+    // Charge extra per meter for length beyond regular threshold
+    if (length > maxLengthForRegularSizedVehicle) {
+        int extraLengthMeters = static_cast<int>(length - maxLengthForRegularSizedVehicle);
+        totalExtra += extraLengthMeters * extraPerMeterInLength;
+    }
+    // Charge extra per meter for height beyond regular threshold
+    if (height > maxHeightForRegularSizedVehicle) {
+        int extraHeightMeters = static_cast<int>(height - maxHeightForRegularSizedVehicle);
+        totalExtra += extraHeightMeters * extraPerMeterInHeight;
+    }
+    return regularSizedVehicleFare + totalExtra;
+}
+
+// Setters for Booking class:
 void Booking::setSailingID(const string& id) {
     strncpy(this->sailingId, id.c_str(), sizeof(this->sailingId) - 1);
     this->sailingId[sizeof(this->sailingId) - 1] = '\0';
 }
-
 void Booking::setLicensePlate(const string& plate) {
     strncpy(this->licensePlate, plate.c_str(), sizeof(this->licensePlate) - 1);
     this->licensePlate[sizeof(this->licensePlate) - 1] = '\0';
 }
-
 void Booking::setPhoneNumber(const string& phone) {
     strncpy(this->phoneNumber, phone.c_str(), sizeof(this->phoneNumber) - 1);
     this->phoneNumber[sizeof(this->phoneNumber) - 1] = '\0';
 }
-
 void Booking::setCheckedIn(bool status) {
     this->checkedIn = status;
 }
 
-// Getters
+// Getters for Booking:
 string Booking::getSailingID() const {
     return sailingId;
 }
-
 string Booking::getLicensePlate() const {
     return licensePlate;
 }
-
 string Booking::getPhoneNumber() const {
     return phoneNumber;
 }
-
 bool Booking::getCheckedIn() const {
     return checkedIn;
 }
