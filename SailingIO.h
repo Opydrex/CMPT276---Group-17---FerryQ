@@ -1,23 +1,30 @@
-//==========================================================================
-// SailingIO.h
-// Rev.1 - 24/07/2025 - Handles all file-level binary I/O for Sailings
-//==========================================================================
+//======================== SailingIO.h ========================
+// Handles all file-level binary I/O for Sailings using provided streams
 
 #ifndef SAILING_IO_H
 #define SAILING_IO_H
 
+#include "Sailing.h"
 #include <fstream>
 #include <string>
-#include <io.h>
-#include "Sailing.h"
 using namespace std;
 
-// Low-level sailing file operations:
-int findSailingIndexByID(const string& id);
-bool loadSailingByIndex(int index, Sailing& result);
-bool appendSailingRecord(const Sailing& record);
-bool writeSailingByIndex(int index, const Sailing& data);
-int countSailingRecords();
-bool deleteSailingByID(const string& sailingID, fstream& ioFile);
+// Finds index of a sailing record in the open binary stream
+int findSailingIndexByID(fstream& inFile, const string& id);
+
+// Appends a Sailing record to an already-open binary stream
+bool appendSailingRecord(fstream& outFile, const Sailing& record);
+
+// Loads a Sailing record by index from an open binary stream
+bool loadSailingByIndex(fstream& inFile, int index, Sailing& result);
+
+// Overwrites a Sailing record at given index in an open binary stream
+bool writeSailingByIndex(fstream& ioFile, int index, const Sailing& data);
+
+// Returns number of records in an open binary stream
+int countSailingRecords(fstream& inFile);
+
+// Deletes a Sailing by ID in an open fstream (in/out)
+bool deleteSailingByID(fstream& ioFile, const string& sailingID);
 
 #endif // SAILING_IO_H

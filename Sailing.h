@@ -18,7 +18,7 @@ using namespace std;
 
 const int maxSailingDay = 31;
 const int maxSailingHour = 23;
-const string fileNameSailing = "sailing.dat";
+const string fileNameSailing = "sailing.txt";
 
 class Sailing {
     public:

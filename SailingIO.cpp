@@ -1,58 +1,75 @@
-//==========================================================================
-// SailingIO.cpp - Handles file I/O operations for Sailing records
-//==========================================================================
+//======================== SailingIO.cpp ========================
+// Implements file I/O operations for Sailing records using provided streams
 
 #include "SailingIO.h"
-#include "Sailing.h"
-#include <fstream>
-#include <cstdio>
-#include <io.h>
-#include <fcntl.h>
-#include <iostream>
-#include <unistd.h>
+#include <cstdio>    // for truncate
 using namespace std;
 
-// (Low-level functions like appendSailingRecord, truncateSailingFile, loadSailingByIndex etc. 
-// remain similar to original implementation, managing binary records via fstreams.)
-bool appendSailingRecord(const Sailing& record) {
-    ofstream outFile(fileNameSailing, ios::binary | ios::app);
-    if (!outFile) return false;
-    outFile.write(reinterpret_cast<const char*>(&record), sizeof(Sailing));
-    return true;
-}
-
-// ... (Other functions not shown for brevity, but would include findSailingIndexByID, loadSailingByIndex, countSailingRecords, etc.)
-
-bool deleteSailingByID(const string& sailingID, fstream& ioFile) {
-    ioFile.clear();
-    ioFile.seekg(0, ios::beg);
+int findSailingIndexByID(fstream& inFile, const string& id) {
+    inFile.clear();
+    inFile.seekg(0, ios::beg);
     Sailing temp;
     int index = 0;
-    int targetIndex = -1;
-    int lastIndex = -1;
-    // Find target record index and track last index
-    while (ioFile.read(reinterpret_cast<char*>(&temp), sizeof(Sailing))) {
-        if (temp.getSailingID() == sailingID) {
-            targetIndex = index;
-        }
-        lastIndex = index;
-        index++;
+    while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Sailing))) {
+        if (temp.getSailingID() == id) return index;
+        ++index;
     }
-    if (targetIndex == -1) {
-        return false;  // not found
-    }
-    // If target isn't last record, replace it with last record
-    if (targetIndex != lastIndex) {
+    return -1;
+}
+
+bool appendSailingRecord(fstream& outFile, const Sailing& record) {
+    if (!outFile) return false;
+    outFile.clear();
+    outFile.seekp(0, ios::end);
+    outFile.write(reinterpret_cast<const char*>(&record), sizeof(Sailing));
+    return outFile.good();
+}
+
+bool loadSailingByIndex(fstream& inFile, int index, Sailing& result) {
+    if (!inFile) return false;
+    inFile.clear();
+    inFile.seekg(index * sizeof(Sailing), ios::beg);
+    inFile.read(reinterpret_cast<char*>(&result), sizeof(Sailing));
+    return inFile.gcount() == sizeof(Sailing);
+}
+
+bool writeSailingByIndex(fstream& ioFile, int index, const Sailing& data) {
+    if (!ioFile) return false;
+    ioFile.clear();
+    ioFile.seekp(index * sizeof(Sailing), ios::beg);
+    ioFile.write(reinterpret_cast<const char*>(&data), sizeof(Sailing));
+    return ioFile.good();
+}
+
+int countSailingRecords(fstream& inFile) {
+    if (!inFile) return 0;
+    inFile.clear();
+    inFile.seekg(0, ios::end);
+    streampos size = inFile.tellg();
+    return static_cast<int>(size / sizeof(Sailing));
+}
+
+bool deleteSailingByID(fstream& ioFile, const string& sailingID) {
+    // find target index
+    int target = findSailingIndexByID(ioFile, sailingID);
+    if (target < 0) return false;
+
+    int total = countSailingRecords(ioFile);
+    int lastIndex = total - 1;
+
+    Sailing lastRec;
+    if (target != lastIndex) {
+        // read last record
         ioFile.clear();
         ioFile.seekg(lastIndex * sizeof(Sailing), ios::beg);
-        ioFile.read(reinterpret_cast<char*>(&temp), sizeof(Sailing));
+        ioFile.read(reinterpret_cast<char*>(&lastRec), sizeof(Sailing));
+        // overwrite target
         ioFile.clear();
-        ioFile.seekp(targetIndex * sizeof(Sailing), ios::beg);
-        ioFile.write(reinterpret_cast<const char*>(&temp), sizeof(Sailing));
+        ioFile.seekp(target * sizeof(Sailing), ios::beg);
+        ioFile.write(reinterpret_cast<const char*>(&lastRec), sizeof(Sailing));
     }
-    // Truncate file to remove last record
+    // truncate file
     ioFile.close();
     long newSize = lastIndex * sizeof(Sailing);
-    truncate(fileNameSailing.c_str(), newSize);
-    return true;
+    return truncate("sailing.dat", newSize) == 0;
 }
