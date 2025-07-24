@@ -115,7 +115,7 @@ void createBooking(fstream& vehicleFile,
             break;
         }
         Vehicle v(plate, height, length);
-        if (!appendVehicle(vehicleFile, v)) {
+        if (!writeVehicle(vehicleFile, v)) {
             cerr << "Error: Unable to append vehicle record." << endl;
         }
     } else {
