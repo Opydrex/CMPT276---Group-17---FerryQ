@@ -18,38 +18,38 @@ using namespace std;
 void createVessel(fstream& vesselFile) {
     string name;
     while (true) {
-        cout << "Enter Vessel name (1-25 chars): ";
+        cout << "Enter Vessel name (1-25 characters): ";
         getline(cin >> ws, name);
         if (name.empty()) return;
         if (name.size() > 25) {
-            cout << "Name too long. Try again." << endl;
+            cout << "Vessel name is too long. Try again." << endl;
             continue;
         }
         if (doesVesselExist(vesselFile, name)) {
-            cout << "Vessel exists. Enter a unique name." << endl;
+            cout << "Vessel already exists. Enter a unique name." << endl;
             continue;
         }
         break;
     }
 
     float capSmall = 0.0f, capBig = 0.0f;
-    string input;
-
+    string inputForLow;
+    string inputForSpecial;
     // Regular capacity
     while (true) {
-        cout << "Enter regular capacity (0-" << maxLaneLength << "): ";
-        getline(cin >> ws, input);
-        if (input.empty()) return;
-        stringstream ss(input);
+        cout << "Enter vessel capacity for low vehicles (0-" << maxLaneLength << "): ";
+        getline(cin >> ws, inputForLow);
+        if (inputForLow.empty()) return;
+        stringstream ss(inputForLow);
         if (ss >> capSmall && capSmall >= 0 && capSmall <= maxLaneLength) break;
         cout << "Invalid. Try again." << endl;
     }
     // Special capacity
     while (true) {
-        cout << "Enter special capacity (0-" << maxLaneLength << "): ";
-        getline(cin >> ws, input);
-        if (input.empty()) return;
-        stringstream ss(input);
+        cout << "Enter vessel capacity for special vehicles (0-" << maxLaneLength << "): ";
+        getline(cin >> ws, inputForSpecial);
+        if (inputForSpecial.empty()) return;
+        stringstream ss(inputForSpecial);
         if (ss >> capBig && capBig >= 0 && capBig <= maxLaneLength) break;
         cout << "Invalid. Try again." << endl;
     }
@@ -59,8 +59,12 @@ void createVessel(fstream& vesselFile) {
         cerr << "Error writing vessel to file." << endl;
         return;
     }
-    cout << "Created vessel " << name << "." << endl;
-    cout << "Create another? (Y/N): ";
+    cout << "A vessel called " << name
+         << " with " << inputForLow
+         << " low vehicle capacity and "
+         << inputForSpecial
+         << " special vehicle capacity has been created."
+         << " Would you like to create another vessel? (Y/N): ";
     string resp;
     getline(cin >> ws, resp);
     if (!resp.empty() && (resp[0]=='Y'||resp[0]=='y'))

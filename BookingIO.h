@@ -13,7 +13,7 @@ using namespace std;
 
 
 // Appends a booking to the file
-bool appendBookingRecord(const Booking&, std::fstream&);
+bool writeBooking(const Booking&, std::fstream&);
 
 // Deletes a booking by SailingID and License Plate
 bool deleteBookingRecord(const string&, const string&, std::fstream&);
