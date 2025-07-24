@@ -8,6 +8,7 @@
 #include <fstream>
 #include <string>
 using namespace std;
+const int RECORD_SIZE = 12 + 25 + sizeof(float) * 2;  // 45 bytes
 
 // Finds index of a sailing record in the open binary stream
 int findSailingIndexByID(fstream& inFile, const string& id);

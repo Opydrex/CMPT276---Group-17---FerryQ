@@ -22,7 +22,7 @@ const string fileNameSailing = "sailing.txt";
 
 class Sailing {
     public:
-        Sailing() = default;
+        Sailing() : sailingID{0}, vesselName{0}, currentCapacitySmall(0), currentCapacityBig(0) {}
 
         // File I/O
         void writeSailing(fstream& outFile);
@@ -62,7 +62,7 @@ bool deleteSailing(fstream& sailingFile);
 // Usage: Called from Sailings menu. Uses open sailing file and calls booking deletion functions.
 // Returns: true if a record was deleted, false if not found.
 
-bool isSailingExist(const string& sailingId, fstream& sailingFile);
+// bool isSailingExist(const string& sailingId, fstream& sailingFile);
 // Job: Checks if a given SailingID exists in the open sailing file.
 // Usage: Used to validate Sailing existence (e.g., when creating booking or check-in).
 // Returns: true if found, false if not.

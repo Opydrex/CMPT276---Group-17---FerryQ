@@ -176,26 +176,34 @@ void printReport(fstream& sailingFile) {
 void querySailing(fstream& sailingFile) {
     while (true) {
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
-        string sid; getline(cin >> ws, sid);
+        string sid; 
+        getline(cin >> ws, sid);
         if (sid.empty() || !isValidSailingID(sid)) return;
-        Sailing s;
-        sailingFile.clear(); sailingFile.seekg(0, ios::beg);
-        if (findSailingIndexByID(sailingFile, sid)) {
-            cout << "== Sailing Details ==" << endl;
+
+        int idx = findSailingIndexByID(sailingFile, sid);
+        if (idx >= 0) {
+            Sailing s;
+            if (!loadSailingByIndex(sailingFile, idx, s)) {
+                cout << "Error reading sailing data.\n";
+                return;
+            }
+            cout << "== Sailing Details ==\n";
             printSailingReportHeader();
-            cout << setw(4) << "1) "
-                 << left  << setw(12) << s.getSailingID() << " "
+            cout << setw(4) << "1) " 
+                 << left << setw(12) << s.getSailingID() << " "
                  << setw(24) << s.getVesselName() << " "
                  << setw(6)  << fixed << setprecision(1) << s.getCurrentCapacitySmall() << " "
                  << setw(6)  << s.getCurrentCapacityBig() << " "
                  << setw(14) << 0 << " "
-                 << setw(13) << "0%" << endl;
+                 << setw(13) << "0%" << "\n";
         } else {
-            cout << "No sailing " << sid << " found." << endl;
+            cout << "No sailing " << sid << " found.\n";
         }
         cout << "Query another? (Y/N): ";
-        string r; getline(cin >> ws, r);
-        if (r.empty() || (r[0]!='Y' && r[0]!='y')) break;
+        string r; 
+        getline(cin >> ws, r);
+        if (r.empty() || (r[0]!='Y' && r[0]!='y')) 
+            break;
     }
 }
 

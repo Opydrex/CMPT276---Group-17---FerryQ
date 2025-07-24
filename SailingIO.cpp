@@ -1,12 +1,25 @@
-//======================== SailingIO.cpp ========================
+// SailingIO.cpp
 // Implements file I/O operations for Sailing records using provided streams
 
 #include "SailingIO.h"
 #include <cstdio>    // for truncate
+#include <fstream>
 extern "C" int truncate(const char* path, long long length);
 using namespace std;
 
+// Append a Sailing record to the end of the open binary file
+bool appendSailingRecord(fstream& outFile, const Sailing& record) {
+    if (!outFile.is_open()) return false;
+    outFile.clear();
+    outFile.seekp(0, ios::end);
+    outFile.write(reinterpret_cast<const char*>(&record), sizeof(Sailing));
+    outFile.flush();
+    return outFile.good();
+}
+
+// Find index of a Sailing record by ID; returns -1 if not found
 int findSailingIndexByID(fstream& inFile, const string& id) {
+    if (!inFile.is_open()) return -1;
     inFile.clear();
     inFile.seekg(0, ios::beg);
     Sailing temp;
@@ -18,63 +31,59 @@ int findSailingIndexByID(fstream& inFile, const string& id) {
     return -1;
 }
 
-bool appendSailingRecord(fstream& outFile, const Sailing& record) {
-    outFile.clear();
-    outFile.seekp(0, ios::end);
-    if (!outFile) {
-        cerr << "appendSailingRecord: file stream not open." << endl;
-        return false;
-    }
-    outFile.write(reinterpret_cast<const char*>(&record), sizeof(Sailing));
-    outFile.flush();  // Ensure the data is written
-    return outFile.good();
-}
-
+// Load the Sailing record at the given index
 bool loadSailingByIndex(fstream& inFile, int index, Sailing& result) {
-    if (!inFile) return false;
+    if (!inFile.is_open()) return false;
     inFile.clear();
-    inFile.seekg(index * sizeof(Sailing), ios::beg);
+    inFile.seekg(static_cast<streampos>(index) * sizeof(Sailing), ios::beg);
     inFile.read(reinterpret_cast<char*>(&result), sizeof(Sailing));
     return inFile.gcount() == sizeof(Sailing);
 }
 
+// Overwrite a Sailing record at the given index
 bool writeSailingByIndex(fstream& ioFile, int index, const Sailing& data) {
-    if (!ioFile) return false;
+    if (!ioFile.is_open()) return false;
     ioFile.clear();
-    ioFile.seekp(index * sizeof(Sailing), ios::beg);
+    ioFile.seekp(static_cast<streampos>(index) * sizeof(Sailing), ios::beg);
     ioFile.write(reinterpret_cast<const char*>(&data), sizeof(Sailing));
+    ioFile.flush();
     return ioFile.good();
 }
 
+// Return the number of Sailing records in the open binary file
 int countSailingRecords(fstream& inFile) {
-    if (!inFile) return 0;
+    if (!inFile.is_open()) return 0;
     inFile.clear();
     inFile.seekg(0, ios::end);
     streampos size = inFile.tellg();
     return static_cast<int>(size / sizeof(Sailing));
 }
 
+// Delete a Sailing record by ID by moving the last record into its place and truncating the file
 bool deleteSailingByID(fstream& ioFile, const string& sailingID) {
-    // find target index
     int target = findSailingIndexByID(ioFile, sailingID);
     if (target < 0) return false;
 
     int total = countSailingRecords(ioFile);
     int lastIndex = total - 1;
-
     Sailing lastRec;
     if (target != lastIndex) {
-        // read last record
+        if (!loadSailingByIndex(ioFile, lastIndex, lastRec)) return false;
         ioFile.clear();
-        ioFile.seekg(lastIndex * sizeof(Sailing), ios::beg);
-        ioFile.read(reinterpret_cast<char*>(&lastRec), sizeof(Sailing));
-        // overwrite target
-        ioFile.clear();
-        ioFile.seekp(target * sizeof(Sailing), ios::beg);
+        ioFile.seekp(static_cast<streampos>(target) * sizeof(Sailing), ios::beg);
         ioFile.write(reinterpret_cast<const char*>(&lastRec), sizeof(Sailing));
+        ioFile.flush();
     }
-    // truncate file
+
+    // Close the fstream so we can truncate on disk
     ioFile.close();
-    long newSize = lastIndex * sizeof(Sailing);
-    return truncate("sailing.txt", newSize) == 0;
+
+    long newSize = static_cast<long>(lastIndex) * static_cast<long>(sizeof(Sailing));
+    if (truncate(fileNameSailing.c_str(), newSize) != 0) {
+        return false;
+    }
+
+    // Now reopen exactly as you did in main():
+    ioFile.open(fileNameSailing, ios::in | ios::out | ios::binary);
+    return ioFile.is_open();
 }
