@@ -1,3 +1,4 @@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //==========================================================================
 //==========================================================================
 /*
@@ -53,9 +54,13 @@ bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle);
 // Restrictions: Only call if vehicle does not already exist in file.
 
 bool isVehicleExist(fstream& vehicleFile, const string& licensePlate);
-// Checks if a vehicle with the given license plate exists in the open vehicle file.
+// Job: Checks if the vehicle exists in the text file.
+// Usage: Called when adding a new vehicle to file.
+// Restrictions: vehicle file must be open. license plate has to be in range
 
 bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, float& length, float& height);
-// Finds a vehicle by license plate in the open file and outputs its length and height (returns true if found).
+// Job: Getter for vehicle dimensions.
+// Usage: Called while creating a Sailings report. Or when fare is calculated
+// Restrictions: vehicle file must be open. license plate has to be in range, vehicle must exist
 
 #endif // VEHICLE_H
