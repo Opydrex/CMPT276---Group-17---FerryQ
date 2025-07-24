@@ -27,42 +27,42 @@ Design notes:
 using namespace std;
 
 //----------------------------------------------------------------------------
-// Constructor: initializes a Vehicle object with license, height, and length.
-Vehicle::Vehicle(const string& licensePlate, const float& height, const float& length) {
+//Constructor: initializes a Vehicle object with license, height, and length.
+Vehicle::Vehicle(const string& licensePlate, const float& height, const float& length){
     strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
-    this->licensePlate[sizeof(this->licensePlate) - 1] = '\0'; // Null-terminate
+    this->licensePlate[sizeof(this->licensePlate) - 1] = '\0'; //Null-terminate
     this->height = height;
     this->length = length;
 }
 
 //----------------------------------------------------------------------------
-// Appends a vehicle record to the end of the vehicle file.
-// Returns true if successful.
-bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle) {
-    vehicleFile.clear();                       // Clear EOF or fail flags
-    vehicleFile.seekp(0, ios::end);            // Move to end to append
+//Appends a vehicle record to the end of the vehicle file.
+//Returns true if successful.
+bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle){
+    vehicleFile.clear();                       //Clear EOF or fail flags
+    vehicleFile.seekp(0, ios::end);            //Move to end to append
 
-    if (!vehicleFile) {
+    if (!vehicleFile){
         cerr << "Error: Vehicle file stream not available for writing.\n";
         return false;
     }
 
     vehicleFile.write(reinterpret_cast<const char*>(&vehicle), sizeof(Vehicle));
-    vehicleFile.flush();                       // Ensure it's written to disk
+    vehicleFile.flush();                       //Ensure it's written to disk
     return true;
 }
 
 //----------------------------------------------------------------------------
-// Checks if a vehicle with the given license plate exists in the file.
-// Returns true if found.
-bool isVehicleExist(fstream& vehicleFile, const string& licensePlate) {
+//Checks if a vehicle with the given license plate exists in the file.
+//Returns true if found.
+bool isVehicleExist(fstream& vehicleFile, const string& licensePlate){
     vehicleFile.clear();
     vehicleFile.seekg(0, ios::beg);
     Vehicle temp;
 
-    // Linear search through all records
-    while (vehicleFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
-        if (temp.getLicensePlate() == licensePlate) {
+    //Linear search through all records
+    while (vehicleFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))){
+        if (temp.getLicensePlate() == licensePlate){
             return true;
         }
     }
@@ -70,16 +70,16 @@ bool isVehicleExist(fstream& vehicleFile, const string& licensePlate) {
 }
 
 //----------------------------------------------------------------------------
-// Retrieves the dimensions of a vehicle by license plate.
-// Stores the length and height in output parameters and returns true if found.
-bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, float& length, float& height) {
+//Retrieves the dimensions of a vehicle by license plate.
+//Stores the length and height in output parameters and returns true if found.
+bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, float& length, float& height){
     vehicleFile.clear();
     vehicleFile.seekg(0, ios::beg);
     Vehicle temp;
 
-    // Search each record for a match
-    while (vehicleFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))) {
-        if (temp.getLicensePlate() == licensePlate) {
+    //Search each record for a match
+    while (vehicleFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))){
+        if (temp.getLicensePlate() == licensePlate){
             length = temp.getLength();
             height = temp.getHeight();
             return true;
@@ -89,39 +89,39 @@ bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, floa
 }
 
 //----------------------------------------------------------------------------
-// Setters
+//Setters
 
-// Sets the license plate string (fixed-size char array).
-void Vehicle::setLicensePlate(const string& licensePlate) {
+//Sets the license plate string (fixed-size char array).
+void Vehicle::setLicensePlate(const string& licensePlate){
     strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
-    this->licensePlate[10] = '\0'; // Null-terminate
+    this->licensePlate[10] = '\0'; //Null-terminate
 }
 
-// Sets the height of the vehicle.
-void Vehicle::setHeight(float height) {
+//Sets the height of the vehicle.
+void Vehicle::setHeight(float height){
     this->height = height;
 }
 
-// Sets the length of the vehicle.
-void Vehicle::setLength(float length) {
+//Sets the length of the vehicle.
+void Vehicle::setLength(float length){
     this->length = length;
 }
 
 //----------------------------------------------------------------------------
-// Getters
+//Getters
 
-// Returns the license plate as a std::string.
-string Vehicle::getLicensePlate() const {
+//Returns the license plate as a std::string.
+string Vehicle::getLicensePlate() const{
     return string(this->licensePlate);
 }
 
-// Returns the height of the vehicle.
-float Vehicle::getHeight() const {
+//Returns the height of the vehicle.
+float Vehicle::getHeight() const{
     return this->height;
 }
 
-// Returns the length of the vehicle.
-float Vehicle::getLength() const {
+//Returns the length of the vehicle.
+float Vehicle::getLength() const{
     return this->length;
 }
 

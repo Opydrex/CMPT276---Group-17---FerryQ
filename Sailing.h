@@ -1,10 +1,13 @@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //==========================================================================
 //==========================================================================
+
 /*
 MODULE NAME: Sailing.h
 Rev.1 - 09/07/2025 - Sailing class header created
 ----------------------------------------------------------------------------
-This module contains functions and implementations related to Sailings.
+This module contains the Sailing class and high-level operations related to
+creating, deleting, and querying sailing records using binary file I/O.
 ----------------------------------------------------------------------------
 */
 
@@ -16,68 +19,71 @@ This module contains functions and implementations related to Sailings.
 #include <fstream>
 using namespace std;
 
-const int maxSailingDay = 31;
-const int maxSailingHour = 23;
-const string fileNameSailing = "sailing.txt";
+//Constants used for sailing validation and file name
+const int maxSailingDay = 31;              //Max valid day (1–31)
+const int maxSailingHour = 23;             //Max valid hour (0–23)
+const string fileNameSailing = "sailing.txt"; //Path to sailing file
 
-class Sailing {
-    public:
-        Sailing() : sailingID{0}, vesselName{0}, currentCapacitySmall(0), currentCapacityBig(0) {}
+//Fixed-length binary record representing a sailing
+class Sailing{
+public:
+    Sailing() : sailingID{0}, vesselName{0}, currentCapacitySmall(0), currentCapacityBig(0){}
 
-        // File I/O
-        void writeSailing(fstream& outFile);
-        // Job: Writes this Sailing record to the open sailing file (binary).
-        // Usage: Called when adding or updating a Sailing record.
+    //File I/O (not used under current modular design)
+    void writeSailing(fstream& outFile);
+    //Job: Writes this Sailing record to the given open file stream.
+    //Usage: Legacy only. Prefer calling low-level I/O from SailingIO.cpp.
 
-        // (Potential readSailing function could be added if needed)
+    //Setters
+    void setSailingID(const string& id);
+    void setVesselName(const string& name);
+    void setCurrentCapacitySmall(float cap);
+    void setCurrentCapacityBig(float cap);
 
-        // Setters
-        void setSailingID(const string& id);
-        void setVesselName(const string& name);
-        void setCurrentCapacitySmall(float cap);
-        void setCurrentCapacityBig(float cap);
-        // Getters
-        string getSailingID() const;
-        string getVesselName() const;
-        float getCurrentCapacitySmall() const;
-        float getCurrentCapacityBig() const;
-    private:
-        char sailingID[16];     // format "ccc-dd-hh" + null terminator
-        char vesselName[26];    // vessel name (25 + null)
-        float currentCapacitySmall;
-        float currentCapacityBig;
+    //Getters
+    string getSailingID() const;
+    string getVesselName() const;
+    float getCurrentCapacitySmall() const;
+    float getCurrentCapacityBig() const;
+
+private:
+    char sailingID[16];         //Format: ccc-dd-hh (15 + null)
+    char vesselName[26];        //Vessel name (25 + null)
+    float currentCapacitySmall; //Remaining regular deck length (LHR)
+    float currentCapacityBig;   //Remaining oversize deck length (HHR)
 };
 
-// High-level Sailing functions using open files:
+//============================================================================
+//High-level UI-driven Sailing functions (require open file streams)
+//============================================================================
+
 bool isValidSailingID(const string& id);
-// Checks if a string is in valid "ccc-dd-dd" format.
+//Job: Validates that the given ID is in correct format: "ccc-dd-dd".
+//Usage: Called before creating, deleting, or querying a sailing.
+//Returns: true if format is valid; false otherwise.
 
 void createSailing(fstream& vesselFile, fstream& sailingFile);
-// Job: Prompts user for new Sailing details and appends a new Sailing record.
-// Usage: Called from Sailings menu (requires vesselFile to verify vessel and sailingFile to write new record).
-// Restrictions: Terminal code 3 letters, day 01-31, hour 00-23; vessel must exist.
+//Job: Prompts user to enter sailing details and saves it to the sailing file.
+//Usage: Called from Sailings menu (option [1]).
+//Requirements: Valid terminal, vessel must exist, proper day/hour formatting.
 
 bool deleteSailing(fstream& sailingFile);
-// Job: Deletes a Sailing record (and associated bookings) given a SailingID from user input.
-// Usage: Called from Sailings menu. Uses open sailing file and calls booking deletion functions.
-// Returns: true if a record was deleted, false if not found.
-
-// bool isSailingExist(const string& sailingId, fstream& sailingFile);
-// Job: Checks if a given SailingID exists in the open sailing file.
-// Usage: Used to validate Sailing existence (e.g., when creating booking or check-in).
-// Returns: true if found, false if not.
+//Job: Prompts user for SailingID and removes that sailing from file.
+//Usage: Called from Sailings menu (option [2]).
+//Returns: true if sailing was deleted; false otherwise.
 
 void printSailingReportHeader();
-// Prints the header line for sailing reports (column titles, underlines).
+//Job: Prints column headers for use with sailing listings.
+//Usage: Called from printReport and querySailing for consistent formatting.
 
 void printReport(fstream& sailingFile);
-// Job: Displays a paginated report of up to 5 sailings per page with key metrics (LHR, HHR, etc).
-// Usage: Called from Sailings menu (View Sailings Report).
-// Restriction: At least one Sailing should exist to produce output.
+//Job: Displays all sailing records in a paginated list (5 per page).
+//Usage: Called from Sailings menu (option [4]).
+//Requirements: sailingFile must be open; supports skip/continue on prompt.
 
 void querySailing(fstream& sailingFile);
-// Job: Prompts for a SailingID and displays detailed info for that sailing (or error if not found).
-// Usage: Called from Sailings menu (Query a Sailing).
-// Restriction: SailingID must be valid format; sailing must exist.
+//Job: Prompts for a SailingID and displays full details if found.
+//Usage: Called from Sailings menu (option [5]).
+//Requirements: SailingID must be valid; record must exist in file.
 
-#endif // SAILING_H
+#endif //SAILING_H
