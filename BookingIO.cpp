@@ -5,7 +5,7 @@
 using namespace std;
 static const char* BOOKING_FILENAME = "booking.txt";
 
-bool appendBookingRecord(const Booking& booking, fstream& bookingFile) {
+bool writeBooking(const Booking& booking, fstream& bookingFile) {
     bookingFile.clear();
     bookingFile.seekp(0, ios::end);
     bookingFile.write(reinterpret_cast<const char*>(&booking), sizeof(Booking));

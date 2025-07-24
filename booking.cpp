@@ -138,7 +138,7 @@ void createBooking(fstream& vehicleFile,
 
     // append booking
     Booking b(plate, sailingId, phone, false);
-    if (!appendBookingRecord(b, bookingFile)) {
+    if (!writeBooking(b, bookingFile)) {
         cerr << "Error: Unable to append booking record." << endl;
     } else {
         cout << "Booking created for " << plate << " on " << sailingId << endl;
@@ -194,7 +194,7 @@ void checkIn(fstream& bookingFile,
             return;
         }
         Booking updated(plate, sid, found.getPhoneNumber(), true);
-        if (!appendBookingRecord(updated, bookingFile)) {
+        if (!writeBooking(updated, bookingFile)) {
             cerr << "Error: Unable to append updated booking record." << endl;
         }
 
