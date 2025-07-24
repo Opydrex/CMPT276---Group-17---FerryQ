@@ -3,6 +3,7 @@
 
 #include "SailingIO.h"
 #include <cstdio>    // for truncate
+extern "C" int truncate(const char* path, long long length);
 using namespace std;
 
 int findSailingIndexByID(fstream& inFile, const string& id) {
@@ -18,10 +19,14 @@ int findSailingIndexByID(fstream& inFile, const string& id) {
 }
 
 bool appendSailingRecord(fstream& outFile, const Sailing& record) {
-    if (!outFile) return false;
     outFile.clear();
     outFile.seekp(0, ios::end);
+    if (!outFile) {
+        cerr << "appendSailingRecord: file stream not open." << endl;
+        return false;
+    }
     outFile.write(reinterpret_cast<const char*>(&record), sizeof(Sailing));
+    outFile.flush();  // Ensure the data is written
     return outFile.good();
 }
 
@@ -71,5 +76,5 @@ bool deleteSailingByID(fstream& ioFile, const string& sailingID) {
     // truncate file
     ioFile.close();
     long newSize = lastIndex * sizeof(Sailing);
-    return truncate("sailing.dat", newSize) == 0;
+    return truncate("sailing.txt", newSize) == 0;
 }

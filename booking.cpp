@@ -12,7 +12,7 @@ functions.
 #include "Vehicle.h"
 #include "Sailing.h"
 #include "BookingIO.h"
-
+#include "SailingIO.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -40,11 +40,6 @@ Booking::Booking(const string& licensePlate,
 //-----------------------------------------------------------------------------
 // Write this booking to the end of the already-open bookingFile
 //----------------------------------------------------------------------------- 
-void Booking::writeBooking(fstream& bookingFile) {
-    if (!appendBookingRecord(*this, bookingFile)) {
-        cerr << "Error: Unable to append booking record." << endl;
-    }
-}
 
 //-----------------------------------------------------------------------------
 // createBooking
@@ -61,11 +56,11 @@ void createBooking(fstream& vehicleFile,
         cout << "Enter Sailing ID (ccc-dd-dd) or blank to cancel: ";
         getline(cin >> ws, sailingId);
         if (sailingId.empty()) return;
-        if (!isValidSailingID(sailingId)) {
+        if (findSailingIndexByID(sailingFile, sailingId) == -1) {
             cout << "Bad entry! Sailing ID format is ccc-dd-dd." << endl;
             continue;
         }
-        if (!isSailingExist(sailingId, sailingFile)) {
+        if (findSailingIndexByID(sailingFile, sailingId) == -1) {
             cout << "Error: Sailing not found." << endl;
             continue;
         }
@@ -143,7 +138,7 @@ void createBooking(fstream& vehicleFile,
 
     // append booking
     Booking b(plate, sailingId, phone, false);
-    if (!appendBookingRecord(b, bookingFile)) {
+    if (!writeBooking(b, bookingFile)) {
         cerr << "Error: Unable to append booking record." << endl;
     } else {
         cout << "Booking created for " << plate << " on " << sailingId << endl;
@@ -164,7 +159,7 @@ void checkIn(fstream& bookingFile,
         cout << "Enter SailingID (ccc-dd-dd) or blank to exit: ";
         getline(cin >> ws, sid);
         if (sid.empty()) return;
-        if (!isValidSailingID(sid) || !isSailingExist(sid, sailingFile)) {
+        if (!isValidSailingID(sid) || findSailingIndexByID(sailingFile, sid) == -1) {
             cout << "Invalid or missing sailing. Try again." << endl;
             continue;
         }
@@ -199,7 +194,7 @@ void checkIn(fstream& bookingFile,
             return;
         }
         Booking updated(plate, sid, found.getPhoneNumber(), true);
-        if (!appendBookingRecord(updated, bookingFile)) {
+        if (!writeBooking(updated, bookingFile)) {
             cerr << "Error: Unable to append updated booking record." << endl;
         }
 

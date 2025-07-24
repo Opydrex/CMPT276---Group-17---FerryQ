@@ -165,7 +165,7 @@ void BookingsMenu(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFi
                 createBooking(vehicleFile, bookingFile, sailingFile);
                 break;
             case 2:
-                promptToDeleteBooking();
+                promptToDeleteBooking(bookingFile);
                 break;
             case 0:
                 inMenu = false;
