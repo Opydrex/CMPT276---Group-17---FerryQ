@@ -1,30 +1,80 @@
-#include "Vehicle.h"
+
 #include <iostream>
 #include <fstream>
+#include "Vehicle.h"
+
 using namespace std;
 
 int main() {
-    // Create a vehicle object
-    Vehicle v("CMPT276", 2.5f, 4.8f);
-
-    // Print out the fields to check constructor + getters
-    cout << "License Plate: " << v.getLicensePlate() << endl;
-    cout << "Height: " << v.getHeight() << endl;
-    cout << "Length: " << v.getLength() << endl;
-
-    // Open a binary file to test writeVehicle
-    fstream outFile("vehicle.txt", ios::out | ios::binary);
-    writeVehicle(outFile, v);
-    outFile.close();
-
-    // Confirm that file was created
-    ifstream check("vehicle.txt", ios::binary);
-    if (check.good()) {
-        cout << "Vehicle written to vehicle.txt successfully." << endl;
-    } else {
-        cerr << "Failed to write vehicle to file." << endl;
+    // Open (and truncate) the vehicle file
+    fstream file(fileNameVehicle, ios::binary | ios::in | ios::out | ios::trunc);
+    if (!file) {
+        cerr << "Error: Unable to open " << fileNameVehicle << endl;
+        return 1;
     }
-    check.close();
 
-    return 0;
+    // Create two vehicles
+    Vehicle v1("ABC123", 1.5, 4.2);
+    Vehicle v2("XYZ789", 2.8, 6.6);
+
+    bool pass = true;
+
+    // Write them to file
+    if (!writeVehicle(file, v1)) {
+        cerr << "Error: writeVehicle(v1) failed" << endl;
+        pass = false;
+    }
+    if (!writeVehicle(file, v2)) {
+        cerr << "Error: writeVehicle(v2) failed" << endl;
+        pass = false;
+    }
+
+    // Test existence checks
+
+    if (!isVehicleExist(file, "ABC123")) {
+        cerr << "Error: A vehicle with the license plate ABC123 does not exist" << endl;
+        pass = false;
+    }
+    if (!isVehicleExist(file, "XYZ789")) {
+        cerr << "Error: A vehicle with the license plate XYZ789 does not exist" << endl;
+        pass = false;
+    }
+
+
+    // Test dimension reads
+    float length, height;
+
+    if (!getVehicleDimensions(file, "ABC123", length, height) ||
+        length != v1.getLength() || height != v1.getHeight()) {
+        cerr << "Error: getVehicleDimensions failed for license plate ABC123" << endl;
+        pass = false;
+    } else {
+        cout << "Read height  = " << height << " and length = " << length << " of the vehicle with the license plate ABC123" << endl;
+    }
+
+    if (!getVehicleDimensions(file, "XYZ789", length, height) ||
+        length != v2.getLength() || height != v2.getHeight()) {
+        cerr << "Error: getVehicleDimensions failed for license plate XYZ789" << endl;
+        pass = false;
+    }else {
+        cout << "Read height  = " << height << " and length = " << length << " of the vehicle with the license plate XYZ789" << endl;
+    }
+
+    // Test that reading beyond end fails
+    if (getVehicleDimensions(file, "MYSTERY", length, height)) {
+        cerr << "Error: getVehicleDimensions found a license plate that should not exist!" << endl;
+        pass = false;
+    } else {
+        cout << "getVehicleDimensions stopped successfully at EOF" << endl;
+    }
+
+    // Final result
+    if(pass){
+        cout << "Test passed!" << endl;
+        return 0;
+    } else {
+        cout << "Test Failed!" << endl;
+        return 1;
+    }
+
 }
