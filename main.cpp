@@ -1,39 +1,83 @@
-//==========================================================================
-//==========================================================================
-/*
-MODULE NAME: main.cpp
-Rev.1 - 09/07/2025 - Main module created
-----------------------------------------------------------------------------
-This module contains the main function, as well as functions and implementations related to startup and shutdown.
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: main.cpp
+// Rev.1 - 09/07/2025 - Main module created
+//
+// --------------------------------------------------------------------------
+// This module serves as the entry point for the FerryQ application.
+//
+// What it does:
+// - Initializes all fstream objects for binary file I/O.
+// - Creates the data files (.txt) if they do not already exist.
+// - Launches the main user interface loop, passing the open file streams.
+// - Handles the final closing of all file streams upon program termination.
+//
+// Used By: This module is called by the operating system to start the program.
+// --------------------------------------------------------------------------
 
 #include "UserInterface.h"
+#include "VesselUserIO.h"
+#include "VehicleFileIO.h"
+#include "BookingUserIO.h"
+#include "SailingUserIO.h"
 #include <iostream>
+#include <fstream>
+using namespace std;
 
-int main() {
-    std::cout << "Welcome to the FerryQ!!!" << std::endl << std::endl;
-    userInterfaceLoop();
+
+//--------------------------------------------------------------------------
+int main(){
+//Job: Entry point of the FerryQ system. Initializes all binary file streams,
+//     creates them if missing, then launches the main user interface loop.
+//Usage: Called when the FerryQ program is executed. Ensures all required
+//       system data files exist and are opened correctly.
+//Restrictions: Files must be accessible for read/write in binary mode.
+    cout << "Welcome to the FerryQ!!!" << endl << endl;
+
+    //Open all system files or create if missing
+    fstream vesselFile(fileNameVessel, ios::in | ios::out | ios::binary);
+    if (!vesselFile){
+        ofstream tmp(fileNameVessel, ios::binary); tmp.close();
+        vesselFile.open(fileNameVessel, ios::in | ios::out | ios::binary);
+    }
+
+    fstream vehicleFile(fileNameVehicle, ios::in | ios::out | ios::binary);
+    if (!vehicleFile){
+        ofstream tmp(fileNameVehicle, ios::binary); tmp.close();
+        vehicleFile.open(fileNameVehicle, ios::in | ios::out | ios::binary);
+    }
+
+    fstream bookingFile(fileNameBooking, ios::in | ios::out | ios::binary);
+    if (!bookingFile){
+        ofstream tmp(fileNameBooking, ios::binary); tmp.close();
+        bookingFile.open(fileNameBooking, ios::in | ios::out | ios::binary);
+    }
+
+    fstream sailingFile(fileNameSailing, ios::in | ios::out | ios::binary);
+    if (!sailingFile){
+        ofstream tmp(fileNameSailing, ios::binary); tmp.close();
+        sailingFile.open(fileNameSailing, ios::in | ios::out | ios::binary);
+    }
+
+    if (!vesselFile || !vehicleFile || !bookingFile || !sailingFile){
+        cerr << "Error: Could not open one or more data files." << endl;
+        return 1;
+    }
+
+    //Launch main interface
+    userInterfaceLoop(vesselFile, vehicleFile, bookingFile, sailingFile);
+
+    //Final cleanup
+    vesselFile.close();
+    vehicleFile.close();
+    bookingFile.close();
+    sailingFile.close();
+
     return 0;
 }
 
-void init();
+/*                      CODING CONVENTIONS:
 
-//Job: Initialises and opens every data file upon program launch.
-//Usage: Used in main.cpp
-//Restrictions: Data files must exist. They come prefilled with the executable of FerryQ.
-
-//----------------------------------------------------------------------------
-
-void shutdown();
-
-//Job: Shutdowns every data file and frees all the used memory when User exits the program.
-//Usage: Used in main.cpp
-//Restrictions: Data files must exist. They come prefilled with the executable of FerryQ.
-
-//----------------------------------------------------------------------------
-
-/*
 Modules will be separated by two double-dashed lines, example:
 //==========================================================================
 //==========================================================================

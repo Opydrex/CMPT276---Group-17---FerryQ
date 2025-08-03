@@ -1,0 +1,130 @@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: VehicleFileIO.cpp
+// Rev.1 - 24/07/2025 - Vehicle class implementation.
+//
+// ----------------------------------------------------------------------------
+// This module performs all low-level binary file operations for vehicle records.
+//
+// What it does:
+// - Provides functions to write, search for, and read the dimensions of
+//   Vehicle objects from the "vehicle.txt" binary file.
+//
+// Implementation Strategy:
+// - Data is stored as fixed-length binary records (using sizeof(Vehicle)).
+// - All lookups are performed using a linear search of the file.
+// - String data (license plate) is stored in a fixed-size char array to
+//   ensure a consistent record size for binary I/O.
+//
+// Used By: Called by the BookingUserIO.cpp module to manage vehicle data.
+// ----------------------------------------------------------------------------
+
+#include "VehicleFileIO.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <cstring>
+using namespace std;
+
+//----------------------------------------------------------------------------
+Vehicle::Vehicle(const string& licensePlate, const float& height, const float& length){
+//Description: This is a constructor that initializes a Vehicle object with license, height, and length.
+    strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
+    this->licensePlate[sizeof(this->licensePlate) - 1] = '\0'; //Null-terminate
+    this->height = height;
+    this->length = length;
+}
+
+//----------------------------------------------------------------------------
+bool writeVehicle(fstream& vehicleFile, const Vehicle& vehicle){
+//Description: Appends a vehicle record to the end of the vehicle file.
+//             Returns true if successful.
+    vehicleFile.clear();                       //Clear EOF or fail flags
+    vehicleFile.seekp(0, ios::end);            //Move to end to append
+
+    if (!vehicleFile){
+        cerr << "Error: Vehicle file stream not available for writing.\n";
+        return false;
+    }
+
+    vehicleFile.write(reinterpret_cast<const char*>(&vehicle), sizeof(Vehicle));
+    vehicleFile.flush();                       //Ensure it's written to disk
+    return true;
+}
+
+//----------------------------------------------------------------------------
+bool isVehicleExist(fstream& vehicleFile, const string& licensePlate){
+//Description: Checks if a vehicle with the given license plate exists in the file.
+//             Returns true if found.
+    vehicleFile.clear();
+    vehicleFile.seekg(0, ios::beg);
+    Vehicle temp;
+
+    //Linear search through all records
+    while (vehicleFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))){
+        if (temp.getLicensePlate() == licensePlate){
+            return true;
+        }
+    }
+    return false;
+}
+
+//----------------------------------------------------------------------------
+bool getVehicleDimensions(fstream& vehicleFile, const string& licensePlate, float& length, float& height){
+//Description: Retrieves the dimensions of a vehicle by license plate.
+//             Stores the length and height in output parameters and returns true if found.
+    vehicleFile.clear();
+    vehicleFile.seekg(0, ios::beg);
+    Vehicle temp;
+
+    //Search each record for a match
+    while (vehicleFile.read(reinterpret_cast<char*>(&temp), sizeof(Vehicle))){
+        if (temp.getLicensePlate() == licensePlate){
+            length = temp.getLength();
+            height = temp.getHeight();
+            return true;
+        }
+    }
+    return false;
+}
+
+
+//----------------------------------------------------------------------------
+void Vehicle::setLicensePlate(const string& licensePlate){
+//Description: Sets the license plate string (fixed-size char array).
+    strncpy(this->licensePlate, licensePlate.c_str(), sizeof(this->licensePlate) - 1);
+    this->licensePlate[10] = '\0'; //Null-terminate
+}
+
+//----------------------------------------------------------------------------
+void Vehicle::setHeight(float height){
+//Description: Sets the height of the vehicle.
+    this->height = height;
+}
+
+//----------------------------------------------------------------------------
+void Vehicle::setLength(float length){
+//Description: Sets the length of the vehicle.
+    this->length = length;
+}
+
+//----------------------------------------------------------------------------
+string Vehicle::getLicensePlate() const{
+//Description: Returns the license plate as a std::string.
+    return string(this->licensePlate);
+}
+
+//----------------------------------------------------------------------------
+float Vehicle::getHeight() const{
+//Description: Returns the height of the vehicle.
+    return this->height;
+}
+
+//----------------------------------------------------------------------------
+float Vehicle::getLength() const{
+//Description: Returns the length of the vehicle.
+    return this->length;
+}
+
+//----------------------------------------------------------------------------

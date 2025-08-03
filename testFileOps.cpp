@@ -1,192 +1,90 @@
-//==========================================================================
-//==========================================================================
-/*
-MODULE NAME: testFileOps.cpp
-Rev.1 - 17/07/2025 - test file operations module created
-----------------------------------------------------------------------------
-This module contains the operations and functions that will test the program
-----------------------------------------------------------------------------
-*/
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//
+// MODULE NAME: testFileOps.cpp
+// Rev.1 - 09/07/2025 - Implemented a test driver for vehicle file IO
+//
+// ----------------------------------------------------------------------------
+// This module contains a test driver for vehicle file IO
+// ----------------------------------------------------------------------------
 
-//==========================================================================
-//==========================================================================
-/*
-MODULE NAME: testFileOps.cpp
-Rev.1 - 17/07/2025 - test file operations module created
-----------------------------------------------------------------------------  
-This module contains the operations and functions that will test the program
-----------------------------------------------------------------------------  
-*/
-
-#include <fstream>
 #include <iostream>
-#include <string>
-#include <sstream>
-#include <cstdio>
-#include <limits>
-#include "Vessel.h"
-#include "Vehicle.h"
-#include "Sailing.h"
+#include <fstream>
+#include "VehicleFileIO.h"
+
 using namespace std;
 
-bool validSailingId(const string& s) {  
-    if (s.size() != 9) return false;  
-    if (s[3] != '-' || s[6] != '-') return false;  
-    for (int i = 0; i < 3; ++i) if (!isalpha(s[i])) return false;  
-    for (int i : {4,5,7,8})      if (!isdigit(s[i])) return false;  
-    return true;  
-}  
-  
-int main() {  
-    // make sure data files exist  
-    { ofstream tmp("vessel.txt", ios::app); }  
-    { ofstream tmp("sailing.txt", ios::app); }  
-  
-    // open vessel file for lookup  
-    ifstream vesselIn("vessel.txt");  
-    if (!vesselIn) {  
-        cerr << "Could not open vessel.txt for reading\n";  
-        return 1;  
-    }  
-  
-    // persistent streams for creates & reports  
-    ofstream sailingOut("sailing.txt", ios::app);  
-    if (!sailingOut) {  
-        cerr << "Could not open sailing.txt for appending\n";  
-        return 1;  
-    }  
-    ifstream sailingIn("sailing.txt");  
-    if (!sailingIn) {  
-        cerr << "Could not open sailing.txt for reading\n";  
-        return 1;  
-    }  
-  
-    int choice = -1;  
-    do {  
-        cout << "\n=== Sailing Module Test Harness ===\n";  
-        cout << "1) Create a Sailing\n";  
-        cout << "2) Delete a Sailing\n";  
-        cout << "3) View Sailings Report\n";  
-        cout << "4) Query a Sailing\n";  
-        cout << "0) Exit\n";  
-        cout << "Enter choice (0-4): ";  
-        cin >> choice;  
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');  
-  
-        switch (choice) {  
-            case 1:  
-                cout << "\n--- Create Sailing ---\n";  
-                createSailing(vesselIn, sailingOut, sailingIn);  
-                break;  
-  
-            case 2: {
-                cout << "\n--- Delete Sailing ---\n";
-                // 0) Close the persistent handles so we can delete/rename the file
-                sailingIn.close();
-                sailingOut.close();
+//----------------------------------------------------------------------------
+int main() {
+//Description: This is a test driver! not the actual main function of the program
+    // Open (and truncate) the vehicle file
+    fstream file(fileNameVehicle, ios::binary | ios::in | ios::out | ios::trunc);
+    if (!file) {
+        cerr << "Error: Unable to open " << fileNameVehicle << endl;
+        return 1;
+    }
 
-                while (true) {
-                    // 1) Open fresh streams on the file
-                    ifstream inFile("sailing.txt");
-                    ofstream outFile("sailing_tmp.txt", ios::trunc);
-                    if (!inFile || !outFile) {
-                        cerr << "Error opening files\n";
-                        break;
-                    }
+    // Create two vehicles
+    Vehicle v1("ABC123", 1.5, 4.2);
+    Vehicle v2("XYZ789", 2.8, 6.6);
 
-                    // 2) Prompt for ID, filter one record
-                    bool ok = deleteSailing(outFile, inFile);
-                    inFile.close();
-                    outFile.close();
+    bool pass = true;
 
-                    // 3) Now that no handles are open, this will succeed
-                    remove("sailing.txt");
-                    rename("sailing_tmp.txt", "sailing.txt");
+    // Write them to file
+    if (!writeVehicle(file, v1)) {
+        cerr << "Error: writeVehicle(v1) failed" << endl;
+        pass = false;
+    }
+    if (!writeVehicle(file, v2)) {
+        cerr << "Error: writeVehicle(v2) failed" << endl;
+        pass = false;
+    }
 
-                    cout << "Would you like to delete another sailing? (Y/N) ";
-                    string resp;
-                    getline(cin, resp);
-                    if (resp.empty() || (resp[0] != 'Y' && resp[0] != 'y'))
-                        break;
-                }
+    // Test existence checks
 
-                // 4) Reopen persistent streams for the rest of the harness
-                sailingOut.open("sailing.txt", ios::app);
-                sailingIn.open("sailing.txt");
-                break;
-            }  
-            case 3:  
-                printReport(sailingIn);  
-                break;  
-  
-            case 4:  
-                cout << "\n--- Query a Single Sailing ---\n";  
-                querySailing(sailingIn);  
-                break;  
-  
-            case 0:  
-                cout << "Exiting test harness.\n";  
-                break;  
-  
-            default:  
-                cout << "Invalid option. Please enter 0-4.\n";  
-        }  
-  
-        if (choice != 0) {  
-            cout << "\nPress Enter to return to menu...";  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
-            sailingIn.clear();  
-            sailingIn.seekg(0, ios::beg);  
-        }  
-    } while (choice != 0);  
-  
-    return 0;  
+    if (!isVehicleExist(file, "ABC123")) {
+        cerr << "Error: A vehicle with the license plate ABC123 does not exist" << endl;
+        pass = false;
+    }
+    if (!isVehicleExist(file, "XYZ789")) {
+        cerr << "Error: A vehicle with the license plate XYZ789 does not exist" << endl;
+        pass = false;
+    }
+
+
+    // Test dimension reads
+    float length, height;
+
+    if (!getVehicleDimensions(file, "ABC123", length, height) ||
+        length != v1.getLength() || height != v1.getHeight()) {
+        cerr << "Error: getVehicleDimensions failed for license plate ABC123" << endl;
+        pass = false;
+    } else {
+        cout << "Read height  = " << height << " and length = " << length << " of the vehicle with the license plate ABC123" << endl;
+    }
+
+    if (!getVehicleDimensions(file, "XYZ789", length, height) ||
+        length != v2.getLength() || height != v2.getHeight()) {
+        cerr << "Error: getVehicleDimensions failed for license plate XYZ789" << endl;
+        pass = false;
+    }else {
+        cout << "Read height  = " << height << " and length = " << length << " of the vehicle with the license plate XYZ789" << endl;
+    }
+
+    // Test that reading beyond end fails
+    if (getVehicleDimensions(file, "MYSTERY", length, height)) {
+        cerr << "Error: getVehicleDimensions found a license plate that should not exist!" << endl;
+        pass = false;
+    } else {
+        cout << "getVehicleDimensions stopped successfully at EOF" << endl;
+    }
+
+    // Final result
+    if(pass){
+        cout << "Test passed!" << endl;
+        return 0;
+    } else {
+        cout << "Test Failed!" << endl;
+        return 1;
+    }
+
 }
-
-// int main(){
-//     // Declare the stream objects
-//     // Step 1: open for reading to check duplicates
-//     ifstream myInputVesselFile("vessel.txt");
-//     if (!myInputVesselFile) {
-//         cerr << "Could not open vessel.txt for reading" << endl;
-//         return 1;
-//     }
-
-
-
-//     ofstream myOutputVesselFile("vessel.txt", ios::app);
-//     if (!myOutputVesselFile) {
-//         cerr << "Could not open vessel.txt for appending" << endl;
-//         return 1;
-//     }
-
-// // Now call your logic
-//     createVessel(myInputVesselFile, myOutputVesselFile);
-
-
-
-//     //testing vehicle
-//     ifstream myInputVehicleFile("vehicle.txt");
-//     if (!myInputVehicleFile) {
-//         cerr << "Could not open vehicle.txt for reading" << endl;
-//         return 1;
-//     }
-
-
-
-//     ofstream myOutputVehicleFile("vehicle.txt", ios::app);
-//     if (!myOutputVesselFile) {
-//         cerr << "Could not open vessel.txt for appending" << endl;
-//         return 1;
-//     }
-//     Vehicle newVehicle("cmpt276", 2, 6);
-
-//     newVehicle.writeVehicle(myOutputVehicleFile);
-//     cout<<isVesselExist("cmpt276",myInputVehicleFile);
-
-
-// // Clean up
-//     myInputVesselFile.close();
-//     myOutputVesselFile.close();
-
-// }
