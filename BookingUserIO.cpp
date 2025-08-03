@@ -94,7 +94,7 @@ void createBooking(fstream& vehicleFile,
     if (!isVehicleExist(vehicleFile, plate)){
         //Input and validate height
         while (true){
-            cout << "Enter height (0–" << maxHeight << "): ";
+            cout << "Enter height (0 to " << maxHeight << "): ";
             if (!(cin >> height) || height < 0 || height > maxHeight){
                 cout << "Invalid. Try again." << endl;
                 cin.clear();
@@ -106,7 +106,7 @@ void createBooking(fstream& vehicleFile,
 
         //Input and validate length
         while (true){
-            cout << "Enter length (0–" << maxLength << "): ";
+            cout << "Enter length (0 to " << maxLength << "): ";
             if (!(cin >> length) || length < 0 || length > maxLength){
                 cout << "Invalid. Try again." << endl;
                 cin.clear();
