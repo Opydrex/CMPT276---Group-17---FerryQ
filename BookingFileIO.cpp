@@ -117,3 +117,21 @@ int countBookingRecords(fstream& bookingFile){
     bookingFile.seekg(0, ios::end);
     return static_cast<int>(bookingFile.tellg() / sizeof(Booking));
 }
+
+//----------------------------------------------------------------------------
+int countBookingsForSailing(const string& sailingID, fstream& bookingFile) {
+    //Description: Counts the number of bookings for a specific sailing.
+    if (!bookingFile.good()) return 0;
+
+    bookingFile.clear();
+    bookingFile.seekg(0, ios::beg);
+    Booking temp;
+    int count = 0;
+
+    while (bookingFile.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
+        if (temp.getSailingID() == sailingID) {
+            count++;
+        }
+    }
+    return count;
+}

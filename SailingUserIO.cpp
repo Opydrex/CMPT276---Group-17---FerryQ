@@ -20,6 +20,8 @@
 #include "SailingFileIO.h"
 #include "SailingUserIO.h"
 #include "VesselFileIO.h"
+#include "BookingFileIO.h"
+#include "VehicleFileIO.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -161,7 +163,7 @@ void printSailingReportHeader(){
 }
 
 //----------------------------------------------------------------------------
-void printReport(fstream& sailingFile){
+void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFile, fstream& vesselFile){
 //Description: Displays all sailings from file, 5 per screen.
     cout << "== Sailings Report ==" << endl;
     printSailingReportHeader();
@@ -172,14 +174,31 @@ void printReport(fstream& sailingFile){
     for (int i = 0; i < count; ++i){
         Sailing s;
         if (!loadSailingByIndex(sailingFile, i, s)) continue;
+        
+        string sailingID = s.getSailingID();
+        string vesselName = s.getVesselName();
+
+        bookingFile.clear();
+        bookingFile.seekg(0, ios::beg);
+        int vehicleCount = countBookingsForSailing(sailingID, bookingFile);
+
+        float initialCapSmall = getMaxRegularLength(vesselName, vesselFile);
+        float initialCapBig = getMaxSpecialLength(vesselName, vesselFile);
+
+        float totalInitialCapacity = initialCapSmall + initialCapBig;
+        float totalRemainingCapacity = s.getCurrentCapacitySmall() + s.getCurrentCapacityBig();
+        float deckUsagePercentage = 0.0f;
+        if (totalInitialCapacity > 0) {
+            deckUsagePercentage = ((totalInitialCapacity - totalRemainingCapacity) / totalInitialCapacity) * 100;
+        }
 
         cout << setw(4) << (i+1) << ") "
-             << left << setw(12) << s.getSailingID() << " "
-             << setw(24) << s.getVesselName() << " "
+             << left << setw(12) << sailingID << " "
+             << setw(24) << vesselName << " "
              << setw(6)  << fixed << setprecision(1) << s.getCurrentCapacitySmall() << " "
              << setw(6)  << s.getCurrentCapacityBig() << " "
-             << setw(14) << 0 << " "  //Placeholder for total vehicles
-             << setw(13) << "0%" << endl; //Placeholder for deck usage
+             << setw(14) << vehicleCount << " "
+             << setw(6) << fixed << setprecision(2) << deckUsagePercentage << "%" << endl;
 
         //Paginate every 5 rows
         if (++shown == 5){

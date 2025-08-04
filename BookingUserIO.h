@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 //Constants used in fare calculations and validation
@@ -112,7 +113,7 @@ void checkIn(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile);
 //Restrictions: All files must be open. Assumes booking exists and vehicle info is valid.
 
 //----------------------------------------------------------------------------
-void promptToDeleteBooking(fstream& bookingFile);
+void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile);
 //Job: Prompts user for a booking and deletes it from the file if found.
 //Usage: Called from Bookings menu.
 //Restrictions: Booking file must be open for read/write.

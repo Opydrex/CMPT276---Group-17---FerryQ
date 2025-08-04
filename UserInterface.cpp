@@ -62,7 +62,7 @@ void userInterfaceLoop(fstream& vesselFile, fstream& vehicleFile, fstream& booki
                 BookingsMenu(vehicleFile, bookingFile, sailingFile);
                 break;
             case 3:
-                SailingsMenu(vesselFile, sailingFile);
+                SailingsMenu(vesselFile, sailingFile, bookingFile, vehicleFile);
                 break;
             case 0:
                 running = false;
@@ -78,7 +78,7 @@ void userInterfaceLoop(fstream& vesselFile, fstream& vehicleFile, fstream& booki
 }
 
 //----------------------------------------------------------------------------
-void SailingsMenu(fstream& vesselFile, fstream& sailingFile){
+void SailingsMenu(fstream& vesselFile, fstream& sailingFile, fstream& bookingFile, fstream& vehicleFile){
 //Description: Displays the Sailings submenu and handles create, delete, report, and query actions.
     string inputLine;
     int choice = -1;
@@ -115,7 +115,7 @@ void SailingsMenu(fstream& vesselFile, fstream& sailingFile){
                 createVessel(vesselFile);
                 break;
             case 4:
-                printReport(sailingFile);
+                printReport(sailingFile, bookingFile, vehicleFile, vesselFile);
                 break;
             case 5:
                 querySailing(sailingFile);
@@ -161,7 +161,7 @@ void BookingsMenu(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFi
                 createBooking(vehicleFile, bookingFile, sailingFile);
                 break;
             case 2:
-                promptToDeleteBooking(bookingFile);
+                promptToDeleteBooking(bookingFile, vehicleFile, sailingFile);
                 break;
             case 0:
                 inMenu = false;

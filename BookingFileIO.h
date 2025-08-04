@@ -45,5 +45,11 @@ int countBookingRecords(fstream& bookingFile);
 //Usage: Used for iteration, reporting, or validation.
 //Restrictions: File must be opened in binary mode.
 
+//----------------------------------------------------------------------------
+int countBookingsForSailing(const string& sailingID, fstream& bookingFile);
+//Job: Counts the number of bookings for a specific sailing.
+//Usage: Used in the sailings report to show the number of vehicles.
+//Restrictions: File must be open.
+
 
 #endif //BOOKING_IO_H

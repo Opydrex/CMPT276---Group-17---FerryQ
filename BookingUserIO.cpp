@@ -148,6 +148,14 @@ void createBooking(fstream& vehicleFile,
         cerr << "Error: Unable to append booking record." << endl;
     } else{
         cout << "Booking created for " << plate << " on " << sailingId << endl;
+        // Update sailing capacity
+        bool isSpecial = (height > maxHeightForRegularSizedVehicle || length > maxLengthForRegularSizedVehicle);
+        float regularLengthUsed = isSpecial ? 0.0f : length;
+        float specialLengthUsed = isSpecial ? length : 0.0f;
+
+        if (!updateSailingCapacities(sailingFile, sailingId, regularLengthUsed, specialLengthUsed)) {
+            cerr << "Error: Failed to update sailing capacity." << endl;
+        }
     }
 }
 
@@ -213,7 +221,7 @@ void checkIn(fstream& bookingFile,
 }
 
 //----------------------------------------------------------------------------
-void promptToDeleteBooking(fstream& bookingFile){
+void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile){
 //Description: Interactive prompt to delete a booking by sailing ID and license plate.
     string sid, plate;
     cout << "Enter SailingID (ccc-dd-dd): ";
@@ -224,8 +232,29 @@ void promptToDeleteBooking(fstream& bookingFile){
     getline(cin >> ws, plate);
     if (plate.empty()) return;
 
-    bool ok = deleteBookingRecord(sid, plate, bookingFile);
-    cout << (ok ? "Booking deleted" : "Booking not found") << endl;
+    Booking bookingToDelete;
+    if (loadBookingByKey(sid, plate, bookingToDelete, bookingFile)) {
+        float length, height;
+        if (getVehicleDimensions(vehicleFile, plate, length, height)) {
+            bool isSpecial = (height > maxHeightForRegularSizedVehicle || length > maxLengthForRegularSizedVehicle);
+            float regularLengthRestored = isSpecial ? 0.0f : length;
+            float specialLengthRestored = isSpecial ? length : 0.0f;
+
+            if (deleteBookingRecord(sid, plate, bookingFile)) {
+                cout << "Booking deleted" << endl;
+                // Restore sailing capacity
+                if (!updateSailingCapacities(sailingFile, sid, -regularLengthRestored, -specialLengthRestored)) { // Note the negative sign to add back
+                    cerr << "Error: Failed to restore sailing capacity." << endl;
+                }
+            } else {
+                 cout << "Error deleting booking." << endl;
+            }
+        } else {
+            cout << "Could not find vehicle to restore capacity." << endl;
+        }
+    } else {
+        cout << "Booking not found" << endl;
+    }
 }
 
 //----------------------------------------------------------------------------
