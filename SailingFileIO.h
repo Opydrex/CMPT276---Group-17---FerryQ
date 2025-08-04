@@ -58,4 +58,10 @@ bool deleteSailingByID(fstream& ioFile, const string& sailingID);
 //Usage: Called by the interactive deleteSailing() workflow.
 //Restrictions: File must be opened in binary read/write mode.
 
+//----------------------------------------------------------------------------
+bool updateSailingCapacities(fstream& sailingFile, const string& sailingID, float regularLengthUsed, float specialLengthUsed);
+//Job: Updates the capacities of a sailing.
+//Usage: Called when a booking is created or deleted.
+//Restrictions: File must be open.
+
 #endif //SAILING_IO_H

@@ -112,7 +112,7 @@ void printSailingReportHeader();
 //Usage: Called from printReport and querySailing for consistent formatting.
 
 //----------------------------------------------------------------------------
-void printReport(fstream& sailingFile);
+void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFile, fstream& vesselFile);
 //Job: Displays all sailing records in a paginated list (5 per page).
 //Usage: Called from Sailings menu (option [4]).
 //Requirements: sailingFile must be open; supports skip/continue on prompt.

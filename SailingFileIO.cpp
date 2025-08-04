@@ -127,3 +127,18 @@ bool deleteSailingByID(fstream& ioFile, const string& sailingID){
     ioFile.open(fileNameSailing, ios::in | ios::out | ios::binary);
     return ioFile.is_open();
 }
+
+//----------------------------------------------------------------------------
+bool updateSailingCapacities(fstream& sailingFile, const string& sailingID, float regularLengthUsed, float specialLengthUsed) {
+//Description: Updates the capacities of a sailing.
+    int index = findSailingIndexByID(sailingFile, sailingID);
+    if (index < 0) return false;
+
+    Sailing s;
+    if (!loadSailingByIndex(sailingFile, index, s)) return false;
+
+    s.setCurrentCapacitySmall(s.getCurrentCapacitySmall() - regularLengthUsed);
+    s.setCurrentCapacityBig(s.getCurrentCapacityBig() - specialLengthUsed);
+
+    return writeSailingByIndex(sailingFile, index, s);
+}

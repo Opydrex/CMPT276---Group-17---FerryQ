@@ -28,8 +28,10 @@ void userInterfaceLoop(fstream& vesselFile, //input
 //Restrictions: All file streams must be open and valid before calling.
 
 //----------------------------------------------------------------------------
-void SailingsMenu(fstream& vesselFile,//input
-                  fstream& sailingFile//input
+void SailingsMenu(fstream& vesselFile,    //input
+                  fstream& sailingFile,   //input
+                  fstream& bookingFile,   //input
+                  fstream& vehicleFile    //input
                   );
 //Job: Displays and handles the Sailings submenu (create/delete sailings, add vessels, view reports).
 //Usage: Called from userInterfaceLoop when user selects Sailings.
