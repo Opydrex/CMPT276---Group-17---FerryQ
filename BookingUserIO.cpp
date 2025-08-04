@@ -125,7 +125,7 @@ void createBooking(fstream& vehicleFile,
         if (!getVehicleDimensions(vehicleFile, plate, length, height)){
             cerr << "Error: Failed to read vehicle dimensions." << endl;
         } else{
-            cout << "Using stored dims—H=" << height << " L=" << length << endl;
+            cout << "Using stored dimensions. Height: " << height << " ; Length: " << length << endl;
         }
     }
 
@@ -138,6 +138,10 @@ void createBooking(fstream& vehicleFile,
         for (char c : phone) if (isdigit(c)) cnt++;
         if (cnt < 7){
             cout << "Too few digits. Try again." << endl;
+            continue;
+        }
+        else if (cnt > 15){
+            cout<<"Too many digits. Try again." << endl;
             continue;
         }
         break;
