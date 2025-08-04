@@ -33,6 +33,9 @@ bool deleteBookingRecord(const string& sailingID, const string& licensePlate, fs
 //Usage: Called by check-in or booking cancellation workflows.
 //Restrictions: File must be opened in binary read/write mode.
 
+
+bool deleteBookingsBySailingID(fstream& bookingFile, const string& sailingID);//COMMENT THIS SHI
+
 //----------------------------------------------------------------------------
 bool loadBookingByKey(const string& sailingID, const string& licensePlate, Booking& result, fstream& bookingFile);
 //Job: Searches for and loads a Booking record by SailingID and License Plate.

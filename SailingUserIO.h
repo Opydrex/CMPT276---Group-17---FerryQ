@@ -101,7 +101,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile);
 //Requirements: Valid terminal, vessel must exist, proper day/hour formatting.
 
 //----------------------------------------------------------------------------
-bool deleteSailing(fstream& sailingFile);
+bool deleteSailing(fstream& sailingFile, fstream& bookingFile);
 //Job: Prompts user for SailingID and removes that sailing from file.
 //Usage: Called from Sailings menu (option [2]).
 //Returns: true if sailing was deleted; false otherwise.

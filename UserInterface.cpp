@@ -109,7 +109,7 @@ void SailingsMenu(fstream& vesselFile, fstream& sailingFile, fstream& bookingFil
                 createSailing(vesselFile, sailingFile);
                 break;
             case 2:
-                deleteSailing(sailingFile);
+                deleteSailing(sailingFile, bookingFile);
                 break;
             case 3:
                 createVessel(vesselFile);
