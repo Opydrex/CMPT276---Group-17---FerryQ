@@ -5,6 +5,7 @@
 //                    - Functions now clear the terminal before outputting their result.
 //                    - Fixed Sailing Report, now correctly formatted according to User Manual
 // Rev.2 - 24/07/2025 - Updated to match UI stream logic and core operations.
+//                    - Changed file name from "Sailing.h" to current.
 // Rev.1 - 9/07/2025 - Module created.
 //
 // ----------------------------------------------------------------------------
