@@ -74,7 +74,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
                 return;
             } 
             if (vesselName.size() > 25){
-                cout << "Bad entry! Name too long." << endl;
+                cout << "Bad entry! Name too long.\n" << endl;
                 continue;
             }
 
@@ -84,7 +84,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             vesselFile.clear(); vesselFile.seekg(0, ios::beg);
             capBig = getMaxSpecialLength(vesselName, vesselFile);
             if (capSmall < 0 || capBig < 0){
-                cout << "Error: Vessel not found. Please re-enter." << endl;
+                cout << "Error: Vessel not found. Please re-enter.\n" << endl;
                 continue;
             }
             break;
@@ -103,12 +103,12 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
                 return;
             }
             if (dayStr.size() != 2 || !isdigit(dayStr[0]) || !isdigit(dayStr[1])){
-                cout << "Bad entry! Must be two digits." << endl;
+                cout << "Bad entry! Must be two digits.\n" << endl;
                 continue;
             }
             int day = stoi(dayStr);
             if (day < 1 || day > maxSailingDay){
-                cout << "Day out of range." << endl;
+                cout << "Day out of range.\n" << endl;
                 continue;
             }
             break;
@@ -125,12 +125,12 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
                 return;
             }
             if (hourStr.size() != 2 || !isdigit(hourStr[0]) || !isdigit(hourStr[1])){
-                cout << "Bad entry! Must be two digits." << endl;
+                cout << "Bad entry! Must be two digits.\n" << endl;
                 continue;
             }
             int hour = stoi(hourStr);
             if (hour < 1 || hour > maxSailingHour){
-                cout << "Hour out of range." << endl;
+                cout << "Hour out of range.\n" << endl;
                 continue;
             }
             break;
@@ -152,7 +152,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             if (appendSailingRecord(sailingFile, s)){
                 cout << "Sailing successfully created. The SailingID is " << sailingID << ". Would you like to create another sailing? (Y/N) ";
             } else{
-                cout << "Error writing sailing to file." << endl;
+                cout << "Error writing sailing to file.\n" << endl;
                 return;
             }
         }
@@ -179,6 +179,7 @@ bool deleteSailing(fstream& sailingFile, fstream& bookingFile){
     }
     if (!isValidSailingID(sailingID)) {
         system("cls");
+        cout << "No sailing with SailingID " << sailingID << " was found." << endl;
         return false;
     }
     bool ok = deleteSailingByID(sailingFile, sailingID);
@@ -186,9 +187,7 @@ bool deleteSailing(fstream& sailingFile, fstream& bookingFile){
     if (ok){
         deleteBookingsBySailingID(bookingFile, sailingID);
         cout << "Sailing with SailingID " << sailingID << " deleted successfully." << endl;
-        }
-    else
-        cout << "No sailing with SailingID " << sailingID << " was found." << endl;
+    }
     return ok;
 }
 
@@ -255,7 +254,7 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
             deckUsagePercentage = ((totalInitialCapacity - totalRemainingCapacity) / totalInitialCapacity) * 100;
         }
 
-        cout << setw(4) << (i+1) << ") "
+        cout << right << setw(4) << (i+1) << ") "
              << left << setw(12) << sailingID << " "
              << setw(24) << vesselName << " "
              << setw(6)  << fixed << setprecision(1) << s.getCurrentCapacitySmall() << " "
@@ -267,7 +266,7 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
 
         // Paginate every 5 rows or at the end of the report
         if (shownOnPage == 5 && i < count - 1){
-            cout << "0) Exit" << endl << "Enter M to print 5 more lines or "
+            cout << "   0) Exit" << endl << "Enter M to print 5 more lines or "
             <<"0 to exit: ";
             while(true){
                 string in; 
@@ -322,7 +321,7 @@ void querySailing(fstream& sailingFile){
 
         if(!isValidSailingID(sid)){
             system("cls");
-            cout << "No sailing " << sid << " found.\n";
+            cout << "No sailing with SailingID " << sid << " found.\n";
             continue;
         }
 
@@ -336,7 +335,7 @@ void querySailing(fstream& sailingFile){
             }
             cout << "== Sailing Details ==\n";
             printSailingReportHeader();
-            cout << setw(4) << "1) "
+            cout << setw(4) << "1)   "
                  << left << setw(12) << s.getSailingID() << " "
                  << setw(24) << s.getVesselName() << " "
                  << setw(6)  << fixed << setprecision(1) << s.getCurrentCapacitySmall() << " "
@@ -347,7 +346,7 @@ void querySailing(fstream& sailingFile){
             cout << "No sailing " << sid << " found.\n";
         }
 
-        cout << "Query another? (Y/N): ";
+        cout << "\nQuery another? (Y/N): ";
         string r; 
         getline(cin, r);
         r = trim(r);

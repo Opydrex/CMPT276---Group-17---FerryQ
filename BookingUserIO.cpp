@@ -91,7 +91,7 @@ void createBooking(fstream& vehicleFile,
             return;
         }
         if (plate.size() < 3 || plate.size() > 10){
-            cout << "\nBad entry! Plate must be 3-10 characters." << endl;
+            cout << "Bad entry! Plate must be 3-10 characters. \n" ;
             continue;
         }
         Booking dummy;
@@ -110,7 +110,7 @@ void createBooking(fstream& vehicleFile,
         while (true){
             cout << "Enter height (0 to " << maxHeight << "): ";
             if (!(cin >> height) || height < 0 || height > maxHeight || cin.peek() != '\n'){
-                cout << "Invalid. Try again." << endl;
+                cout << "Height must be a number between 0.0-9.9. Try again." << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
@@ -123,7 +123,7 @@ void createBooking(fstream& vehicleFile,
         while (true){
             cout << "Enter length (0 to " << maxLength << "): ";
             if (!(cin >> length) || length < 0 || length > maxLength || cin.peek() != '\n'){
-                cout << "Invalid. Try again." << endl;
+                cout << "Height must be a number between 0.0-99.9. Try again." << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
@@ -225,7 +225,7 @@ void checkIn(fstream& bookingFile,
             }
             //Validate sailing ID
             if (!isValidSailingID(sid)){
-                cout << "Bad entry! Sailing ID format is ccc-dd-dd." << endl;
+                cout << "Bad entry! Sailing ID format is ccc-dd-dd.\n";
                 continue;
             }
             //Validate sailing ID existence
@@ -248,7 +248,7 @@ void checkIn(fstream& bookingFile,
 
             // plate length check: must be between 3 and 10 chars
             if (plate.size() < 3 || plate.size() > 10) {
-                cout << "Bad entry! Must be between 3 and 10 characters." << endl;
+                cout << "\nBad entry! Must be between 3 and 10 characters.\n" << endl;
                 continue;
             }
 
