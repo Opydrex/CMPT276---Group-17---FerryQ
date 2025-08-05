@@ -53,7 +53,7 @@ void createVessel(fstream& vesselFile){
 
     //Ask for regular (low) vehicle lane capacity
     while (true){
-        cout << "Enter vessel capacity for low vehicles (0-" << maxLaneLength << "): or blank to cancel ";
+        cout << "Enter vessel capacity for low vehicles (0 - " << maxLaneLength << " meters) or blank to cancel: ";
         getline(cin, inputForLow);
         inputForLow = trim(inputForLow);
         if (inputForLow.empty()) {
@@ -67,7 +67,7 @@ void createVessel(fstream& vesselFile){
 
     //Ask for special (tall or wide) vehicle lane capacity
     while (true){
-        cout << "Enter vessel capacity for special vehicles (0-" << maxLaneLength << ") or blank to cancel: ";
+        cout << "Enter vessel capacity for special vehicles (0 - " << maxLaneLength << " meters) or blank to cancel: ";
         getline(cin, inputForSpecial);
         inputForSpecial = trim(inputForSpecial);
         if (inputForSpecial.empty()) {

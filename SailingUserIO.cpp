@@ -30,6 +30,7 @@
 #include <string>
 #include <cstring>
 #include <regex>
+#include <limits>
 
 using namespace std;
 
@@ -132,7 +133,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 
         //Prevent duplicate sailings
         if (findSailingIndexByID(sailingFile, sailingID) != -1){
-            cout << "A sailing with ID " << sailingID << " already exists. Try again? (Y/N): ";
+            cout << "A sailing with SailingID " << sailingID << " already exists. Try again? (Y/N) ";
         } else{
             //Append valid sailing to file
             Sailing s;
@@ -141,7 +142,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             s.setCurrentCapacitySmall(capSmall);
             s.setCurrentCapacityBig(capBig);
             if (appendSailingRecord(sailingFile, s)){
-                cout << "Sailing successfully created. The SailingID is " << sailingID << ". Would you like to create another sailing? (Y/N): ";
+                cout << "Sailing successfully created. The SailingID is " << sailingID << ". Would you like to create another sailing? (Y/N) ";
             } else{
                 cout << "Error writing sailing to file." << endl;
                 return;
@@ -152,6 +153,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         getline(cin, resp);
         resp = trim(resp);
         if (resp.empty() || (resp[0] != 'Y' && resp[0] != 'y')) break;
+        cout << endl;
     }
 }
 
@@ -203,7 +205,7 @@ void printSailingReportHeader(){
 //----------------------------------------------------------------------------
 void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFile, fstream& vesselFile){
 //Description: Displays all sailings from file, 5 per screen.
-    cout << "== Sailings Report ==" << endl;
+    cout << endl << "== Sailings Report ==" << endl;
     printSailingReportHeader();
 
     int count = countSailingRecords(sailingFile);
@@ -247,12 +249,22 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
 
         // Paginate every 5 rows or at the end of the report
         if (shownOnPage == 5 && i < count - 1){
-            cout << "0) Exit or M for more: ";
-            string in; 
-            getline(cin, in);
-            in = trim(in);
-            if (in.empty() || in[0] == '0') {
-                return; // Exit function
+            cout << "0) Exit" << endl << "Enter M to print 5 more lines or "
+            <<"0 to exit: ";
+            while(true){
+                string in; 
+                getline(cin, in);
+                in = trim(in);
+                if (in.empty() || in[0] == '0') {
+                    return; // Exit function
+                }
+                else if ((in[0]=='M'||in[0]=='m') && in.length() == 1){
+                    break;
+                }
+                else{
+                    cout << "Invalid input, please Enter M to print 5 more lines or "
+                    <<"0 to exit: ";
+                }
             }
             printSailingReportHeader();
             shownOnPage = 0; // Reset for the next page
@@ -261,7 +273,7 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
 
     // After the loop, if any sailings were shown
     if (count > 0) {
-        cout << "End of report. Press 0 to exit: ";
+        cout << "End of report. Press anything to exit ";
         string in;
         getline(cin, in);
         in = trim(in);

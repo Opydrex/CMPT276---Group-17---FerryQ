@@ -171,14 +171,14 @@ void createBooking(fstream& vehicleFile,
         // Update sailing capacity
         bool isSpecial = (height > maxHeightForRegularSizedVehicle || length > maxLengthForRegularSizedVehicle);
         if(isSpecial){
-            cout << "Special-sized vehicle with \'" << plate 
+            cout << "Special-sized vehicle with a \'" << plate 
             << "\' license plate has been booked for sailing "
-            << sailingId << ". ";
+            << sailingId << ". Would you like to create another booking? (Y/N) ";
         }
         else{
-            cout << "Normal-sized vehicle with \'" << plate 
+            cout << "Normal-sized vehicle with a \'" << plate 
             << "\' license plate has been booked for sailing "
-            << sailingId << ". Would you like to create another booking? (Y/N): ";
+            << sailingId << ". Would you like to create another booking? (Y/N) ";
         }
         float regularLengthUsed = isSpecial ? 0.0f : length;
         float specialLengthUsed = isSpecial ? length : 0.0f;
@@ -217,7 +217,7 @@ void checkIn(fstream& bookingFile,
             continue;
         }
 
-        cout << "Enter license plate (3-10 characters) or blank to cancel: ";
+        cout << "Enter the vehicle's license plate (3 - 10 characters) or blank to cancel: ";
         getline(cin, plate);
         plate = trim(plate);
         if (plate.empty()) {
@@ -244,7 +244,7 @@ void checkIn(fstream& bookingFile,
         }
 
         float fare = calculateFare(L, H);
-        cout << "Fare is " << fare << ". Press Enter once collected.";
+        cout << "The fare is " << fare << ". Press <enter> once it has been collected.";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         //Replace record with updated (checked-in) version
@@ -258,7 +258,7 @@ void checkIn(fstream& bookingFile,
             cerr << "Error: Unable to append updated booking record." << endl;
         }
 
-        cout << "Checked in " << plate << " on " << sid << endl;
+        cout << "Checked in \'" << plate << "\' onto " << sid << endl;
         return;
     }
 }
