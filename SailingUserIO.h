@@ -2,6 +2,7 @@
 //
 // MODULE NAME: SailingUserIO.h
 // Rev.2 - 24/07/2025 - Multiple function declarations altered to match implementation
+//                    - Changed this module's name from "Sailing.h" to current
 // Rev.1 - 09/07/2025 - SailingUserIO module header created
 //
 // ----------------------------------------------------------------------------
