@@ -91,7 +91,7 @@ void SailingsMenu(fstream& vesselFile, fstream& sailingFile, fstream& bookingFil
         cout << "[3] Create a Vessel" << endl;
         cout << "[4] View Sailings Report" << endl;
         cout << "[5] Query a Sailing" << endl;
-        cout << "[0] Exit" << endl;
+        cout << "[0] Back" << endl;
         cout << "Enter a number (0-5): ";
         getline(cin, inputLine);
         if (inputLine.empty()) return;
@@ -143,7 +143,7 @@ void BookingsMenu(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFi
         cout << "==Bookings==" << endl;
         cout << "[1] Create a booking" << endl;
         cout << "[2] Delete a booking" << endl;
-        cout << "[0] Exit" << endl;
+        cout << "[0] Back" << endl;
         cout << "Enter a number (0-2): ";
         getline(cin, inputLine);
         if (inputLine.empty()) return;

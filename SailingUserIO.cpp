@@ -89,7 +89,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             continue;
         }
         int hour = stoi(hourStr);
-        if (hour < 0 || hour > maxSailingHour){
+        if (hour < 1 || hour > maxSailingHour){
             cout << "Hour out of range." << endl;
             continue;
         }

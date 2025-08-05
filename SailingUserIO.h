@@ -24,7 +24,7 @@ using namespace std;
 
 //Constants used for sailing validation and file name
 const int maxSailingDay = 31;              //Max valid day (1–31)
-const int maxSailingHour = 23;             //Max valid hour (0–23)
+const int maxSailingHour = 24;             //Max valid hour (1–24)
 const string fileNameSailing = "sailing.txt"; //Path to sailing file
 
 //Fixed-length binary record representing a sailing
