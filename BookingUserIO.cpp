@@ -1,6 +1,7 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: BookingUserIO.cpp
+// Rev.2 - 05/08/2025 - Updated user input logic to correctly check for blank inputs.
 // Rev.1 – 24/07/2025 – Initial implementation of Booking class and UI functions.
 //
 // ----------------------------------------------------------------------------
@@ -21,6 +22,7 @@
 #include "SailingUserIO.h"
 #include "BookingFileIO.h"
 #include "SailingFileIO.h"
+#include "userInterface.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -57,8 +59,12 @@ void createBooking(fstream& vehicleFile,
     //Loop until a valid sailing ID is entered or cancelled
     while (true){
         cout << "Enter Sailing ID (ccc-dd-dd) or blank to cancel: ";
-        getline(cin >> ws, sailingId);
-        if (sailingId.empty()) return;
+        getline(cin, sailingId);
+        sailingId = trim(sailingId);
+        if (sailingId.empty()) {
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
         if (findSailingIndexByID(sailingFile, sailingId) == -1){
             cout << "Bad entry! Sailing ID format is ccc-dd-dd." << endl;
             continue;
@@ -74,8 +80,12 @@ void createBooking(fstream& vehicleFile,
     //Loop until a valid and unique license plate is entered
     while (true){
         cout << "Enter license plate (3-10 chars) or blank to cancel: ";
-        getline(cin >> ws, plate);
-        if (plate.empty()) return;
+        getline(cin, plate);
+        plate = trim(plate);
+        if (plate.empty()) {
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
         if (plate.size() < 3 || plate.size() > 10){
             cout << "Bad entry! Plate must be 3-10 chars." << endl;
             continue;
@@ -133,7 +143,8 @@ void createBooking(fstream& vehicleFile,
     //Prompt until a valid phone number with at least 7 digits is entered
     while (true){
         cout << "Enter customer phone (at least 7 digits): ";
-        getline(cin >> ws, phone);
+        getline(cin, phone);
+        phone = trim(phone);
         int cnt = 0;
         for (char c : phone) if (isdigit(c)) cnt++;
         if (cnt < 7){
@@ -173,8 +184,12 @@ void checkIn(fstream& bookingFile,
     while (true){
         string sid, plate;
         cout << "Enter SailingID (ccc-dd-dd) or blank to exit: ";
-        getline(cin >> ws, sid);
-        if (sid.empty()) return;
+        getline(cin, sid);
+        sid = trim(sid);
+        if (sid.empty()) {
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
 
         //Validate sailing ID and existence
         if (!isValidSailingID(sid) || findSailingIndexByID(sailingFile, sid) == -1){
@@ -183,8 +198,12 @@ void checkIn(fstream& bookingFile,
         }
 
         cout << "Enter license plate (3-10 chars) or blank to exit: ";
-        getline(cin >> ws, plate);
-        if (plate.empty()) return;
+        getline(cin, plate);
+        plate = trim(plate);
+        if (plate.empty()) {
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
 
         Booking found;
         if (!loadBookingByKey(sid, plate, found, bookingFile)){
@@ -229,12 +248,17 @@ void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& 
 //Description: Interactive prompt to delete a booking by sailing ID and license plate.
     string sid, plate;
     cout << "Enter SailingID (ccc-dd-dd): ";
-    getline(cin >> ws, sid);
+    getline(cin, sid);
+    sid = trim(sid);
     if (sid.empty() || !isValidSailingID(sid)) return;
 
     cout << "Enter license plate (3-10 chars): ";
-    getline(cin >> ws, plate);
-    if (plate.empty()) return;
+    getline(cin, plate);
+    plate = trim(plate);
+    if (plate.empty()) {
+        cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+        return;
+    }
 
     Booking bookingToDelete;
     if (loadBookingByKey(sid, plate, bookingToDelete, bookingFile)) {

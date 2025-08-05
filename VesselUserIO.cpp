@@ -1,6 +1,7 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: VesselUserIO.cpp
+// Rev.2 - 05/08/2025 - Updated user input logic to correctly check for blank inputs.
 // Rev.1 - 24/07/2025 - Vessel class implementation.
 //
 // ----------------------------------------------------------------------------
@@ -16,6 +17,7 @@
 // ----------------------------------------------------------------------------
 #include "VesselUserIO.h"
 #include "VesselFileIO.h"
+#include "UserInterface.h"
 #include <iostream>
 #include <sstream>
 #include <cstring>
@@ -29,8 +31,12 @@ void createVessel(fstream& vesselFile){
     string name;
     while (true){
         cout << "Enter Vessel name (1-25 characters): ";
-        getline(cin >> ws, name);
-        if (name.empty()) return;
+        getline(cin, name);
+        name = trim(name);
+        if (name.empty()) {
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
         if (name.size() > 25){
             cout << "Vessel name is too long. Try again." << endl;
             continue;
@@ -48,8 +54,12 @@ void createVessel(fstream& vesselFile){
     //Ask for regular (low) vehicle lane capacity
     while (true){
         cout << "Enter vessel capacity for low vehicles (0-" << maxLaneLength << "): ";
-        getline(cin >> ws, inputForLow);
-        if (inputForLow.empty()) return;
+        getline(cin, inputForLow);
+        inputForLow = trim(inputForLow);
+        if (inputForLow.empty()) {
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
         stringstream ss(inputForLow);
         if (ss >> capSmall && capSmall >= 0 && capSmall <= maxLaneLength) break;
         cout << "Invalid. Try again." << endl;
@@ -58,8 +68,12 @@ void createVessel(fstream& vesselFile){
     //Ask for special (tall or wide) vehicle lane capacity
     while (true){
         cout << "Enter vessel capacity for special vehicles (0-" << maxLaneLength << "): ";
-        getline(cin >> ws, inputForSpecial);
-        if (inputForSpecial.empty()) return;
+        getline(cin, inputForSpecial);
+        inputForSpecial = trim(inputForSpecial);
+        if (inputForSpecial.empty()) {
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
         stringstream ss(inputForSpecial);
         if (ss >> capBig && capBig >= 0 && capBig <= maxLaneLength) break;
         cout << "Invalid. Try again." << endl;
@@ -77,7 +91,8 @@ void createVessel(fstream& vesselFile){
          << inputForSpecial << " special vehicle capacity has been created."
          << " Would you like to create another vessel? (Y/N): ";
     string resp;
-    getline(cin >> ws, resp);
+    getline(cin, resp);
+    resp = trim(resp);
     if (!resp.empty() && (resp[0]=='Y'||resp[0]=='y'))
         createVessel(vesselFile);
 }

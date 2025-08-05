@@ -1,8 +1,9 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: SailingUserIO.cpp
-// Rev.1 - 9/07/2025 - Module created.
+// Rev.3 - 05/08/2025 - Updated user input logic to correctly check for blank inputs
 // Rev.2 - 24/07/2025 - Updated to match UI stream logic and core operations.
+// Rev.1 - 9/07/2025 - Module created.
 //
 // ----------------------------------------------------------------------------
 // This module handles all high-level, interactive logic for managing sailings.
@@ -22,6 +23,7 @@
 #include "VesselFileIO.h"
 #include "BookingFileIO.h"
 #include "VehicleFileIO.h"
+#include "UserInterface.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -42,8 +44,12 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         //Prompt for 3-letter terminal code
         while(true){
             cout << "Enter departure terminal ID (ccc): ";
-            getline(cin >> ws, term);
-            if (term.empty()) return;
+            getline(cin, term);
+            term = trim(term);
+            if (term.empty()) {
+                cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+                return;
+            }
             if (term.size() != 3 || !isalpha(term[0]) || !isalpha(term[1]) || !isalpha(term[2])){
                 cout << "Bad entry! Must be exactly three letters." << endl;
                 continue;
@@ -55,8 +61,12 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         //Prompt for vessel name
         while(true){
             cout << "Enter vessel name (1-25 characters): ";
-            getline(cin >> ws, vesselName);
-            if (vesselName.empty()) return;
+            getline(cin, vesselName);
+            vesselName = trim(vesselName);
+            if (vesselName.empty()){
+                cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+                return;
+            } 
             if (vesselName.size() > 25){
                 cout << "Bad entry! Name too long." << endl;
                 continue;
@@ -79,8 +89,12 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         //Prompt for departure day
         while(true){
             cout << "Enter departure day (dd): ";
-            getline(cin >> ws, dayStr);
-            if (dayStr.empty()) return;
+            getline(cin, dayStr);
+            dayStr = trim(dayStr);
+            if (dayStr.empty()) {
+                cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+                return;
+            }
             if (dayStr.size() != 2 || !isdigit(dayStr[0]) || !isdigit(dayStr[1])){
                 cout << "Bad entry! Must be two digits." << endl;
                 continue;
@@ -96,8 +110,12 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         //Prompt for departure hour
         while(true){
             cout << "Enter departure hour (hh): ";
-            getline(cin >> ws, hourStr);
-            if (hourStr.empty()) return;
+            getline(cin, hourStr);
+            hourStr = trim(hourStr);
+            if (hourStr.empty()) {
+                cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+                return;
+            }
             if (hourStr.size() != 2 || !isdigit(hourStr[0]) || !isdigit(hourStr[1])){
                 cout << "Bad entry! Must be two digits." << endl;
                 continue;
@@ -131,7 +149,8 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
         }
 
         string resp;
-        getline(cin >> ws, resp);
+        getline(cin, resp);
+        resp = trim(resp);
         if (resp.empty() || (resp[0] != 'Y' && resp[0] != 'y')) break;
     }
 }
@@ -141,7 +160,8 @@ bool deleteSailing(fstream& sailingFile, fstream& bookingFile){
 //Description: Prompts user for sailing ID and deletes it from the file if found.
     string sailingID;
     cout << "Enter SailingID (ccc-dd-dd): ";
-    getline(cin >> ws, sailingID);
+    getline(cin, sailingID);
+    sailingID = trim(sailingID);
     if (sailingID.empty() || !isValidSailingID(sailingID)) return false;
     bool ok = deleteSailingByID(sailingFile, sailingID);
     if (ok){
@@ -229,7 +249,8 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
         if (shownOnPage == 5 && i < count - 1){
             cout << "0) Exit or M for more: ";
             string in; 
-            getline(cin >> ws, in);
+            getline(cin, in);
+            in = trim(in);
             if (in.empty() || in[0] == '0') {
                 return; // Exit function
             }
@@ -242,7 +263,8 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
     if (count > 0) {
         cout << "End of report. Press 0 to exit: ";
         string in;
-        getline(cin >> ws, in);
+        getline(cin, in);
+        in = trim(in);
     }
 }
 
@@ -252,7 +274,8 @@ void querySailing(fstream& sailingFile){
     while (true){
         cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sid; 
-        getline(cin >> ws, sid);
+        getline(cin, sid);
+        sid = trim(sid);
         if (sid.empty() || !isValidSailingID(sid)) return;
 
         int idx = findSailingIndexByID(sailingFile, sid);
@@ -277,7 +300,8 @@ void querySailing(fstream& sailingFile){
 
         cout << "Query another? (Y/N): ";
         string r; 
-        getline(cin >> ws, r);
+        getline(cin, r);
+        r = trim(r);
         if (r.empty() || (r[0] != 'Y' && r[0] != 'y')) break;
     }
 }
