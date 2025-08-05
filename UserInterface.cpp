@@ -28,6 +28,22 @@
 #include <fstream>
 using namespace std;
 
+// Returns True if the input is empty, otherwise, returns false.
+bool isLineEmpty(string inputLine){
+        int choice = -1;
+        getline(cin, inputLine);
+        if (!inputLine.empty()){
+            try{
+                choice = stoi(inputLine);
+            } catch (...){
+                choice = -1;
+            }
+        } else{
+            cout << "Bad Entry! Please try again." << endl;
+            return true;
+        }
+        return false;
+}
 //----------------------------------------------------------------------------
 void userInterfaceLoop(fstream& vesselFile, fstream& vehicleFile, fstream& bookingFile, fstream& sailingFile){
 //Description: Runs the main program menu and dispatches user input to check-in, booking, or sailing modules.
@@ -51,6 +67,9 @@ void userInterfaceLoop(fstream& vesselFile, fstream& vehicleFile, fstream& booki
             }
         } else{
             cout << "Bad Entry! Please try again." << endl;
+            continue;
+        }
+        if(isLineEmpty(inputLine)){
             continue;
         }
 
@@ -173,4 +192,13 @@ void BookingsMenu(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFi
 
         cout << "\n";
     }
+}
+
+string trim(string& s){
+    //Description: takes a string and returns a substring with trimmed
+    //off whitespace characters
+    size_t start = s.find_first_not_of(" \t\n\r");
+    if(start == string::npos) return ""; //The string only has whitespace characters, return an empty string
+    size_t end = s.find_last_not_of(" \t\n\r");
+    return s.substr(start, end - start + 1);
 }

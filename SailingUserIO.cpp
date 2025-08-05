@@ -38,60 +38,76 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
     string term, vesselName, dayStr, hourStr;
 
     while (true){
+
         //Prompt for 3-letter terminal code
-        cout << "Enter departure terminal ID (ccc): ";
-        getline(cin >> ws, term);
-        if (term.empty()) return;
-        if (term.size() != 3 || !isalpha(term[0]) || !isalpha(term[1]) || !isalpha(term[2])){
-            cout << "Bad entry! Must be exactly three letters." << endl;
-            continue;
+        while(true){
+            cout << "Enter departure terminal ID (ccc): ";
+            getline(cin >> ws, term);
+            if (term.empty()) return;
+            if (term.size() != 3 || !isalpha(term[0]) || !isalpha(term[1]) || !isalpha(term[2])){
+                cout << "Bad entry! Must be exactly three letters." << endl;
+                continue;
+            }
+            break;
         }
 
+        float capSmall, capBig;
         //Prompt for vessel name
-        cout << "Enter vessel name (1-25 characters): ";
-        getline(cin >> ws, vesselName);
-        if (vesselName.empty()) return;
-        if (vesselName.size() > 25){
-            cout << "Bad entry! Name too long." << endl;
-            continue;
+        while(true){
+            cout << "Enter vessel name (1-25 characters): ";
+            getline(cin >> ws, vesselName);
+            if (vesselName.empty()) return;
+            if (vesselName.size() > 25){
+                cout << "Bad entry! Name too long." << endl;
+                continue;
+            }
+
+            //Check that vessel exists and retrieve capacities
+            vesselFile.clear(); vesselFile.seekg(0, ios::beg);
+            capSmall = getMaxRegularLength(vesselName, vesselFile);
+            vesselFile.clear(); vesselFile.seekg(0, ios::beg);
+            capBig = getMaxSpecialLength(vesselName, vesselFile);
+            if (capSmall < 0 || capBig < 0){
+                cout << "Error: Vessel not found. Please re-enter." << endl;
+                continue;
+            }
+            break;
         }
 
-        //Check that vessel exists and retrieve capacities
-        vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-        float capSmall = getMaxRegularLength(vesselName, vesselFile);
-        vesselFile.clear(); vesselFile.seekg(0, ios::beg);
-        float capBig = getMaxSpecialLength(vesselName, vesselFile);
-        if (capSmall < 0 || capBig < 0){
-            cout << "Error: Vessel not found. Please re-enter." << endl;
-            continue;
-        }
+
 
         //Prompt for departure day
-        cout << "Enter departure day (dd): ";
-        getline(cin >> ws, dayStr);
-        if (dayStr.empty()) return;
-        if (dayStr.size() != 2 || !isdigit(dayStr[0]) || !isdigit(dayStr[1])){
-            cout << "Bad entry! Must be two digits." << endl;
-            continue;
-        }
-        int day = stoi(dayStr);
-        if (day < 1 || day > maxSailingDay){
-            cout << "Day out of range." << endl;
-            continue;
+        while(true){
+            cout << "Enter departure day (dd): ";
+            getline(cin >> ws, dayStr);
+            if (dayStr.empty()) return;
+            if (dayStr.size() != 2 || !isdigit(dayStr[0]) || !isdigit(dayStr[1])){
+                cout << "Bad entry! Must be two digits." << endl;
+                continue;
+            }
+            int day = stoi(dayStr);
+            if (day < 1 || day > maxSailingDay){
+                cout << "Day out of range." << endl;
+                continue;
+            }
+            break;
         }
 
         //Prompt for departure hour
-        cout << "Enter departure hour (hh): ";
-        getline(cin >> ws, hourStr);
-        if (hourStr.empty()) return;
-        if (hourStr.size() != 2 || !isdigit(hourStr[0]) || !isdigit(hourStr[1])){
-            cout << "Bad entry! Must be two digits." << endl;
-            continue;
-        }
-        int hour = stoi(hourStr);
-        if (hour < 1 || hour > maxSailingHour){
-            cout << "Hour out of range." << endl;
-            continue;
+        while(true){
+            cout << "Enter departure hour (hh): ";
+            getline(cin >> ws, hourStr);
+            if (hourStr.empty()) return;
+            if (hourStr.size() != 2 || !isdigit(hourStr[0]) || !isdigit(hourStr[1])){
+                cout << "Bad entry! Must be two digits." << endl;
+                continue;
+            }
+            int hour = stoi(hourStr);
+            if (hour < 1 || hour > maxSailingHour){
+                cout << "Hour out of range." << endl;
+                continue;
+            }
+            break;
         }
 
         string sailingID = term + "-" + dayStr + "-" + hourStr;

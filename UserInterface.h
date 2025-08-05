@@ -1,6 +1,7 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: UserInterface.h
+// Rev.2 - 05/08/2025 - Added the trim helper
 // Rev.1 - 09/07/2025 - UserInterface class header created.
 //
 // --------------------------------------------------------------------------
@@ -45,5 +46,12 @@ void BookingsMenu(fstream& vehicleFile,//input
 //Job: Displays and handles the Bookings submenu (create/delete bookings).
 //Usage: Called from userInterfaceLoop when user selects Bookings.
 //Restrictions: Requires valid, open file streams.
+
+//----------------------------------------------------------------------------
+string trim(const string& s //input
+            );
+//Job: Trims off whitespace characters from the input and returns it
+//Usage: Called after any getline() to trim off whitespace for usage elsewhere
+//Restrictions: Requires a string.
 
 #endif //USERINTERFACE_H
