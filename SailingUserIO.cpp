@@ -169,7 +169,7 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
     printSailingReportHeader();
 
     int count = countSailingRecords(sailingFile);
-    int shown = 0;
+    int shownOnPage = 0;
 
     for (int i = 0; i < count; ++i){
         Sailing s;
@@ -182,7 +182,12 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
         bookingFile.seekg(0, ios::beg);
         int vehicleCount = countBookingsForSailing(sailingID, bookingFile);
 
+        vesselFile.clear();
+        vesselFile.seekg(0, ios::beg);
         float initialCapSmall = getMaxRegularLength(vesselName, vesselFile);
+
+        vesselFile.clear();
+        vesselFile.seekg(0, ios::beg);
         float initialCapBig = getMaxSpecialLength(vesselName, vesselFile);
 
         float totalInitialCapacity = initialCapSmall + initialCapBig;
@@ -200,14 +205,26 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
              << setw(14) << vehicleCount << " "
              << setw(6) << fixed << setprecision(2) << deckUsagePercentage << "%" << endl;
 
-        //Paginate every 5 rows
-        if (++shown == 5){
+        shownOnPage++;
+
+        // Paginate every 5 rows or at the end of the report
+        if (shownOnPage == 5 && i < count - 1){
             cout << "0) Exit or M for more: ";
-            string in; getline(cin >> ws, in);
-            if (in.empty() || in[0] == '0') break;
-            shown = 0;
+            string in; 
+            getline(cin >> ws, in);
+            if (in.empty() || in[0] == '0') {
+                return; // Exit function
+            }
             printSailingReportHeader();
+            shownOnPage = 0; // Reset for the next page
         }
+    }
+
+    // After the loop, if any sailings were shown
+    if (count > 0) {
+        cout << "End of report. Press 0 to exit: ";
+        string in;
+        getline(cin >> ws, in);
     }
 }
 
