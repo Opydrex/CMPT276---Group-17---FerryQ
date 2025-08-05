@@ -178,8 +178,7 @@ bool deleteSailing(fstream& sailingFile, fstream& bookingFile){
         return false;
     }
     if (!isValidSailingID(sailingID)) {
-        system("cls");
-        cout << "No sailing with SailingID " << sailingID << " was found." << endl;
+        cout << "Bad Entry! SailingID must have format ccc-dd-hh. Try again" << endl;
         return false;
     }
     bool ok = deleteSailingByID(sailingFile, sailingID);
@@ -187,6 +186,9 @@ bool deleteSailing(fstream& sailingFile, fstream& bookingFile){
     if (ok){
         deleteBookingsBySailingID(bookingFile, sailingID);
         cout << "Sailing with SailingID " << sailingID << " deleted successfully." << endl;
+    }else{
+        system("cls");
+        cout << "No sailing with SailingID " << sailingID << " was found." << endl;
     }
     return ok;
 }
@@ -320,8 +322,7 @@ void querySailing(fstream& sailingFile){
         }
 
         if(!isValidSailingID(sid)){
-            system("cls");
-            cout << "No sailing with SailingID " << sid << " found.\n";
+            cout << "Bad Entry! SailingID must have format ccc-dd-hh. Try again" << endl;
             continue;
         }
 
@@ -343,7 +344,7 @@ void querySailing(fstream& sailingFile){
                  << setw(14) << 0 << " "
                  << setw(13) << "0%" << "\n";
         } else{
-            cout << "No sailing " << sid << " found.\n";
+            cout << "No sailing  with SailingID" << sid << " found.\n";
         }
 
         cout << "\nQuery another? (Y/N): ";
