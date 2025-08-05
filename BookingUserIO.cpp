@@ -23,7 +23,7 @@
 #include "SailingUserIO.h"
 #include "BookingFileIO.h"
 #include "SailingFileIO.h"
-#include "userInterface.h"
+#include "UserInterface.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
