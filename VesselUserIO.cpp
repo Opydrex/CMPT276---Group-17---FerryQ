@@ -30,7 +30,7 @@ void createVessel(fstream& vesselFile){
 //             wants to create another. Assumes vesselFile is already open.
     string name;
     while (true){
-        cout << "Enter Vessel name (1-25 characters) or blank to cancel: ";
+        cout << endl << "Enter Vessel name (1-25 characters) or blank to cancel: ";
         getline(cin, name);
         name = trim(name);
         if (name.empty()) {
@@ -79,6 +79,7 @@ void createVessel(fstream& vesselFile){
         cout << "Invalid. Try again." << endl;
     }
 
+    system("cls");
     Vessel v(name, capSmall, capBig);
     if (!writeVesselToFile(vesselFile, v)){
         cerr << "Error writing vessel to file." << endl;

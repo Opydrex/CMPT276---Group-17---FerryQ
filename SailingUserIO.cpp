@@ -44,7 +44,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 
         //Prompt for 3-letter terminal code
         while(true){
-            cout << "Enter departure terminal ID (ccc): ";
+            cout << endl << "Enter departure terminal ID (ccc): ";
             getline(cin, term);
             term = trim(term);
             if (term.empty()) {
@@ -131,6 +131,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 
         string sailingID = term + "-" + dayStr + "-" + hourStr;
 
+        system("cls");
         //Prevent duplicate sailings
         if (findSailingIndexByID(sailingFile, sailingID) != -1){
             cout << "A sailing with SailingID " << sailingID << " already exists. Try again? (Y/N) ";
@@ -161,11 +162,12 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 bool deleteSailing(fstream& sailingFile, fstream& bookingFile){
 //Description: Prompts user for sailing ID and deletes it from the file if found.
     string sailingID;
-    cout << "Enter SailingID (ccc-dd-dd): ";
+    cout << endl << "Enter SailingID (ccc-dd-dd): ";
     getline(cin, sailingID);
     sailingID = trim(sailingID);
     if (sailingID.empty() || !isValidSailingID(sailingID)) return false;
     bool ok = deleteSailingByID(sailingFile, sailingID);
+    system("cls");
     if (ok){
         deleteBookingsBySailingID(bookingFile, sailingID);
         cout << "Sailing with SailingID " << sailingID << " deleted successfully." << endl;
@@ -205,6 +207,7 @@ void printSailingReportHeader(){
 //----------------------------------------------------------------------------
 void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFile, fstream& vesselFile){
 //Description: Displays all sailings from file, 5 per screen.
+    system("cls");
     cout << endl << "== Sailings Report ==" << endl;
     printSailingReportHeader();
 
@@ -284,12 +287,13 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
 void querySailing(fstream& sailingFile){
 //Description: Asks for one SailingID and shows its detailed info.
     while (true){
-        cout << "Enter SailingID (ccc-dd-dd) or blank to return: ";
+        cout << endl << "Enter SailingID (ccc-dd-dd) or blank to return: ";
         string sid; 
         getline(cin, sid);
         sid = trim(sid);
         if (sid.empty() || !isValidSailingID(sid)) return;
 
+        system("cls");
         int idx = findSailingIndexByID(sailingFile, sid);
         if (idx >= 0){
             Sailing s;

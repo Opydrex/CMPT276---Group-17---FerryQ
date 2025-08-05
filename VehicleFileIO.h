@@ -20,8 +20,8 @@
 #include <string>
 using namespace std;
 
-const float maxLength = 99.9;  //maximum allowed vehicle length (meters)
-const float maxHeight = 9.9;   //maximum allowed vehicle height (meters)
+const float maxLength = 99.9f;  //maximum allowed vehicle length (meters)
+const float maxHeight = 9.9f;   //maximum allowed vehicle height (meters)
 const string fileNameVehicle = "vehicle.txt";
 
 class Vehicle{

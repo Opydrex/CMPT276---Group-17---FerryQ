@@ -1,6 +1,7 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: main.cpp
+// Rev.2 - 05/08/2025 - FerryQ now clears the terminal before launching
 // Rev.1 - 09/07/2025 - Main module created
 //
 // --------------------------------------------------------------------------
@@ -32,6 +33,7 @@ int main(){
 //Usage: Called when the FerryQ program is executed. Ensures all required
 //       system data files exist and are opened correctly.
 //Restrictions: Files must be accessible for read/write in binary mode.
+    system("cls");
     cout << "Welcome to the FerryQ!!!" << endl << endl;
 
     //Open all system files or create if missing
@@ -65,6 +67,7 @@ int main(){
     }
 
     //Launch main interface
+
     userInterfaceLoop(vesselFile, vehicleFile, bookingFile, sailingFile);
 
     //Final cleanup

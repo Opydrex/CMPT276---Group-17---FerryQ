@@ -2,6 +2,7 @@
 //
 // MODULE NAME: BookingUserIO.cpp
 // Rev.2 - 05/08/2025 - Updated user input logic to correctly check for blank inputs.
+//                    - Functions now clear the terminal before outputting their result.
 // Rev.1 – 24/07/2025 – Initial implementation of Booking class and UI functions.
 //
 // ----------------------------------------------------------------------------
@@ -58,7 +59,7 @@ void createBooking(fstream& vehicleFile,
     string sailingId;
     //Loop until a valid sailing ID is entered or cancelled
     while (true){
-        cout << "Enter Sailing ID (ccc-dd-dd) or blank to cancel: ";
+        cout << endl << "Enter Sailing ID (ccc-dd-dd) or blank to cancel: ";
         getline(cin, sailingId);
         sailingId = trim(sailingId);
         if (sailingId.empty()) {
@@ -105,19 +106,20 @@ void createBooking(fstream& vehicleFile,
         //Input and validate height
         while (true){
             cout << "Enter height (0 to " << maxHeight << "): ";
-            if (!(cin >> height) || height < 0 || height > maxHeight){
+            if (!(cin >> height) || height < 0 || height > maxHeight || cin.peek() != '\n'){
                 cout << "Invalid. Try again." << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
             }
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             break;
         }
 
         //Input and validate length
         while (true){
             cout << "Enter length (0 to " << maxLength << "): ";
-            if (!(cin >> length) || length < 0 || length > maxLength){
+            if (!(cin >> length) || length < 0 || length > maxLength || cin.peek() != '\n'){
                 cout << "Invalid. Try again." << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -171,11 +173,13 @@ void createBooking(fstream& vehicleFile,
         // Update sailing capacity
         bool isSpecial = (height > maxHeightForRegularSizedVehicle || length > maxLengthForRegularSizedVehicle);
         if(isSpecial){
+            system("cls");
             cout << "Special-sized vehicle with a \'" << plate 
             << "\' license plate has been booked for sailing "
             << sailingId << ". Would you like to create another booking? (Y/N) ";
         }
         else{
+            system("cls");
             cout << "Normal-sized vehicle with a \'" << plate 
             << "\' license plate has been booked for sailing "
             << sailingId << ". Would you like to create another booking? (Y/N) ";
@@ -203,11 +207,11 @@ void checkIn(fstream& bookingFile,
 
     while (true){
         string sid, plate;
-        cout << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
+        cout << endl << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
         getline(cin, sid);
         sid = trim(sid);
         if (sid.empty()) {
-            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            cout << endl << "Enter pressed. Now returning to the Main Menu" << endl;
             return;
         }
 
@@ -258,8 +262,8 @@ void checkIn(fstream& bookingFile,
             cerr << "Error: Unable to append updated booking record." << endl;
         }
 
+        system("cls");
         cout << "Checked in \'" << plate << "\' onto " << sid << endl;
-        return;
     }
 }
 
@@ -267,7 +271,7 @@ void checkIn(fstream& bookingFile,
 void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile){
 //Description: Interactive prompt to delete a booking by sailing ID and license plate.
     string sid, plate;
-    cout << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
+    cout << endl << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
     getline(cin, sid);
     sid = trim(sid);
     if (sid.empty() || !isValidSailingID(sid)) return;
@@ -279,6 +283,7 @@ void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& 
         cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
         return;
     }
+    system("cls");
 
     Booking bookingToDelete;
     if (loadBookingByKey(sid, plate, bookingToDelete, bookingFile)) {

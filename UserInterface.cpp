@@ -3,6 +3,7 @@
 // MODULE NAME: UserInterface.cpp
 // Rev.3 - 05/08/2025 - Updated user input logic to correctly check for blank inputs.
 //                    - Added trim() helper function
+//                    - Functions now clear the terminal before outputting their result.
 // Rev.2 - 22/07/2025 - Updated to match new module signatures and added Query Sailing.
 // Rev.1 - 21/07/2025 - UserInterface class implementation.
 //
@@ -59,17 +60,20 @@ void userInterfaceLoop(fstream& vesselFile, fstream& vehicleFile, fstream& booki
 
         switch (choice){
             case 1:
+                system("cls");
                 checkIn(bookingFile, vehicleFile, sailingFile);
                 break;
             case 2:
+                system("cls");
                 BookingsMenu(vehicleFile, bookingFile, sailingFile);
                 break;
             case 3:
+                system("cls");
                 SailingsMenu(vesselFile, sailingFile, bookingFile, vehicleFile);
                 break;
             case 0:
                 running = false;
-                cout << "Shutting down FerryQ. Goodbye!" << endl;
+                cout << endl << "Shutting down FerryQ. Goodbye!" << endl;
                 break;
             default:
                 cout << "Bad Entry! Please try again." << endl;
@@ -125,6 +129,7 @@ void SailingsMenu(fstream& vesselFile, fstream& sailingFile, fstream& bookingFil
                 break;
             case 0:
                 inMenu = false;
+                system("cls");
                 break;
             default:
                 cout << "Bad Entry! Please try again." << endl;
@@ -168,6 +173,7 @@ void BookingsMenu(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFi
                 break;
             case 0:
                 inMenu = false;
+                system("cls");
                 break;
             default:
                 cout << "Bad Entry! Please try again." << endl;
