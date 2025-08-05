@@ -30,6 +30,7 @@
 #include <string>
 #include <sstream>
 #include <limits>
+#include <regex>
 using namespace std;
 
 //----------------------------------------------------------------------------
@@ -63,6 +64,7 @@ void createBooking(fstream& vehicleFile,
         getline(cin, sailingId);
         sailingId = trim(sailingId);
         if (sailingId.empty()) {
+            system("cls");
             cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
             return;
         }
@@ -84,11 +86,12 @@ void createBooking(fstream& vehicleFile,
         getline(cin, plate);
         plate = trim(plate);
         if (plate.empty()) {
+            system("cls");
             cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
             return;
         }
         if (plate.size() < 3 || plate.size() > 10){
-            cout << "Bad entry! Plate must be 3-10 chars." << endl;
+            cout << "\nBad entry! Plate must be 3-10 characters." << endl;
             continue;
         }
         Booking dummy;
@@ -145,21 +148,25 @@ void createBooking(fstream& vehicleFile,
     string phone;
     //Prompt until a valid phone number with at least 7 digits is entered
     while (true){
-        cout << "Enter customer phone number (between 8 and 15 characters) or blank to cancel: ";
+        cout << "Enter customer phone number (between 7 and 15 characters) or blank to cancel: ";
         getline(cin, phone);
         phone = trim(phone);
-        int cnt = 0;
-        for (char c : phone) if (isdigit(c)) cnt++;
-        if(cnt == 0){
-            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+
+        if (phone.empty()) {
+            system("cls");
+            cout << "\nEnter pressed. Now aborting to the previous Menu\n";
             return;
         }
-        else if (cnt < 7){
-            cout << "Too few digits. Try again." << endl;
+        if (!std::regex_match(phone, std::regex("^[0-9]+$"))) {
+            cout << "Bad entry! Phone must contain digits only.\n";
             continue;
         }
-        else if (cnt > 15){
-            cout<<"Too many digits. Try again." << endl;
+        if (!std::regex_match(phone, std::regex("^[0-9]{7,15}$"))) {
+            //at this point we know it's all digits, so it must be a length issue
+            if (phone.size() < 7)
+                cout << "Too few digits. Try again.\n";
+            else
+                cout << "Too many digits. Try again.\n";
             continue;
         }
         break;
@@ -207,28 +214,46 @@ void checkIn(fstream& bookingFile,
 
     while (true){
         string sid, plate;
-        cout << endl << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
-        getline(cin, sid);
-        sid = trim(sid);
-        if (sid.empty()) {
-            cout << endl << "Enter pressed. Now returning to the Main Menu" << endl;
-            return;
+        while(true){
+            cout << endl << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
+            getline(cin, sid);
+            sid = trim(sid);
+            if (sid.empty()) {
+                system("cls");
+                cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+                return;
+            }
+            //Validate sailing ID
+            if (!isValidSailingID(sid)){
+                cout << "Bad entry! Sailing ID format is ccc-dd-dd." << endl;
+                continue;
+            }
+            //Validate sailing ID existence
+            if (findSailingIndexByID(sailingFile, sid) == -1){
+                cout << "No Sailing with SailingID" << sid << " was found. Try again." << endl;
+                continue;
+            }
+            break;
         }
+        while (true) {
+            cout << "Enter the vehicle's license plate (3 - 10 characters) or blank to cancel: ";
+            getline(cin, plate);
+            plate = trim(plate);
 
-        //Validate sailing ID and existence
-        if (!isValidSailingID(sid) || findSailingIndexByID(sailingFile, sid) == -1){
-            cout << "Invalid or missing sailing. Try again." << endl;
-            continue;
+            if (plate.empty()) {
+                system("cls");
+                cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+                return;
+            }
+
+            // plate length check: must be between 3 and 10 chars
+            if (plate.size() < 3 || plate.size() > 10) {
+                cout << "Bad entry! Must be between 3 and 10 characters." << endl;
+                continue;
+            }
+
+            break;
         }
-
-        cout << "Enter the vehicle's license plate (3 - 10 characters) or blank to cancel: ";
-        getline(cin, plate);
-        plate = trim(plate);
-        if (plate.empty()) {
-            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
-            return;
-        }
-
         Booking found;
         if (!loadBookingByKey(sid, plate, found, bookingFile)){
             cout << "Booking not found." << endl;
@@ -280,6 +305,7 @@ void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& 
     getline(cin, plate);
     plate = trim(plate);
     if (plate.empty()) {
+        system("cls");
         cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
         return;
     }

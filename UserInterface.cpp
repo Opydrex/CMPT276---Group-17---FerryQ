@@ -102,8 +102,10 @@ void SailingsMenu(fstream& vesselFile, fstream& sailingFile, fstream& bookingFil
         cout << "[0] Back" << endl;
         cout << "Enter a number (0-5): ";
         getline(cin, inputLine);
-        if (inputLine.empty()) return;
-
+        if (inputLine.empty()) {
+            system("cls"); 
+            return;
+        }
         try{
             choice = stoi(inputLine);
         } catch (...){
@@ -155,8 +157,10 @@ void BookingsMenu(fstream& vehicleFile, fstream& bookingFile, fstream& sailingFi
         cout << "[0] Back" << endl;
         cout << "Enter a number (0-2): ";
         getline(cin, inputLine);
-        if (inputLine.empty()) return;
-
+        if (inputLine.empty()) {
+            system("cls");
+            return;
+        }
         try{
             choice = stoi(inputLine);
         } catch (...){

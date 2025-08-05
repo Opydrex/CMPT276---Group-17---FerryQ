@@ -51,6 +51,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             getline(cin, term);
             term = trim(term);
             if (term.empty()) {
+                system("cls");
                 cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
                 return;
             }
@@ -68,6 +69,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             getline(cin, vesselName);
             vesselName = trim(vesselName);
             if (vesselName.empty()){
+                system("cls");
                 cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
                 return;
             } 
@@ -96,6 +98,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             getline(cin, dayStr);
             dayStr = trim(dayStr);
             if (dayStr.empty()) {
+                system("cls");
                 cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
                 return;
             }
@@ -117,6 +120,7 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
             getline(cin, hourStr);
             hourStr = trim(hourStr);
             if (hourStr.empty()) {
+                system("cls");
                 cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
                 return;
             }
@@ -168,7 +172,15 @@ bool deleteSailing(fstream& sailingFile, fstream& bookingFile){
     cout << endl << "Enter SailingID (ccc-dd-dd): ";
     getline(cin, sailingID);
     sailingID = trim(sailingID);
-    if (sailingID.empty() || !isValidSailingID(sailingID)) return false;
+    if (sailingID.empty()) {
+        system("cls");
+        cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+        return false;
+    }
+    if (!isValidSailingID(sailingID)) {
+        system("cls");
+        return false;
+    }
     bool ok = deleteSailingByID(sailingFile, sailingID);
     system("cls");
     if (ok){
@@ -261,8 +273,16 @@ void printReport(fstream& sailingFile, fstream& bookingFile, fstream& vehicleFil
                 string in; 
                 getline(cin, in);
                 in = trim(in);
-                if (in.empty() || in[0] == '0') {
+                if (in.empty()) {
+                    system("cls");
+                    cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
                     return; // Exit function
+                }
+                else if(in[0] == '0') {
+                    system("cls");
+                    cout << endl << "0 pressed. Now aborting to the previous Menu" << endl;
+                    return; // Exit function
+
                 }
                 else if ((in[0]=='M'||in[0]=='m') && in.length() == 1){
                     break;
@@ -294,7 +314,17 @@ void querySailing(fstream& sailingFile){
         string sid; 
         getline(cin, sid);
         sid = trim(sid);
-        if (sid.empty() || !isValidSailingID(sid)) return;
+        if (sid.empty()) {
+            system("cls");
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
+
+        if(!isValidSailingID(sid)){
+            system("cls");
+            cout << "No sailing " << sid << " found.\n";
+            continue;
+        }
 
         system("cls");
         int idx = findSailingIndexByID(sailingFile, sid);

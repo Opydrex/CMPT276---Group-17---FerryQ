@@ -35,6 +35,7 @@ void createVessel(fstream& vesselFile){
         getline(cin, name);
         name = trim(name);
         if (name.empty()) {
+            system("cls");
             cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
             return;
         }
@@ -58,6 +59,7 @@ void createVessel(fstream& vesselFile){
         getline(cin, inputForLow);
         inputForLow = trim(inputForLow);
         if (inputForLow.empty()) {
+            system("cls");
             cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
             return;
         }
@@ -72,6 +74,7 @@ void createVessel(fstream& vesselFile){
         getline(cin, inputForSpecial);
         inputForSpecial = trim(inputForSpecial);
         if (inputForSpecial.empty()) {
+            system("cls");
             cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
             return;
         }
