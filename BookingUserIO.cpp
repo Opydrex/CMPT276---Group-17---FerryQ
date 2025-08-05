@@ -142,7 +142,7 @@ void createBooking(fstream& vehicleFile,
     string phone;
     //Prompt until a valid phone number with at least 7 digits is entered
     while (true){
-        cout << "Enter customer phone (at least 7 digits): ";
+        cout << "Enter customer phone number (between 8 and 15 characters) or blank to cancel: ";
         getline(cin, phone);
         phone = trim(phone);
         int cnt = 0;
@@ -169,7 +169,7 @@ void createBooking(fstream& vehicleFile,
         float specialLengthUsed = isSpecial ? length : 0.0f;
 
         if (!updateSailingCapacities(sailingFile, sailingId, regularLengthUsed, specialLengthUsed)) {
-            cerr << "Error: Failed to update sailing capacity." << endl;
+            cerr << "Error: The vessel does not have enough space to fit this vehicle." << endl;
         }
     }
 }
@@ -183,7 +183,7 @@ void checkIn(fstream& bookingFile,
 
     while (true){
         string sid, plate;
-        cout << "Enter SailingID (ccc-dd-dd) or blank to exit: ";
+        cout << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
         getline(cin, sid);
         sid = trim(sid);
         if (sid.empty()) {
@@ -197,7 +197,7 @@ void checkIn(fstream& bookingFile,
             continue;
         }
 
-        cout << "Enter license plate (3-10 chars) or blank to exit: ";
+        cout << "Enter license plate (3-10 characters) or blank to cancel: ";
         getline(cin, plate);
         plate = trim(plate);
         if (plate.empty()) {
@@ -247,12 +247,12 @@ void checkIn(fstream& bookingFile,
 void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile){
 //Description: Interactive prompt to delete a booking by sailing ID and license plate.
     string sid, plate;
-    cout << "Enter SailingID (ccc-dd-dd): ";
+    cout << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
     getline(cin, sid);
     sid = trim(sid);
     if (sid.empty() || !isValidSailingID(sid)) return;
 
-    cout << "Enter license plate (3-10 chars): ";
+    cout << "Enter license plate (3-10 characters) or blank to cancel: ";
     getline(cin, plate);
     plate = trim(plate);
     if (plate.empty()) {
@@ -269,7 +269,7 @@ void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& 
             float specialLengthRestored = isSpecial ? length : 0.0f;
 
             if (deleteBookingRecord(sid, plate, bookingFile)) {
-                cout << "Booking deleted" << endl;
+                cout << "Booking has been successfully deleted" << endl;
                 // Restore sailing capacity
                 if (!updateSailingCapacities(sailingFile, sid, -regularLengthRestored, -specialLengthRestored)) { // Note the negative sign to add back
                     cerr << "Error: Failed to restore sailing capacity." << endl;
