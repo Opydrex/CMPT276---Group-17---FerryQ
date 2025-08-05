@@ -1,8 +1,8 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: SailingUserIO.h
+// Rev.2 - 24/07/2025 - Multiple function declarations altered to match implementation
 // Rev.1 - 09/07/2025 - SailingUserIO module header created
-// Rev.2 - 24/07/2025 - SailingUserIO module header edited
 //
 // ----------------------------------------------------------------------------
 // This module defines the public interface for all high-level, user-facing

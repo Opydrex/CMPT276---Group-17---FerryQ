@@ -1,8 +1,9 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: BookingUserIO.h
+// Rev.2 - 24/07/2025 - Changed the module name from 'Booking' to current.
+//                    - Modified function declarations to match implementation
 // Rev.1 - 09/07/2025 - BookingUserIO module header created
-// Rev.2 - 24/07/2025 - BookingUserIO module header edited
 //
 // ----------------------------------------------------------------------------
 // This module provides the high-level interface for all user-facing booking

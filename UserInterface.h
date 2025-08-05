@@ -1,7 +1,7 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: UserInterface.h
-// Rev.2 - 05/08/2025 - Added the trim() helper function
+// Rev.2 - 05/08/2025 - Added the trim() helper function declaration
 // Rev.1 - 09/07/2025 - UserInterface class header created.
 //
 // --------------------------------------------------------------------------

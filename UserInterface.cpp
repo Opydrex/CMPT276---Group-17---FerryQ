@@ -2,7 +2,7 @@
 //
 // MODULE NAME: UserInterface.cpp
 // Rev.3 - 05/08/2025 - Updated user input logic to correctly check for blank inputs.
-//                    - Added trim() helper function
+//                    - Added and Implemented the trim() helper function
 //                    - Functions now clear the terminal before outputting their result.
 // Rev.2 - 22/07/2025 - Updated to match new module signatures and added Query Sailing.
 // Rev.1 - 21/07/2025 - UserInterface class implementation.
@@ -18,6 +18,7 @@
 //   mid-level UserIO modules (e.g., createSailing, promptToDeleteBooking).
 //
 // Used By: Called by main.cpp to run the application's primary event loop.
+//          Most UI modules also utilize the trim() helper function
 // ---------------------------------------------------------------------------
 
 #include "UserInterface.h"

@@ -1,8 +1,9 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: VehicleFileIO.h
+// Rev.3 - 05/08/2025 - Updated constant values to correctly display in prints
+// Rev.2 - 24/07/2025 - Minor changes to function declarations
 // Rev.1 - 09/07/2025 - Vehicle class header created
-// Rev.2 - 24/07/2025 - Minor changes
 // 
 // ----------------------------------------------------------------------------
 // This module provides the interface for all vehicle-related data operations.

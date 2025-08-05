@@ -1,8 +1,8 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: VesselUserIO.h
+// Rev.2 - 24/07/2025 - Minor changes to function comments
 // Rev.1 - 09/07/2025 - Vessel class header created.
-// Rev.2 - 24/07/2025 - Minor changes
 //
 // ----------------------------------------------------------------------------
 // This module provides the high-level interface for vessel management. It

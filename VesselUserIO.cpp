@@ -2,6 +2,7 @@
 //
 // MODULE NAME: VesselUserIO.cpp
 // Rev.2 - 05/08/2025 - Updated user input logic to correctly check for blank inputs.
+//                    - Functions now clear the terminal before outputting their result.
 // Rev.1 - 24/07/2025 - Vessel class implementation.
 //
 // ----------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 // MODULE NAME: BookingUserIO.cpp
 // Rev.2 - 05/08/2025 - Updated user input logic to correctly check for blank inputs.
 //                    - Functions now clear the terminal before outputting their result.
-// Rev.1 – 24/07/2025 – Initial implementation of Booking class and UI functions.
+// Rev.1 - 24/07/2025 - Initial implementation of Booking class and UI functions.
 //
 // ----------------------------------------------------------------------------
 // This module handles all high-level, interactive logic for managing bookings.
