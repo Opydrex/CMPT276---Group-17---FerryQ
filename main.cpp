@@ -1,7 +1,8 @@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 // MODULE NAME: main.cpp
-// Rev.2 - 05/08/2025 - FerryQ now clears the terminal before launching
+// Rev.3 - 05/08/2025 - FerryQ now clears the terminal before launching
+// Rev.2 - 24/07/2025 - main now opens all the files and calls the main UI loop.
 // Rev.1 - 09/07/2025 - Main module created
 //
 // --------------------------------------------------------------------------
