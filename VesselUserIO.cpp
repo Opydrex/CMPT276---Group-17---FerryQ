@@ -40,7 +40,7 @@ void createVessel(fstream& vesselFile){
             return;
         }
         if (name.size() > 25){
-            cout << "Vessel name must be 1-25 characters. Try again." << endl;
+            cout << "Bad try! Vessel name must be 1-25 characters. Try again." << endl;
             continue;
         }
         if (doesVesselExist(vesselFile, name)){
@@ -65,7 +65,7 @@ void createVessel(fstream& vesselFile){
         }
         stringstream ss(inputForLow);
         if (ss >> capSmall && capSmall >= 0 && capSmall <= maxLaneLength) break;
-        cout << "Must be a number between 0-3600. Try again." << endl;
+        cout << "Bad try! Must be a number between 0-3600. Try again." << endl;
     }
 
     //Ask for special (tall or wide) vehicle lane capacity
@@ -80,7 +80,7 @@ void createVessel(fstream& vesselFile){
         }
         stringstream ss(inputForSpecial);
         if (ss >> capBig && capBig >= 0 && capBig <= maxLaneLength) break;
-        cout << "Must be a number between 0-3600. Try again." << endl;
+        cout << "Bad try! Must be a number between 0-3600. Try again." << endl;
     }
 
     system("cls");
