@@ -86,6 +86,37 @@ bool deleteBookingRecord(const string& sailingID,
 }
 
 //----------------------------------------------------------------------------
+
+bool deleteBookingsBySailingID(fstream& bookingFile, const string& sailingID) {
+    if (!bookingFile.good()) return false;
+
+    bool deletedAtLeastOne = false;
+    bool deletedThisPass;
+
+    do {
+        deletedThisPass = false;
+        bookingFile.clear();
+        bookingFile.seekg(0, ios::beg);
+
+        Booking temp;
+        while (bookingFile.read(reinterpret_cast<char*>(&temp), sizeof(Booking))) {
+            if (temp.getSailingID() == sailingID) {
+                // Delete this booking (license plate needed for deleteBookingRecord)
+                if (deleteBookingRecord(sailingID, temp.getLicensePlate(), bookingFile)) {
+                    deletedAtLeastOne = true;
+                    deletedThisPass = true;
+                    break; // restart loop because file changed
+                }
+            }
+        }
+    } while (deletedThisPass);
+
+    return deletedAtLeastOne;
+}
+
+
+
+//----------------------------------------------------------------------------
 bool loadBookingByKey(const string& sailingID,
                       const string& licensePlate,
                       Booking& result,

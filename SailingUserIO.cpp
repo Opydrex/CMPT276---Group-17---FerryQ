@@ -121,15 +121,17 @@ void createSailing(fstream& vesselFile, fstream& sailingFile){
 }
 
 //----------------------------------------------------------------------------
-bool deleteSailing(fstream& sailingFile){
+bool deleteSailing(fstream& sailingFile, fstream& bookingFile){
 //Description: Prompts user for sailing ID and deletes it from the file if found.
     string sailingID;
     cout << "Enter SailingID (ccc-dd-dd): ";
     getline(cin >> ws, sailingID);
     if (sailingID.empty() || !isValidSailingID(sailingID)) return false;
     bool ok = deleteSailingByID(sailingFile, sailingID);
-    if (ok)
+    if (ok){
+        deleteBookingsBySailingID(bookingFile, sailingID);
         cout << "Sailing with SailingID " << sailingID << " deleted successfully." << endl;
+        }
     else
         cout << "No sailing with SailingID " << sailingID << " was found." << endl;
     return ok;
