@@ -123,6 +123,7 @@ void createBooking(fstream& vehicleFile,
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
             }
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             break;
         }
 
@@ -147,7 +148,11 @@ void createBooking(fstream& vehicleFile,
         phone = trim(phone);
         int cnt = 0;
         for (char c : phone) if (isdigit(c)) cnt++;
-        if (cnt < 7){
+        if(cnt == 0){
+            cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
+            return;
+        }
+        else if (cnt < 7){
             cout << "Too few digits. Try again." << endl;
             continue;
         }
@@ -162,9 +167,19 @@ void createBooking(fstream& vehicleFile,
     if (!writeBooking(b, bookingFile)){
         cerr << "Error: Unable to append booking record." << endl;
     } else{
-        cout << "Booking created for " << plate << " on " << sailingId << endl;
+        
         // Update sailing capacity
         bool isSpecial = (height > maxHeightForRegularSizedVehicle || length > maxLengthForRegularSizedVehicle);
+        if(isSpecial){
+            cout << "Special-sized vehicle with \'" << plate 
+            << "\' license plate has been booked for sailing "
+            << sailingId << ". ";
+        }
+        else{
+            cout << "Normal-sized vehicle with \'" << plate 
+            << "\' license plate has been booked for sailing "
+            << sailingId << ". Would you like to create another booking? (Y/N): ";
+        }
         float regularLengthUsed = isSpecial ? 0.0f : length;
         float specialLengthUsed = isSpecial ? length : 0.0f;
 
@@ -172,6 +187,11 @@ void createBooking(fstream& vehicleFile,
             cerr << "Error: The vessel does not have enough space to fit this vehicle." << endl;
         }
     }
+    string resp;
+    getline(cin, resp);
+    resp = trim(resp);
+    if (!resp.empty() && (resp[0]=='Y'||resp[0]=='y'))
+        createBooking(vehicleFile, bookingFile, sailingFile);
 }
 
 //----------------------------------------------------------------------------
