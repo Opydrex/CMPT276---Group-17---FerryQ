@@ -91,7 +91,7 @@ void createBooking(fstream& vehicleFile,
             return;
         }
         if (plate.size() < 3 || plate.size() > 10){
-            cout << "Bad entry! Plate must be 3-10 characters. \n" ;
+            cout << "Bad entry! Plate must be 3-10 characters. " ;
             continue;
         }
         Booking dummy;
@@ -158,7 +158,7 @@ void createBooking(fstream& vehicleFile,
             return;
         }
         if (!std::regex_match(phone, std::regex("^[0-9]+$"))) {
-            cout << "Bad entry! Phone must contain digits only.\n";
+            cout << "Bad entry! Phone must contain digits only.";
             continue;
         }
         if (!std::regex_match(phone, std::regex("^[0-9]{7,15}$"))) {
@@ -225,7 +225,7 @@ void checkIn(fstream& bookingFile,
             }
             //Validate sailing ID
             if (!isValidSailingID(sid)){
-                cout << "Bad entry! Sailing ID format is ccc-dd-dd.\n";
+                cout << "Bad entry! Sailing ID format is ccc-dd-dd.";
                 continue;
             }
             //Validate sailing ID existence
@@ -248,7 +248,7 @@ void checkIn(fstream& bookingFile,
 
             // plate length check: must be between 3 and 10 chars
             if (plate.size() < 3 || plate.size() > 10) {
-                cout << "\nBad entry! Must be between 3 and 10 characters.\n" << endl;
+                cout << "\nBad entry! Must be between 3 and 10 characters." << endl;
                 continue;
             }
 
