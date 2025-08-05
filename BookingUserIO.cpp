@@ -296,18 +296,40 @@ void checkIn(fstream& bookingFile,
 void promptToDeleteBooking(fstream& bookingFile, fstream& vehicleFile, fstream& sailingFile){
 //Description: Interactive prompt to delete a booking by sailing ID and license plate.
     string sid, plate;
-    cout << endl << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
-    getline(cin, sid);
-    sid = trim(sid);
-    if (sid.empty() || !isValidSailingID(sid)) return;
+    while (true) {
+        cout << endl
+             << "Enter SailingID (ccc-dd-dd) or blank to cancel: ";
+        getline(cin, sid);
+        sid = trim(sid);
 
-    cout << "Enter license plate (3-10 characters) or blank to cancel: ";
-    getline(cin, plate);
-    plate = trim(plate);
-    if (plate.empty()) {
-        system("cls");
-        cout << endl << "Enter pressed. Now aborting to the previous Menu" << endl;
-        return;
+        if (sid.empty()) {
+            cout << endl << "Enter pressed. Now aborting to the previous Menu\n";
+            system("cls");
+            return;
+        }
+        if (isValidSailingID(sid)) {
+            break;
+        }
+        cout << "Bad Entry!Please use format ccc-dd-dd. Try again.\n";
+    }
+
+    while (true) {
+        cout << "Enter license plate (3-10 characterss) or blank to cancel: ";
+        getline(cin, plate);
+        plate = trim(plate);
+
+        if (plate.empty()) {
+            system("cls");
+            cout << endl << "Enter pressed. Now aborting to the previous Menu\n";
+            return;
+        }
+        if (plate.size() < 3 || plate.size() > 10) {
+            cout << "\nBad entry! License plate must be 3-10 characters. Try again.\n";
+            continue;
+        }else{
+            break;
+        }
+        
     }
     system("cls");
 
